@@ -11,7 +11,7 @@
   
 
 	dependencies {
-	        implementation 'com.github.yenenahmet:AndroidBaseCore:Tag'
+	        implementation 'com.github.yenenahmet:AndroidBaseCore:0.1.0'
 	}
   
   -----
