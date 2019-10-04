@@ -35,7 +35,6 @@ viewModelClass: Class<VM>, private val isOnCreateGetData: Boolean
     }
 
     private fun runNoDataFoundObserve(viewModel: BaseRxSingleHandlerViewModel<T>) {
-        loadingDialog?.show()
         viewModel.noDataFound.observe(this, Observer {
             it?.let {
                 onNoDataFoundObserve(it)
@@ -46,6 +45,7 @@ viewModelClass: Class<VM>, private val isOnCreateGetData: Boolean
 
     protected fun runDataObserve(viewModel: BaseRxSingleHandlerViewModel<T>) {
         preCommunicationProcedures()
+        loadingDialog?.show()
         viewModel.getData().observe(this, Observer {
             it?.let {
                 onDataObserve(it)
@@ -58,6 +58,12 @@ viewModelClass: Class<VM>, private val isOnCreateGetData: Boolean
         preCommunicationProcedures()
         loadingDialog?.show()
         viewModel.dataChangeable()
+    }
+
+    protected fun postData(){
+        preCommunicationProcedures()
+        loadingDialog?.show()
+        viewModel.postData()
     }
 
     protected abstract fun onDataObserve(results: T)

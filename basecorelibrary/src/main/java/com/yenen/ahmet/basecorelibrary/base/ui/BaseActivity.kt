@@ -1,6 +1,8 @@
 package com.yenen.ahmet.basecorelibrary.base.ui
 
+import android.content.Context
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
@@ -59,5 +61,14 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
 
     fun showToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+    }
+
+
+    protected fun hideKeybord(){
+        currentFocus?.let {
+            val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputManager?.hideSoftInputFromWindow(it.windowToken, 0)
+        }
+
     }
 }

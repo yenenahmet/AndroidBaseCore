@@ -13,12 +13,12 @@ open class BaseDialog(private val context: Activity, layoutId: Int) {
     protected var view: View? = null
 
     init {
+        view = context.layoutInflater.inflate(layoutId, null)
+
         dialog = AlertDialog.Builder(context)
             .setView(view)
             .setCancelable(false)
             .create()
-
-        view = context.layoutInflater.inflate(layoutId, null)
 
         val color = ColorDrawable(Color.TRANSPARENT)
         dialog?.window?.let {

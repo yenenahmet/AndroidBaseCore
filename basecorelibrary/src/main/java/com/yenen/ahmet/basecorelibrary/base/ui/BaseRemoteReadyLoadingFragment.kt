@@ -38,7 +38,6 @@ abstract class BaseRemoteReadyLoadingFragment<T, VM : BaseRxSingleHandlerViewMod
     }
 
     private fun runNoDataFoundObserve(viewModel: BaseRxSingleHandlerViewModel<T>) {
-        loadingDialog?.show()
         viewModel.noDataFound.observe(viewLifecycleOwner, Observer {
             it?.let {
                 onNoDataFoundObserve(it)
@@ -49,6 +48,7 @@ abstract class BaseRemoteReadyLoadingFragment<T, VM : BaseRxSingleHandlerViewMod
 
     protected fun runDataObserve(viewModel: BaseRxSingleHandlerViewModel<T>) {
         preCommunicationProcedures()
+        loadingDialog?.show()
         viewModel.getData().observe(viewLifecycleOwner, Observer {
             it?.let {
                 onDataObserve(it)
@@ -61,6 +61,12 @@ abstract class BaseRemoteReadyLoadingFragment<T, VM : BaseRxSingleHandlerViewMod
         preCommunicationProcedures()
         loadingDialog?.show()
         viewModel.dataChangeable()
+    }
+
+    protected fun postData(){
+        preCommunicationProcedures()
+        loadingDialog?.show()
+        viewModel.postData()
     }
 
     protected abstract fun onDataObserve(results: T)
