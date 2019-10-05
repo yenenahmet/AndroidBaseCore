@@ -20,7 +20,7 @@ constructor(private var items: MutableList<T>) : BaseAdapter() {
         if (view == null) {
             view = binding.root
         }
-        onViewSetModel(binding)
+        onViewSetModel(binding,getItem(position))
         binding.executePendingBindings()
         return view
     }
@@ -39,7 +39,7 @@ constructor(private var items: MutableList<T>) : BaseAdapter() {
         if (view == null) {
             view = binding.root
         }
-        onDropDownViewSetModel(binding)
+        onDropDownViewSetModel(binding,getItem(position))
         binding.executePendingBindings()
         return view
     }
@@ -58,10 +58,10 @@ constructor(private var items: MutableList<T>) : BaseAdapter() {
 
     protected abstract fun getViewBindingInflate(parent: ViewGroup?): GVB
 
-    protected abstract fun onViewSetModel(binding: GVB)
+    protected abstract fun onViewSetModel(binding: GVB,item :T)
 
     protected abstract fun getDropDownViewBindingInflate(parent: ViewGroup?): GDDVB
 
-    protected abstract fun onDropDownViewSetModel(binding: GDDVB)
+    protected abstract fun onDropDownViewSetModel(binding: GDDVB,item :T)
 
 }
