@@ -1,5 +1,6 @@
 package com.yenen.ahmet.basecorelibrary.base.adapter
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
@@ -15,7 +16,7 @@ constructor(private var items: MutableList<T>) : BaseAdapter() {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var view: View? = convertView
-        val binding = getViewBindingInflate()
+        val binding = getViewBindingInflate(parent)
         if (view == null) {
             view = binding.root
         }
@@ -34,7 +35,7 @@ constructor(private var items: MutableList<T>) : BaseAdapter() {
 
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var view: View? = convertView
-        val binding = getDropDownViewBindingInflate()
+        val binding = getDropDownViewBindingInflate(parent)
         if (view == null) {
             view = binding.root
         }
@@ -51,11 +52,15 @@ constructor(private var items: MutableList<T>) : BaseAdapter() {
         items.clear()
     }
 
-    protected abstract fun getViewBindingInflate(): ViewDataBinding
+    protected fun getInflater(parent: ViewGroup): LayoutInflater {
+        return LayoutInflater.from(parent.context)
+    }
+
+    protected abstract fun getViewBindingInflate(parent: ViewGroup?): ViewDataBinding
 
     protected abstract fun onViewSetModel()
 
-    protected abstract fun getDropDownViewBindingInflate(): ViewDataBinding
+    protected abstract fun getDropDownViewBindingInflate(parent: ViewGroup?): ViewDataBinding
 
     protected abstract fun onDropDownViewSetModel()
 
