@@ -46,29 +46,29 @@ class SharedPreferencesHelper constructor(context: Context) {
     }
 
 
-    fun getValue(keyValue: String,defaultValue:String){
-        sharedPref.getString(keyValue,defaultValue)
+    fun getValue(keyValue: String,defaultValue:String) :String{
+        return sharedPref.getString(keyValue,defaultValue)!!
     }
 
-    fun getValue(keyValue: String,defaultValue:Int){
-        sharedPref.getInt(keyValue,defaultValue)
+    fun getValue(keyValue: String,defaultValue:Int):Int{
+        return sharedPref.getInt(keyValue,defaultValue)
     }
 
 
-    fun getValue(keyValue: String,defaultValue:Long){
-        sharedPref.getLong(keyValue,defaultValue)
+    fun getValue(keyValue: String,defaultValue:Long) :Long{
+        return sharedPref.getLong(keyValue,defaultValue)
     }
 
-    fun getValue(keyValue: String,defaultValue:Boolean){
-        sharedPref.getBoolean(keyValue,defaultValue)
+    fun getValue(keyValue: String,defaultValue:Boolean) :Boolean{
+       return sharedPref.getBoolean(keyValue,defaultValue)
     }
 
-    fun getValue(keyValue: String,defaultValue:Float){
-        sharedPref.getFloat(keyValue,defaultValue)
+    fun getValue(keyValue: String,defaultValue:Float):Float{
+        return sharedPref.getFloat(keyValue,defaultValue)
     }
 
-    fun getValue(keyValue: String,defaultValue:Set<String>){
-        sharedPref.getStringSet(keyValue,defaultValue)
+    fun getValue(keyValue: String,defaultValue:Set<String>):Set<String>{
+        return sharedPref.getStringSet(keyValue,defaultValue)!!
     }
 
 
