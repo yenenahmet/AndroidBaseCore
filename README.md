@@ -11,7 +11,7 @@
   
 
 	dependencies {
-	        implementation 'com.github.yenenahmet:AndroidBaseCore:0.1.0'
+	        implementation 'com.github.yenenahmet:AndroidBaseCore:version'
 	}
   
   -----
