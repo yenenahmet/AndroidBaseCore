@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import androidx.databinding.ViewDataBinding
 
-abstract class BaseSpinnerAdapter<T>
+abstract class BaseSpinnerAdapter<T,GVB:ViewDataBinding,GDDVB:ViewDataBinding>
 constructor(private var items: MutableList<T>) : BaseAdapter() {
 
     fun setItems(items: List<T>) {
@@ -20,7 +20,7 @@ constructor(private var items: MutableList<T>) : BaseAdapter() {
         if (view == null) {
             view = binding.root
         }
-        onViewSetModel()
+        onViewSetModel(binding)
         binding.executePendingBindings()
         return view
     }
@@ -39,7 +39,7 @@ constructor(private var items: MutableList<T>) : BaseAdapter() {
         if (view == null) {
             view = binding.root
         }
-        onDropDownViewSetModel()
+        onDropDownViewSetModel(binding)
         binding.executePendingBindings()
         return view
     }
@@ -56,12 +56,12 @@ constructor(private var items: MutableList<T>) : BaseAdapter() {
         return LayoutInflater.from(parent.context)
     }
 
-    protected abstract fun getViewBindingInflate(parent: ViewGroup?): ViewDataBinding
+    protected abstract fun getViewBindingInflate(parent: ViewGroup?): GVB
 
-    protected abstract fun onViewSetModel()
+    protected abstract fun onViewSetModel(binding: GVB)
 
-    protected abstract fun getDropDownViewBindingInflate(parent: ViewGroup?): ViewDataBinding
+    protected abstract fun getDropDownViewBindingInflate(parent: ViewGroup?): GDDVB
 
-    protected abstract fun onDropDownViewSetModel()
+    protected abstract fun onDropDownViewSetModel(binding: GDDVB)
 
 }
