@@ -84,11 +84,18 @@ viewModelClass: Class<VM>, private val isOnCreateGetData: Boolean
     @LayoutRes
     protected abstract fun getDialogId():Int
 
+    protected fun showDialog(){
+        loadingDialog?.show()
+    }
+
+    protected fun dismissDialog(){
+        loadingDialog?.dismiss()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         loadingDialog?.dismiss()
         loadingDialog = null
     }
-
 
 }

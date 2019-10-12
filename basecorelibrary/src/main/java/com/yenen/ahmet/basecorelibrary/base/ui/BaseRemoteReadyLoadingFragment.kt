@@ -87,6 +87,14 @@ abstract class BaseRemoteReadyLoadingFragment<T, VM : BaseRxSingleHandlerViewMod
     @LayoutRes
     protected abstract fun getDialogId(): Int
 
+    protected fun showDialog(){
+        loadingDialog?.show()
+    }
+
+    protected fun dismissDialog(){
+        loadingDialog?.dismiss()
+    }
+
     override fun onDetach() {
         super.onDetach()
         loadingDialog?.dismiss()

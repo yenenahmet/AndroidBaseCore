@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProviders
+import com.yenen.ahmet.basecorelibrary.base.local.LocaleManager
+import com.yenen.ahmet.basecorelibrary.base.local.SharedPreferencesHelper
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 
 abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
@@ -58,6 +60,17 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         onBindingClear(binding)
     }
 
+    override fun onPause() {
+        super.onPause()
+        hideKeybord()
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        val localeManager = LocaleManager(SharedPreferencesHelper(newBase!!))
+        super.attachBaseContext(localeManager.setLocale(newBase))
+    }
+
+
 
     fun showToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show()
@@ -69,6 +82,5 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
             val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputManager?.hideSoftInputFromWindow(it.windowToken, 0)
         }
-
     }
 }
