@@ -89,7 +89,7 @@ abstract class BaseRxSingleHandlerViewModel<T> : BaseViewModel() {
     private fun handleResults(results: T?) {
         if (results != null) {
             if (results is List<*>) {
-                if (!results.isEmpty()) {
+                if (results.isNotEmpty()) {
                     resultsLiveData?.value = results
                 } else {
                     noDataFound.value = noDataFoundText

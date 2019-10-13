@@ -1,6 +1,7 @@
 package com.yenen.ahmet.basecorelibrary.base.ui
 
 import android.os.Bundle
+import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseRxSingleHandlerViewModel
@@ -11,8 +12,8 @@ import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseRxSingleHandlerViewMod
 // Amaç: Her seferinde bu işlemlerin tekrarını önlenmek ve  projenin gidiş hattını standartlaştırmak.
 // Loading işleminin ve livedata yönetimini doğru bir şekilde sağlamak.
 abstract class BaseRemoteFragment<T, VM : BaseRxSingleHandlerViewModel<T>, DB : ViewDataBinding>(
-    viewModelClass: Class<VM>, private val isOnCreateGetData: Boolean
-) : BaseDaggerFragment<VM, DB>(viewModelClass) {
+    viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int, private val isOnCreateGetData: Boolean
+) : BaseDaggerFragment<VM, DB>(viewModelClass,layoutRes) {
 
 
 

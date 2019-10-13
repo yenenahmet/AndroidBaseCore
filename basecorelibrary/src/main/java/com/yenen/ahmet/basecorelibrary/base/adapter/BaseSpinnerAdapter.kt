@@ -4,23 +4,64 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import androidx.annotation.LayoutRes
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 
-abstract class BaseSpinnerAdapter<T,GVB:ViewDataBinding,GDDVB:ViewDataBinding>
-constructor(private var items: MutableList<T>) : BaseAdapter() {
+abstract class BaseSpinnerAdapter<T, GVB : ViewDataBinding, GDDVB : ViewDataBinding>
+constructor(
+    private var items: MutableList<T>,
+    @LayoutRes private val viewLayoutRes: Int,
+    @LayoutRes private val dropDownLayoutRes:Int
+) :
+    BaseAdapter() {
 
     fun setItems(items: List<T>) {
         this.items = items as MutableList<T>
         notifyDataSetChanged()
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var view: View? = convertView
-        val binding = getViewBindingInflate(parent)
-        if (view == null) {
+        val binding:GVB
+        if(view==null){
+            binding = DataBindingUtil.inflate(
+                getInflater(parent!!),
+                viewLayoutRes,
+                parent,
+                false
+            )
             view = binding.root
+            view.tag = binding
+        }else{
+            binding =  view.tag as GVB
         }
-        onViewSetModel(binding,getItem(position))
+
+        onViewSetModel(binding, getItem(position))
+        binding.executePendingBindings()
+        return view
+    }
+
+
+    @Suppress("UNCHECKED_CAST")
+    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        var view: View? = convertView
+        val binding:GDDVB
+        if (view == null) {
+             binding = DataBindingUtil.inflate(
+                getInflater(parent!!),
+                dropDownLayoutRes,
+                parent,
+                false
+            )
+            view = binding.root
+            view.tag = binding
+        } else {
+            binding =  view.tag as GDDVB
+        }
+
+        onDropDownViewSetModel(binding, getItem(position))
         binding.executePendingBindings()
         return view
     }
@@ -31,17 +72,6 @@ constructor(private var items: MutableList<T>) : BaseAdapter() {
 
     override fun getItemId(position: Int): Long {
         return position.toLong()
-    }
-
-    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        var view: View? = convertView
-        val binding = getDropDownViewBindingInflate(parent)
-        if (view == null) {
-            view = binding.root
-        }
-        onDropDownViewSetModel(binding,getItem(position))
-        binding.executePendingBindings()
-        return view
     }
 
     override fun getCount(): Int {
@@ -56,12 +86,9 @@ constructor(private var items: MutableList<T>) : BaseAdapter() {
         return LayoutInflater.from(parent.context)
     }
 
-    protected abstract fun getViewBindingInflate(parent: ViewGroup?): GVB
 
-    protected abstract fun onViewSetModel(binding: GVB,item :T)
+    protected abstract fun onViewSetModel(binding: GVB, item: T)
 
-    protected abstract fun getDropDownViewBindingInflate(parent: ViewGroup?): GDDVB
-
-    protected abstract fun onDropDownViewSetModel(binding: GDDVB,item :T)
+    protected abstract fun onDropDownViewSetModel(binding: GDDVB, item: T)
 
 }

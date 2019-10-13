@@ -1,9 +1,12 @@
 package com.yenen.ahmet.basecorelibrary.base.ui
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
@@ -14,14 +17,12 @@ import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>(private val viewModelClass: Class<VM>) :
+abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
+    (private val viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int) :
     DaggerFragment() {
 
     @Inject
     lateinit var providerFactory: AppViewModelFactory
-
-    @LayoutRes
-    abstract fun getLayoutRes(): Int
 
     protected var binding: DB? = null
 
@@ -29,8 +30,12 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>(priv
         ViewModelProviders.of(this, providerFactory).get(viewModelClass)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, getLayoutRes(), container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(inflater,layoutRes, container, false)
         viewModel.setViewDataBinding(binding!!)
         initViewModel(viewModel)
         onBindingCreate(binding!!)
@@ -57,12 +62,31 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>(priv
     }
 
 
-    protected fun showToast(text:String){
-        Toast.makeText(activity!!,text, Toast.LENGTH_LONG).show()
+    protected fun showToast(text: String) {
+        Toast.makeText(activity!!, text, Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        hideKeybord()
         onBindingClear(binding!!)
+    }
+
+    protected fun hideKeybord(){
+        activity?.currentFocus?.let {
+            val inputManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputManager?.hideSoftInputFromWindow(it.windowToken, 0)
+        }
+    }
+
+    fun startActivity(sClass: Class<*>) {
+        val intent = Intent(activity, sClass)
+        startActivity(intent)
+    }
+
+    fun startActivity(sClass: Class<*>,bundle: Bundle) {
+        val intent = Intent(activity, sClass)
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 }

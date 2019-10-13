@@ -8,8 +8,8 @@ import com.yenen.ahmet.basecorelibrary.base.dialog.BaseDialog
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseRxSingleHandlerViewModel
 
 abstract class BaseRemoteReadyLoadingActivity<T, VM : BaseRxSingleHandlerViewModel<T>, DB : ViewDataBinding>(
-viewModelClass: Class<VM>, private val isOnCreateGetData: Boolean
-) : BaseDaggerActivity<VM, DB>(viewModelClass)  {
+viewModelClass: Class<VM>,@LayoutRes private val layoutRes: Int,private val isOnCreateGetData: Boolean
+) : BaseDaggerActivity<VM, DB>(viewModelClass,layoutRes)  {
 
     private var loadingDialog: BaseDialog? = null
 

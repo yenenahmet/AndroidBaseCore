@@ -1,9 +1,12 @@
 package com.yenen.ahmet.basecorelibrary.base.ui
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
@@ -13,11 +16,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 
 abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
-    private val viewModelClass: Class<VM>
+    private val viewModelClass: Class<VM>, @LayoutRes private val layoutRes:Int
 ) : Fragment() {
 
-    @LayoutRes
-    abstract fun getLayoutRes(): Int
 
 
     protected val viewModel by lazy {
@@ -28,7 +29,7 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, getLayoutRes(), container, false)
+        binding = DataBindingUtil.inflate(inflater, layoutRes, container, false)
         viewModel.setViewDataBinding(binding!!)
         initViewModel(viewModel)
         onBindingCreate(binding!!)
@@ -61,7 +62,28 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
 
     override fun onDestroyView() {
         super.onDestroyView()
+        hideKeybord()
         onBindingClear(binding!!)
     }
 
+
+
+    protected fun hideKeybord(){
+        activity?.currentFocus?.let {
+            val inputManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputManager?.hideSoftInputFromWindow(it.windowToken, 0)
+        }
+    }
+
+
+    fun startActivity(sClass: Class<*>) {
+        val intent = Intent(activity, sClass)
+        startActivity(intent)
+    }
+
+    fun startActivity(sClass: Class<*>,bundle: Bundle) {
+        val intent = Intent(activity, sClass)
+        intent.putExtras(bundle)
+        startActivity(intent)
+    }
 }
