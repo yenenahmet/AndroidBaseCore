@@ -8,15 +8,16 @@ import com.yenen.ahmet.basecorelibrary.base.dialog.BaseDialog
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseRxSingleHandlerViewModel
 
 abstract class BaseRemoteReadyLoadingActivity<T, VM : BaseRxSingleHandlerViewModel<T>, DB : ViewDataBinding>(
-viewModelClass: Class<VM>,@LayoutRes private val layoutRes: Int,private val isOnCreateGetData: Boolean
-) : BaseDaggerActivity<VM, DB>(viewModelClass,layoutRes)  {
+    viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int, @LayoutRes private val dialogId: Int,
+    private val isOnCreateGetData: Boolean
+) : BaseDaggerActivity<VM, DB>(viewModelClass, layoutRes) {
 
     private var loadingDialog: BaseDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        loadingDialog = BaseDialog(this, getDialogId())
+        loadingDialog = BaseDialog(this, dialogId)
 
         if (isOnCreateGetData) {
             runDataObserve(viewModel)
@@ -60,7 +61,7 @@ viewModelClass: Class<VM>,@LayoutRes private val layoutRes: Int,private val isOn
         viewModel.dataChangeable()
     }
 
-    protected fun postData(){
+    protected fun postData() {
         preCommunicationProcedures()
         loadingDialog?.show()
         viewModel.postData()
@@ -76,19 +77,16 @@ viewModelClass: Class<VM>,@LayoutRes private val layoutRes: Int,private val isOn
     // gerekli veri viewModel üzerinde set edilir //
     // Servic çağrıları herhangi bir parametre içermiyorsa Kullanılmasına gerek yok //
     // Veya sadece bir kerelik viewModel set edilecekse, initViewModel üzerinden bu islem yapılabilir bu fonksiyonu overide etemye
-    protected open fun preCommunicationProcedures(){
+    protected open fun preCommunicationProcedures() {
 
     }
 
 
-    @LayoutRes
-    protected abstract fun getDialogId():Int
-
-    protected fun showDialog(){
+    protected fun showDialog() {
         loadingDialog?.show()
     }
 
-    protected fun dismissDialog(){
+    protected fun dismissDialog() {
         loadingDialog?.dismiss()
     }
 

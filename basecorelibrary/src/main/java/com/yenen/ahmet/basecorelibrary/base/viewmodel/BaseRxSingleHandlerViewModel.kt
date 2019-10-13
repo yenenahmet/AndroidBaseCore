@@ -4,16 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 // Retrofit İçin //
-abstract class BaseRxSingleHandlerViewModel<T> : BaseViewModel() {
-
-
-    protected val disposable by lazy {
-        CompositeDisposable()
-    }
+abstract class BaseRxSingleHandlerViewModel<T> : BaseRxViewModel() {
 
     // Retrofit -> Service üzerinden dönen Mesaj handler edilir
 
@@ -72,7 +66,7 @@ abstract class BaseRxSingleHandlerViewModel<T> : BaseViewModel() {
 
     // LiveDataya direk erişim kapatılmıştır // Eğer değere erişilmek istenirse bu fonk üzerinden alınır
     // Nedeni LiveData Etkinliliğinin bozulmaması ve liveDAta için gerekli kullanımın sağlanması. Fazlasına gerek yoktur.
-    protected fun getValue(): T? {
+    protected fun getLiveDataValue(): T? {
         return resultsLiveData?.value
     }
 
@@ -106,9 +100,5 @@ abstract class BaseRxSingleHandlerViewModel<T> : BaseViewModel() {
         errMessage.value = t
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        disposable.dispose()
-    }
 
 }

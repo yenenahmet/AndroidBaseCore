@@ -9,14 +9,15 @@ import com.yenen.ahmet.basecorelibrary.base.dialog.BaseDialog
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseRxSingleHandlerViewModel
 
 abstract class BaseRemoteReadyLoadingFragment<T, VM : BaseRxSingleHandlerViewModel<T>, DB : ViewDataBinding>(
-    viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int, private val isOnCreateGetData: Boolean
-) : BaseDaggerFragment<VM, DB>(viewModelClass,layoutRes) {
+    viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int, @LayoutRes private val dialogId: Int,
+    private val isOnCreateGetData: Boolean
+) : BaseDaggerFragment<VM, DB>(viewModelClass, layoutRes) {
 
     private var loadingDialog: BaseDialog? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        loadingDialog = BaseDialog(activity!!, getDialogId())
+        loadingDialog = BaseDialog(activity!!, dialogId)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -63,7 +64,7 @@ abstract class BaseRemoteReadyLoadingFragment<T, VM : BaseRxSingleHandlerViewMod
         viewModel.dataChangeable()
     }
 
-    protected fun postData(){
+    protected fun postData() {
         preCommunicationProcedures()
         loadingDialog?.show()
         viewModel.postData()
@@ -83,15 +84,11 @@ abstract class BaseRemoteReadyLoadingFragment<T, VM : BaseRxSingleHandlerViewMod
 
     }
 
-
-    @LayoutRes
-    protected abstract fun getDialogId(): Int
-
-    protected fun showDialog(){
+    protected fun showDialog() {
         loadingDialog?.show()
     }
 
-    protected fun dismissDialog(){
+    protected fun dismissDialog() {
         loadingDialog?.dismiss()
     }
 

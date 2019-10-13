@@ -76,12 +76,12 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
     }
 
 
-    fun startActivity(sClass: Class<*>) {
+    protected fun startActivity(sClass: Class<*>) {
         val intent = Intent(activity, sClass)
         startActivity(intent)
     }
 
-    fun startActivity(sClass: Class<*>,bundle: Bundle) {
+    protected fun startActivity(sClass: Class<*>,bundle: Bundle) {
         val intent = Intent(activity, sClass)
         intent.putExtras(bundle)
         startActivity(intent)
