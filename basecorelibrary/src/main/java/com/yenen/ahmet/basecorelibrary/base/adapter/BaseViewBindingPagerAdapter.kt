@@ -13,7 +13,6 @@ abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
     private var listener: Listener<VDB, T>?
 ) : PagerAdapter() {
 
-
     interface Listener<VDB : ViewDataBinding, T> {
         fun setBindingModel(binding: VDB, item: T)
     }
@@ -46,8 +45,6 @@ abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
     fun clear(){
         items.clear()
     }
-
-
 
     fun unBind() {
         listener = null
