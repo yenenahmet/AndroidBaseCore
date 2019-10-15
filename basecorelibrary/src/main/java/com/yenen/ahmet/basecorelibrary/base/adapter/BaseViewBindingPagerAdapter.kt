@@ -17,6 +17,7 @@ abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
         fun setBindingModel(binding: VDB, item: T)
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val inflater = LayoutInflater.from(container.context)
         val binding =
