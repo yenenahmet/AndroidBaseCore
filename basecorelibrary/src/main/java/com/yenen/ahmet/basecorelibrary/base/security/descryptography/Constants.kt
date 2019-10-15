@@ -1,4 +1,4 @@
-package com.mhamdaoui.nfcsmartcard.security.descrypto
+package com.yenen.ahmet.basecorelibrary.base.security.descryptography
 
 object Constants {
     fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }

@@ -1,4 +1,4 @@
-package com.mhamdaoui.nfcsmartcard.security.descrypto
+package com.yenen.ahmet.basecorelibrary.base.security.descryptography
 
 enum class Algorithm(val algorithm: String) {
     DES("DES"),
