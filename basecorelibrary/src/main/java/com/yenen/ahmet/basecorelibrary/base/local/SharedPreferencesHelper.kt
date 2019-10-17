@@ -1,10 +1,29 @@
 package com.yenen.ahmet.basecorelibrary.base.local
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.os.Build
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 
 class SharedPreferencesHelper constructor(context: Context) {
 
-    private val sharedPref = context.getSharedPreferences("SSSSS_BASE", Context.MODE_PRIVATE)
+    private val sharedPref: SharedPreferences
+
+    init {
+        sharedPref = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+            EncryptedSharedPreferences.create(
+                "secret_shared_prefs",
+                masterKeyAlias,
+                context,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            )
+        } else {
+            context.getSharedPreferences("secret_shared_prefs", Context.MODE_PRIVATE)
+        }
+    }
 
     fun addValueApply(keyValue: String, stringValue: String) {
         val editor = sharedPref.edit()

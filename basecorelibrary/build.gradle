@@ -43,8 +43,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.1.0'
 
     // Dagger 2
-    implementation 'com.google.dagger:dagger:2.23.2'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.dagger:dagger:2.24'
     kapt 'com.google.dagger:dagger-compiler:2.23.1'
     implementation 'com.google.dagger:dagger-android:2.23.1'
     kapt 'com.google.dagger:dagger-android-processor:2.23.1'
@@ -55,10 +54,13 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     //MVVM
 
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta04'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta05'
 
     //Rx
     implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     //Rx
+
+    // Security//
+    implementation "androidx.security:security-crypto:1.0.0-alpha02"
 }
