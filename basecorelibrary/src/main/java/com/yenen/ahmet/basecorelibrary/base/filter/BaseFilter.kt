@@ -19,11 +19,9 @@ abstract class BaseFilter<T> protected constructor(filterItems: List<T>) : Filte
                 val constLowerCase = constraint.toString().toLowerCase()
                 val controlParameter = constLowerCase.substring(0, 2)
                 val lowerCase = constLowerCase.substring(2, constLowerCase.length)
-                for (values in allItems!!) {
-                    values?.let {
-                        getFilterItem(lowerCase, it, controlParameter)?.let { model ->
-                            list.add(model)
-                        }
+                allItems?.forEach {
+                    getFilterItem(lowerCase, it, controlParameter)?.let { model ->
+                        list.add(model)
                     }
                 }
                 results.values = list
