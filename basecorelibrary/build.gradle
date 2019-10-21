@@ -62,6 +62,4 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     //Rx
 
-    // Security//
-    implementation "androidx.security:security-crypto:1.0.0-alpha02"
 }
