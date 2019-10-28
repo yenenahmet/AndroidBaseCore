@@ -56,7 +56,7 @@ abstract class BaseRecyclerViewFilterAdapter<T, E : RecyclerView.ViewHolder> con
         clearItems()
     }
 
-    protected fun clearFilter() {
+    fun clearFilter() {
         filter?.clear()
         filter = null
     }
