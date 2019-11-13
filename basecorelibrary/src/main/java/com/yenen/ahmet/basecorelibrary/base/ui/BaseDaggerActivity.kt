@@ -125,5 +125,11 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         finish()
     }
 
-
+    protected fun reStartApp(sClass: Class<*>){
+        val intent = Intent(applicationContext, sClass)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
+        System.exit(0)
+    }
 }

@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.viewpager.widget.PagerAdapter
 
-abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
+open class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
     @LayoutRes private val layoutRes: Int, private val items: MutableList<T>,
     private var listener: Listener<VDB, T>?
 ) : PagerAdapter() {
@@ -43,6 +43,9 @@ abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
         return items[position]
     }
 
+    fun getItems():List<T>{
+        return items
+    }
     fun clear(){
         items.clear()
     }

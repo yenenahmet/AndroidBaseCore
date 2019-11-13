@@ -86,4 +86,13 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
         intent.putExtras(bundle)
         startActivity(intent)
     }
+
+
+    protected fun reStartApp(sClass: Class<*>){
+        val intent = Intent(activity!!.applicationContext, sClass)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        activity!!.finish()
+        System.exit(0)
+    }
 }
