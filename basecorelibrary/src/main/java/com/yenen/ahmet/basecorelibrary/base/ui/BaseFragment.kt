@@ -31,6 +31,9 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, layoutRes, container, false)
         viewModel.setViewDataBinding(binding!!)
+        arguments?.let {
+            onBundle(it)
+        }
         initViewModel(viewModel)
         onBindingCreate(binding!!)
         return binding?.root
@@ -94,5 +97,9 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
         startActivity(intent)
         activity!!.finish()
         System.exit(0)
+    }
+
+    protected open fun onBundle(bundle: Bundle){
+
     }
 }

@@ -40,6 +40,9 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.setViewDataBinding(binding)
+        intent.extras?.let {
+            onBundle(it)
+        }
         initViewModel(viewModel)
         onBindingCreate(binding)
     }
@@ -131,5 +134,9 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         startActivity(intent)
         finish()
         System.exit(0)
+    }
+
+    protected open fun onBundle(bundle: Bundle){
+
     }
 }

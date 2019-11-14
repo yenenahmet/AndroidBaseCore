@@ -37,6 +37,9 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
     ): View? {
         binding = DataBindingUtil.inflate(inflater,layoutRes, container, false)
         viewModel.setViewDataBinding(binding!!)
+        arguments?.let {
+            onBundle(it)
+        }
         initViewModel(viewModel)
         onBindingCreate(binding!!)
         return binding?.root
@@ -96,5 +99,9 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
         startActivity(intent)
         activity!!.finish()
         System.exit(0)
+    }
+
+    protected open fun onBundle(bundle: Bundle){
+
     }
 }
