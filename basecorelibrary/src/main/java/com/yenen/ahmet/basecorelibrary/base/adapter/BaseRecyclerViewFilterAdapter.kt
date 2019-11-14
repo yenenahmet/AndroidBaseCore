@@ -32,7 +32,8 @@ abstract class BaseRecyclerViewFilterAdapter<T, E : RecyclerView.ViewHolder> con
         getFilter().filter(filterValue)
     }
 
-    inner class RecyclerViewFilter internal constructor(filterItems: List<T>) : BaseFilter<T>(filterItems) {
+    inner class RecyclerViewFilter internal constructor(filterItems: List<T>) :
+        BaseFilter<T>(filterItems) {
 
         override fun getFilterItem(constLowerCase: String, value: T, controlParameter: String): T? {
             if (filter != null) {
@@ -44,10 +45,15 @@ abstract class BaseRecyclerViewFilterAdapter<T, E : RecyclerView.ViewHolder> con
         @Suppress("UNCHECKED_CAST")
         override fun pubslishResults(results: List<*>) {
             setItems(results as List<T>)
+            onFilterFinish(results)
         }
     }
 
-    protected abstract fun getRecyclerFilterItem(constLowerCase: String, value: T, controlParameter: String): T?
+    protected abstract fun getRecyclerFilterItem(
+        constLowerCase: String,
+        value: T,
+        controlParameter: String
+    ): T?
     // Filterable //
 
     // clear Memory //
@@ -62,4 +68,8 @@ abstract class BaseRecyclerViewFilterAdapter<T, E : RecyclerView.ViewHolder> con
     }
     // clear Memory //
 
+
+    protected open fun onFilterFinish(results: List<T>) {
+
+    }
 }

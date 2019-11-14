@@ -13,9 +13,14 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
     ) {
 
     private var listener: ClickListener<T>? = null
+    private var filterListener: FilterListener<T>? = null
 
     interface ClickListener<T> {
         fun onItemClick(item: T, position: Int)
+    }
+
+    interface FilterListener<T> {
+        fun onFilterFinish(results: List<T>)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -54,5 +59,14 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
 
     fun unBind() {
         listener = null
+        filterListener = null
+    }
+
+    fun setFilterListener(listener: FilterListener<T>) {
+        this.filterListener = listener
+    }
+
+    override fun onFilterFinish(results: List<T>) {
+        filterListener?.onFilterFinish(results)
     }
 }

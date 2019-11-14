@@ -67,13 +67,13 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
 
     override fun onDestroyView() {
         super.onDestroyView()
-        hideKeybord()
+        hideKeyboard()
         onBindingClear(binding!!)
     }
 
 
 
-    protected fun hideKeybord(){
+    protected fun hideKeyboard(){
         activity?.currentFocus?.let {
             val inputManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputManager?.hideSoftInputFromWindow(it.windowToken, 0)

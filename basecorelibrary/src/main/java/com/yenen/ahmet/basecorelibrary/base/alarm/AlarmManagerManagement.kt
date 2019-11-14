@@ -31,9 +31,9 @@ class AlarmManagerManagement(private val context: Context) {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            manager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,  calender.getTimeInMillis(), alarmIntent);
+            manager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,  calender.timeInMillis, alarmIntent)
         }else{
-            manager.setExact(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), alarmIntent);
+            manager.setExact(AlarmManager.RTC_WAKEUP, calender.timeInMillis, alarmIntent)
         }
     }
 
