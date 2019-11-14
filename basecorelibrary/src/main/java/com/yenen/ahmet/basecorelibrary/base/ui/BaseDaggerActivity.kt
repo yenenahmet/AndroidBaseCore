@@ -1,7 +1,9 @@
 package com.yenen.ahmet.basecorelibrary.base.ui
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -138,5 +140,19 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
 
     protected open fun onBundle(bundle: Bundle){
 
+    }
+
+    protected fun openFile(uri: Uri, fileType:String,title:String):Boolean{
+        val target = Intent(Intent.ACTION_VIEW)
+        target.setDataAndType(uri, fileType)
+        target.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+        target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        val intent = Intent.createChooser(target, title)
+        return try {
+            startActivity(intent)
+            true
+        } catch (e: ActivityNotFoundException) {
+            false
+        }
     }
 }
