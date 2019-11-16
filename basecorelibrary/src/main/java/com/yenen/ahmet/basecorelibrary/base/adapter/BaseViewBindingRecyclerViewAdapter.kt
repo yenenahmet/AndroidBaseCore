@@ -6,10 +6,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 
-open class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
+abstract class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
     (
-    @LayoutRes private val layoutRes: Int,
-    private var modelListener: ModelListener<T, VDB>?
+    @LayoutRes private val layoutRes: Int
 ) :
     BaseRecyclerViewAdapter<T, BaseViewBindingRecyclerViewAdapter<T, VDB>.ViewHolder>(mutableListOf()) {
 
@@ -19,9 +18,6 @@ open class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
         fun onItemClick(item: T, position: Int)
     }
 
-    interface ModelListener<T, VDB : ViewDataBinding> {
-        fun setBindingModel(item: T, binding: VDB)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = DataBindingUtil.inflate<VDB>(getInflater(parent), layoutRes, parent, false)
@@ -33,7 +29,7 @@ open class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
         position: Int
     ) {
         getItem(position)?.let {
-            holder.bind(it)
+            holder.bind(it,position)
             if (listener != null) {
                 holder.binding.root.setOnClickListener { _ ->
                     listener?.onItemClick(it, position)
@@ -45,8 +41,8 @@ open class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
 
     @Suppress("UNCHECKED_CAST")
     inner class ViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: T) {
-            modelListener?.setBindingModel(item, binding as VDB)
+        fun bind(item: T,position: Int) {
+            setBindingModel(item, binding as VDB,position)
             binding.executePendingBindings()
         }
     }
@@ -58,7 +54,8 @@ open class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
 
     fun unBind() {
         listener = null
-        modelListener = null
     }
+
+    protected abstract fun setBindingModel(item: T, binding: VDB,position: Int)
 
 }

@@ -3,7 +3,6 @@ package com.yenen.ahmet.basecorelibrary.base.remote
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
-import java.lang.Exception
 
 class DownloadFile constructor(
     private val inputStream: InputStream,
@@ -26,9 +25,7 @@ class DownloadFile constructor(
             val fileReader = ByteArray(4096)
             FileOutputStream(file).use {
                 inputStream.use { inputStream ->
-
                     while (true) {
-
                         val read = inputStream.read(fileReader)
 
                         if (read == -1)
@@ -37,11 +34,12 @@ class DownloadFile constructor(
                         it.write(fileReader, 0, read)
 
                         fileSizeDownloaded += read
+                        listener.onLoading(fileSizeDownloaded)
                     }
                 }
                 it.flush()
-                listener.onSuccess(fileSizeDownloaded)
             }
+            listener.onSuccess(fileSizeDownloaded)
         } catch (ex: Exception) {
             listener.onError(ex)
         }

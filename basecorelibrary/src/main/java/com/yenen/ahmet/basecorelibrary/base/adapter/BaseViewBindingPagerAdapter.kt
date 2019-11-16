@@ -8,14 +8,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.viewpager.widget.PagerAdapter
 
-open class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
-    @LayoutRes private val layoutRes: Int, private val items: MutableList<T>,
-    private var listener: Listener<VDB, T>?
+abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
+    @LayoutRes private val layoutRes: Int, private val items: MutableList<T>
 ) : PagerAdapter() {
-
-    interface Listener<VDB : ViewDataBinding, T> {
-        fun setBindingModel(binding: VDB, item: T)
-    }
 
     @Suppress("UNCHECKED_CAST")
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
@@ -23,7 +18,7 @@ open class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
         val binding =
             DataBindingUtil.inflate<ViewDataBinding>(inflater, layoutRes, container, false) as VDB
         container.addView(binding.root)
-        listener?.setBindingModel(binding, items[position])
+        setBindingModel(binding, items[position],position)
         binding.executePendingBindings()
         return binding.root
     }
@@ -50,7 +45,5 @@ open class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
         items.clear()
     }
 
-    fun unBind() {
-        listener = null
-    }
+    protected  abstract fun setBindingModel(binding: VDB, item: T,position: Int)
 }

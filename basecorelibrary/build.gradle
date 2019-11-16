@@ -55,7 +55,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     //MVVM
 
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta05'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-rc01'
 
     //Rx
     implementation 'io.reactivex.rxjava2:rxjava:2.1.9'

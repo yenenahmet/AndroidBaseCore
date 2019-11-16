@@ -18,7 +18,7 @@ abstract class BaseAlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         context?.let {
-            if ("android.intent.action.BOOT_COMPLETED".equals(intent?.action)) {
+            if ("android.intent.action.BOOT_COMPLETED" == intent?.action) {
                 reStartAlarm(context)
                 // alarms will be re-set
                 return
