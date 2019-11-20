@@ -32,7 +32,7 @@ protected constructor(private var items: MutableList<T>) : RecyclerView.Adapter<
     }
 
     fun getItem(position: Int): T? {
-        return if (position > -1 && !items.isEmpty()) {
+        return if (position > -1 && items.isNotEmpty()) {
             items[position]
         } else null
     }

@@ -11,7 +11,7 @@ abstract class BaseApplication : DaggerApplication() {
     override fun attachBaseContext(base: Context?) {
         val sharedPreferencesHelper = SharedPreferencesHelper(base!!)
         val localeManager = LocaleManager(sharedPreferencesHelper)
-        super.attachBaseContext(localeManager.setLocale(base!!))
+        super.attachBaseContext(localeManager.setLocale(base))
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
