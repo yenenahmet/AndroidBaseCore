@@ -9,7 +9,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.viewpager.widget.PagerAdapter
 
 abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
-    @LayoutRes private val layoutRes: Int, private val items: MutableList<T>
+    @LayoutRes private val layoutRes: Int, private var items: MutableList<T>
 ) : PagerAdapter() {
 
     @Suppress("UNCHECKED_CAST")
@@ -18,7 +18,7 @@ abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
         val binding =
             DataBindingUtil.inflate<ViewDataBinding>(inflater, layoutRes, container, false) as VDB
         container.addView(binding.root)
-        setBindingModel(binding, items[position],position)
+        setBindingModel(binding, items[position], position)
         binding.executePendingBindings()
         return binding.root
     }
@@ -34,16 +34,22 @@ abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
 
     override fun getCount(): Int = items.size
 
-    fun getItem(position:Int) :T{
+    fun getItem(position: Int): T {
         return items[position]
     }
 
-    fun getItems():List<T>{
+    fun getItems(): List<T> {
         return items
     }
-    fun clear(){
+
+    fun clear() {
         items.clear()
     }
 
-    protected  abstract fun setBindingModel(binding: VDB, item: T,position: Int)
+    fun setItems(items: List<T>) {
+        this.items = items as MutableList<T>
+        notifyDataSetChanged()
+    }
+
+    protected abstract fun setBindingModel(binding: VDB, item: T, position: Int)
 }
