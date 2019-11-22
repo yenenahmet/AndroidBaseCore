@@ -2,7 +2,7 @@ package com.yenen.ahmet.basecorelibrary.base.utility
 
 import java.util.regex.Pattern
 
-object ControlUtil {
+object ControlUtils {
 
     fun isEmailValid(email: String): Boolean {
         if (email.trim().length > 3) {

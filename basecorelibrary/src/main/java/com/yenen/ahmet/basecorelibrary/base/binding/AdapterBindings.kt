@@ -5,6 +5,8 @@ import androidx.appcompat.widget.AppCompatSpinner
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
 
 object AdapterBindings {
 
@@ -19,6 +21,12 @@ object AdapterBindings {
     @BindingAdapter("setSpinnerAdapter")
     @JvmStatic
     fun bindSpinnerViewAdapter(view: AppCompatSpinner, adapter: BaseAdapter) {
+        view.adapter = adapter
+    }
+
+    @BindingAdapter("setPagerAdapter")
+    @JvmStatic
+    fun bindPagerAdapter(view: ViewPager, adapter: PagerAdapter) {
         view.adapter = adapter
     }
 
