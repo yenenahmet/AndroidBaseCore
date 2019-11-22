@@ -21,8 +21,6 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
     private val viewModelClass: Class<VM>, @LayoutRes private val layoutRes:Int
 ) : Fragment() {
 
-
-
     protected val viewModel by lazy {
         ViewModelProviders.of(this).get(viewModelClass)
     }

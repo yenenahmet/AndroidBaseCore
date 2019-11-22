@@ -12,14 +12,12 @@ import androidx.databinding.ViewDataBinding
 open class BaseBindingDialog<VDB : ViewDataBinding>(private var activity: Activity?,@LayoutRes private val layoutId: Int) {
 
     private val alertDialog: AlertDialog
-    protected var binding: VDB
+    var binding: VDB
 
      init {
         val parent = activity?.window?.decorView?.rootView as? ViewGroup
         binding = DataBindingUtil.inflate(activity?.layoutInflater!!, layoutId, parent, false)
-        val view = binding.root
-
-        this.alertDialog = AlertDialog.Builder(activity).setView(view).setCancelable(false).create()
+        this.alertDialog = AlertDialog.Builder(activity).setView(binding.root).setCancelable(false).create()
         val color = ColorDrawable(Color.TRANSPARENT)
         val window = alertDialog.window
         window?.setBackgroundDrawable(color)
