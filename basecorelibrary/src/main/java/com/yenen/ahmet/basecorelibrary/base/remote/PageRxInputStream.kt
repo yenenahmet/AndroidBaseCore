@@ -10,7 +10,7 @@ import java.io.InputStreamReader
 import java.net.URL
 import java.util.concurrent.Callable
 
-class PageInputStream {
+class PageRxInputStream {
 
     fun getFlowableData(url: String,charsetName:String): Flowable<String> {
         return Flowable.generate(
