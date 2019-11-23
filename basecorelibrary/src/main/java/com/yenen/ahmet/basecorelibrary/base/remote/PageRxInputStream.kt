@@ -2,17 +2,19 @@ package com.yenen.ahmet.basecorelibrary.base.remote
 
 import io.reactivex.Emitter
 import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiConsumer
 import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
 import java.util.concurrent.Callable
 
-class PageRxInputStream {
+object PageRxInputStream {
 
-    fun getFlowableData(url: String,charsetName:String): Flowable<String> {
+    fun getFlowableData(url: String, charsetName: String): Flowable<String> {
         return Flowable.generate(
             Callable {
                 val urlConnection = URL(url)
@@ -33,7 +35,7 @@ class PageRxInputStream {
 
                 }
             }
-
-        )
+        ).observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
     }
 }
