@@ -4,7 +4,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 abstract  class BaseRxViewModel :BaseViewModel() {
 
-    protected val disposable by lazy {
+    val disposable by lazy {
         CompositeDisposable()
     }
 
