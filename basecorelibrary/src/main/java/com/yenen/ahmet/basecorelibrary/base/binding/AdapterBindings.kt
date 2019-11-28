@@ -13,7 +13,6 @@ object AdapterBindings {
     @BindingAdapter("setAdapter")
     @JvmStatic
     fun bindRecyclerViewAdapter(view: RecyclerView, adapter: RecyclerView.Adapter<*>) {
-        view.setHasFixedSize(true)
         view.itemAnimator = DefaultItemAnimator()
         view.adapter = adapter
     }
