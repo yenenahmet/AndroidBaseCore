@@ -131,4 +131,8 @@ abstract class BaseViewBindingRecyclerViewInputAdapter<T, VDB : ViewDataBinding>
     protected abstract fun onInputConfig(item: T, position: Int, binding: VDB)
     //  Abstract fun //
 
+    fun setChangeDelay(changeDelay:Long){
+        this.changeDelay = changeDelay
+    }
+
 }
