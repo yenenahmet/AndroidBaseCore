@@ -1,5 +1,7 @@
 package com.yenen.ahmet.basecorelibrary.base.adapter
 
+import android.app.Activity
+import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -13,9 +15,12 @@ import java.util.*
 // ViewToken ve Input Manager Ekran rotasyonları için dikkat edilmesi gerekiyor !  by lazy olarak kullanılmaz//
 abstract class BaseViewBindingRecyclerViewInputAdapter<T, VDB : ViewDataBinding>(
     @LayoutRes private val layoutRes: Int,
-    private val inputManager: InputMethodManager,
+    private val activity: Activity,
     private val viewToken: RecyclerView
 ) : BaseViewBindingRecyclerViewAdapter<T, VDB>(layoutRes) {
+
+    private val inputManager =
+        activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
     protected var textWatcher: TextWatcher? = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
@@ -83,7 +88,9 @@ abstract class BaseViewBindingRecyclerViewInputAdapter<T, VDB : ViewDataBinding>
         clearTimer()
         val item = getItem(position)
         if (position > -1 && item != null && view != null && !isScroll) {
-            onChange(position, view, item)
+            activity.runOnUiThread {
+                onChange(position, view, item)
+            }
         }
     }
 
