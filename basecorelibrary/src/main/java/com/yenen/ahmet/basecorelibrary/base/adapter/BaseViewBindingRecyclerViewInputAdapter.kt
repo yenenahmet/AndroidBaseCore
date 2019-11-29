@@ -14,13 +14,12 @@ import java.util.*
 
 // ViewToken ve Input Manager Ekran rotasyonları için dikkat edilmesi gerekiyor !  by lazy olarak kullanılmaz//
 abstract class BaseViewBindingRecyclerViewInputAdapter<T, VDB : ViewDataBinding>(
-    @LayoutRes private val layoutRes: Int,
-    private val activity: Activity,
-    private val viewToken: RecyclerView
+    @LayoutRes private val layoutRes: Int
 ) : BaseViewBindingRecyclerViewAdapter<T, VDB>(layoutRes) {
 
-    private val inputManager =
-        activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    private var activity: Activity? = null
+    private var inputManager: InputMethodManager? = null
+    private var recyclerView: RecyclerView? = null
 
     protected var textWatcher: TextWatcher? = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
@@ -55,47 +54,59 @@ abstract class BaseViewBindingRecyclerViewInputAdapter<T, VDB : ViewDataBinding>
             }
         }
 
-    private var changeDelay: Long = 500
+    private var changeDelay: Long = 1000
     private var timer: Timer? = null
     private var focusPosition: Int = -1
     private var focusView: View? = null
     private var isScroll: Boolean = false
     private var onScrollListener: RecyclerView.OnScrollListener? = null
 
-    init {
-        scrollListener()
-    }
-
-    // RecyclerView Scroll listener //
-    private fun scrollListener() {
+    // Adapter Oluşturulduktan sonra önce setActivity sonra setScrollListener Kurulur//
+    // Adapter her seferinde oluturuşmasına gerek yok fakat rotasyonlarda bu iki fonksiyon yenilenmesi gerekiyor //
+    fun setScrollListener(recyclerView: RecyclerView) {
+        removeScrollListener()
         onScrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 clearTimer()
-                if (inputManager.isActive) {
-                    clearFocusView()
-                    hideKeyboard()
+                inputManager?.let {
+                    if (it.isActive) {
+                        clearFocusView()
+                        hideKeyboard()
+                    }
                 }
+
                 isScroll = newState != AbsListView.OnScrollListener.SCROLL_STATE_IDLE
             }
         }
-        viewToken.addOnScrollListener(onScrollListener!!)
+        recyclerView.addOnScrollListener(onScrollListener!!)
+        this.recyclerView = recyclerView
     }
-    // RecyclerView Scroll listener //
+
+    fun setActivity(activity: Activity) {
+        this.activity = null
+        this.inputManager = null
+        this.activity = activity
+        this.inputManager =
+            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    }
 
     // Class Fun //
     private fun runOnChange(position: Int, view: View?) {
         clearTimer()
-        val item = getItem(position)
-        if (position > -1 && item != null && view != null && !isScroll) {
-            activity.runOnUiThread {
-                onChange(position, view, item)
+        getItem(position)?.let {
+            if (position > -1 && view != null && !isScroll) {
+                activity?.runOnUiThread {
+                    onChange(position, view, it)
+                }
             }
         }
     }
 
     private fun hideKeyboard() {
-        inputManager.hideSoftInputFromWindow(viewToken.windowToken, 0)
+        recyclerView?.let {
+            inputManager?.hideSoftInputFromWindow(it.windowToken, 0)
+        }
     }
 
     override fun unBind() {
@@ -105,8 +116,15 @@ abstract class BaseViewBindingRecyclerViewInputAdapter<T, VDB : ViewDataBinding>
         clearTimer()
         timer = null
         focusView = null
+        removeScrollListener()
+        recyclerView = null
+        activity = null
+        inputManager = null
+    }
+
+    private fun removeScrollListener() {
         onScrollListener?.let {
-            viewToken.removeOnScrollListener(it)
+            recyclerView?.removeOnScrollListener(it)
         }
         onScrollListener = null
     }
@@ -124,14 +142,9 @@ abstract class BaseViewBindingRecyclerViewInputAdapter<T, VDB : ViewDataBinding>
     //  Abstract fun //
     protected abstract fun onChange(position: Int, view: View, item: T)
 
-    override fun onUseBindViewHolder(item: T, position: Int, binding: VDB) {
-        onInputConfig(item, position, binding)
-    }
-
-    protected abstract fun onInputConfig(item: T, position: Int, binding: VDB)
     //  Abstract fun //
 
-    fun setChangeDelay(changeDelay:Long){
+    fun setChangeDelay(changeDelay: Long) {
         this.changeDelay = changeDelay
     }
 
