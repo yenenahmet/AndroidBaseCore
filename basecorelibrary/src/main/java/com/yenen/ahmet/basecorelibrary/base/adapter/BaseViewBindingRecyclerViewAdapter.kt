@@ -24,12 +24,14 @@ abstract class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
         return ViewHolder(binding)
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun onBindViewHolder(
         holder: BaseViewBindingRecyclerViewAdapter<T, VDB>.ViewHolder,
         position: Int
     ) {
         getItem(position)?.let {
             holder.bind(it,position)
+            onUseBindViewHolder(it,position,holder.binding as VDB)
             if (listener != null) {
                 holder.binding.root.setOnClickListener { _ ->
                     listener?.onItemClick(it, position)
@@ -52,8 +54,12 @@ abstract class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
         this.listener = listener
     }
 
-    fun unBind() {
+    open fun unBind() {
         listener = null
+    }
+
+    open fun onUseBindViewHolder(item: T,position: Int, binding: VDB){
+
     }
 
     protected abstract fun setBindingModel(item: T, binding: VDB,position: Int)
