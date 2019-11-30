@@ -72,7 +72,7 @@ abstract class BaseRxSingleHandlerViewModel<T> : BaseRxViewModel() {
 
     // Bu fonksiyonlar görevini yerine getirip iletimini yapmaktadır extend alınamaz  veya çağrılamaz //
     private fun runFlowable(observable: Flowable<T>) {
-        disposable.add(
+        addDisposable(
             observable.observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResults, this::handleError)
