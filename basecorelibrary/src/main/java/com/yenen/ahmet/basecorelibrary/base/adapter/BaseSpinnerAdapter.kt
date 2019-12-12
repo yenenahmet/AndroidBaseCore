@@ -16,6 +16,7 @@ constructor(
 ) :
     BaseAdapter() {
 
+
     fun setItems(items: List<T>) {
         this.items = items as MutableList<T>
         notifyDataSetChanged()
