@@ -14,8 +14,9 @@
 	        implementation 'com.github.yenenahmet:AndroidBaseCore:version'
 	}
   
-
-  # Base Adapters 
+ * To facilitate structures that can be used throughout the project
+ 
+ # Base Adapters 
   1) BaseRecyclerViewAdapter
   2) BaseViewBindingRecyclerViewAdapter
   3) BaseRecyclerViewFilterAdapter
