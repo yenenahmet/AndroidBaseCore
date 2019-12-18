@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -16,6 +17,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.yenen.ahmet.basecorelibrary.base.local.LocaleManager
 import com.yenen.ahmet.basecorelibrary.base.local.SharedPreferencesHelper
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
+import java.io.File
+import java.lang.Exception
 
 abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
     private val viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int
@@ -33,11 +36,11 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.setViewDataBinding(binding)
+        initViewModel(viewModel)
+        onBindingCreate(binding)
         intent.extras?.let {
             onBundle(it)
         }
-        initViewModel(viewModel)
-        onBindingCreate(binding)
     }
 
     /*
@@ -101,7 +104,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         startActivity(intent)
     }
 
-    protected fun startActivity(sClass: Class<*>,bundle: Bundle) {
+    protected fun startActivity(sClass: Class<*>, bundle: Bundle) {
         val intent = Intent(this, sClass)
         intent.putExtras(bundle)
         startActivity(intent)
@@ -119,13 +122,13 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         startActivityForResult(intent, req)
     }
 
-    protected fun setNewLocale(language :String,localeManager: LocaleManager) {
-        localeManager.setNewLocale(this,language)
+    protected fun setNewLocale(language: String, localeManager: LocaleManager) {
+        localeManager.setNewLocale(this, language)
         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
         finish()
     }
 
-    protected fun reStartApp(sClass: Class<*>){
+    protected fun reStartApp(sClass: Class<*>) {
         val intent = Intent(applicationContext, sClass)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
@@ -134,11 +137,11 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
     }
 
 
-    protected open fun onBundle(bundle: Bundle){
+    protected open fun onBundle(bundle: Bundle) {
 
     }
 
-    protected fun openFile(uri:Uri,fileType:String,title:String):Boolean{
+    protected fun openFile(uri: Uri, fileType: String, title: String): Boolean {
         val target = Intent(Intent.ACTION_VIEW)
         target.setDataAndType(uri, fileType)
         target.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
@@ -148,6 +151,50 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
             startActivity(intent)
             true
         } catch (e: ActivityNotFoundException) {
+            false
+        }
+    }
+
+
+    protected fun shareFile(
+        fileType: String,
+        file: File,
+        filUri: Uri,
+        subject: String,
+        chooserTitle: String
+    ): Boolean {
+
+        if (!file.exists()) {
+            return false
+        }
+
+        val intentShareFile = Intent().apply {
+            type = fileType
+            putExtra(Intent.EXTRA_STREAM, filUri)
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        }
+
+        Intent.createChooser(intentShareFile, chooserTitle)?.let {
+            startActivity(it)
+            return true
+        }
+        return false
+
+    }
+
+
+    protected fun openAppPermissionPage(): Boolean {
+        return try {
+            val intent = Intent().apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                data = Uri.fromParts("package", packageName, null)
+            }
+            startActivity(intent)
+            true
+        } catch (ex: Exception) {
             false
         }
     }

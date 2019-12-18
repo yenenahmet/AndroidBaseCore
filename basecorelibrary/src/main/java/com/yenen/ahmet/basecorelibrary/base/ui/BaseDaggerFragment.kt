@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.yenen.ahmet.basecorelibrary.base.di.factory.AppViewModelFactory
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 import dagger.android.support.DaggerFragment
+import java.io.File
+import java.lang.Exception
 import javax.inject.Inject
 
 abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
@@ -39,11 +42,13 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
     ): View? {
         binding = DataBindingUtil.inflate(inflater,layoutRes, container, false)
         viewModel.setViewDataBinding(binding!!)
+        initViewModel(viewModel)
+
+        onBindingCreate(binding!!)
+
         arguments?.let {
             onBundle(it)
         }
-        initViewModel(viewModel)
-        onBindingCreate(binding!!)
         return binding?.root
     }
 
@@ -117,6 +122,48 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
             startActivity(intent)
             true
         } catch (e: ActivityNotFoundException) {
+            false
+        }
+    }
+
+    protected fun shareFile(
+        fileType: String,
+        file: File,
+        filUri: Uri,
+        subject: String,
+        chooserTitle: String
+    ): Boolean {
+
+        if (!file.exists()) {
+            return false
+        }
+
+        val intentShareFile = Intent().apply {
+            type = fileType
+            putExtra(Intent.EXTRA_STREAM, filUri)
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        }
+
+        Intent.createChooser(intentShareFile, chooserTitle)?.let {
+            startActivity(it)
+            return true
+        }
+        return false
+
+    }
+
+    protected fun openAppPermissionPage(): Boolean {
+        return try {
+            val intent = Intent().apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                data = Uri.fromParts("package", activity?.packageName, null)
+            }
+            activity?.startActivity(intent)
+            true
+        } catch (ex: Exception) {
             false
         }
     }

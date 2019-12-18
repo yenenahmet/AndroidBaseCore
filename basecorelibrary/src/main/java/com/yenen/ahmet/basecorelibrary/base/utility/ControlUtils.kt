@@ -19,24 +19,27 @@ object ControlUtils {
     }
 
 
-     fun isValidTCN(value: String): Boolean { // 01234567891
-        val charAt10 = Character.digit(value[10], 10)
-        if (value.length == 11 && value.substring(0, 1) != "0" && charAt10 % 2 == 0) {
-            var singleDigits = 0
-            var doubleDigits = 0
-            for (i in 0..8) {
-                if (i % 2 == 0) { // tekler 13579
-                    singleDigits += Character.digit(value[i], 10)
-                } else { // çiftler 2468
-                    doubleDigits += Character.digit(value[i], 10)
+    fun isValidTCN(value: String): Boolean { // 01234567891
+        if (value.length == 11) {
+            val charAt10 = Character.digit(value[10], 10)
+            if (value.substring(0, 1) != "0" && charAt10 % 2 == 0) {
+                var singleDigits = 0
+                var doubleDigits = 0
+                for (i in 0..8) {
+                    if (i % 2 == 0) { // tekler 13579
+                        singleDigits += Character.digit(value[i], 10)
+                    } else { // çiftler 2468
+                        doubleDigits += Character.digit(value[i], 10)
+                    }
+                }
+                val totalDigitCalculation = (singleDigits * 7 - doubleDigits) % 10
+                val charAt9 = Character.digit(value[9], 10)
+                if (totalDigitCalculation == charAt9) {
+                    return (singleDigits + doubleDigits + charAt9) % 10 == charAt10
                 }
             }
-            val totalDigitCalculation = (singleDigits * 7 - doubleDigits) % 10
-            val charAt9 = Character.digit(value[9], 10)
-            if (totalDigitCalculation == charAt9) {
-                return (singleDigits + doubleDigits + charAt9) % 10 == charAt10
-            }
         }
+
         return false
     }
 

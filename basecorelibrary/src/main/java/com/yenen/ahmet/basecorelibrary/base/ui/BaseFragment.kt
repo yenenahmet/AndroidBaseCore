@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +17,12 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
+import java.io.File
+import java.lang.Exception
+
 
 abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
-    private val viewModelClass: Class<VM>, @LayoutRes private val layoutRes:Int
+    private val viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int
 ) : Fragment() {
 
     protected val viewModel by lazy {
@@ -28,14 +32,21 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
     protected var binding: DB? = null
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(inflater, layoutRes, container, false)
         viewModel.setViewDataBinding(binding!!)
+
+        initViewModel(viewModel)
+
+        onBindingCreate(binding!!)
+
         arguments?.let {
             onBundle(it)
         }
-        initViewModel(viewModel)
-        onBindingCreate(binding!!)
         return binding?.root
     }
 
@@ -59,8 +70,8 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
 
     }
 
-    protected fun showToast(text:String){
-        Toast.makeText(activity,text,Toast.LENGTH_LONG).show()
+    protected fun showToast(text: String) {
+        Toast.makeText(activity, text, Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {
@@ -70,10 +81,10 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
     }
 
 
-
-    protected fun hideKeyboard(){
+    protected fun hideKeyboard() {
         activity?.currentFocus?.let {
-            val inputManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val inputManager =
+                activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputManager?.hideSoftInputFromWindow(it.windowToken, 0)
         }
     }
@@ -84,14 +95,14 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
         startActivity(intent)
     }
 
-    protected fun startActivity(sClass: Class<*>,bundle: Bundle) {
+    protected fun startActivity(sClass: Class<*>, bundle: Bundle) {
         val intent = Intent(activity, sClass)
         intent.putExtras(bundle)
         startActivity(intent)
     }
 
 
-    protected fun reStartApp(sClass: Class<*>){
+    protected fun reStartApp(sClass: Class<*>) {
         val intent = Intent(activity!!.applicationContext, sClass)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
@@ -99,11 +110,11 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
         System.exit(0)
     }
 
-    protected open fun onBundle(bundle: Bundle){
+    protected open fun onBundle(bundle: Bundle) {
 
     }
 
-    protected fun openFile(uri: Uri, fileType:String, title:String):Boolean{
+    protected fun openFile(uri: Uri, fileType: String, title: String): Boolean {
         val target = Intent(Intent.ACTION_VIEW)
         target.setDataAndType(uri, fileType)
         target.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
@@ -113,6 +124,50 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
             startActivity(intent)
             true
         } catch (e: ActivityNotFoundException) {
+            false
+        }
+    }
+
+
+    protected fun shareFile(
+        fileType: String,
+        file: File,
+        filUri: Uri,
+        subject: String,
+        chooserTitle: String
+    ): Boolean {
+
+        if (!file.exists()) {
+            return false
+        }
+
+        val intentShareFile = Intent().apply {
+            type = fileType
+            putExtra(Intent.EXTRA_STREAM, filUri)
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        }
+
+        Intent.createChooser(intentShareFile, chooserTitle)?.let {
+            startActivity(it)
+            return true
+        }
+        return false
+
+    }
+
+
+    protected fun openAppPermissionPage(): Boolean {
+        return try {
+            val intent = Intent().apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                action = ACTION_APPLICATION_DETAILS_SETTINGS
+                data = Uri.fromParts("package", activity?.packageName, null)
+            }
+            activity?.startActivity(intent)
+            true
+        } catch (ex: Exception) {
             false
         }
     }

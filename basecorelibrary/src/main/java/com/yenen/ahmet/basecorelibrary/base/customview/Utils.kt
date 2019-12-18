@@ -5,7 +5,11 @@ import androidx.annotation.RequiresApi
 import java.text.NumberFormat
 import java.util.*
 
-internal fun parseMoneyValue(value: String, groupingSeparator: String, currencySymbol: String): String =
+internal fun parseMoneyValue(
+    value: String,
+    groupingSeparator: String,
+    currencySymbol: String
+): String =
     value.replace(groupingSeparator, "").replace(currencySymbol, "")
 
 internal fun parseMoneyValueWithLocale(
