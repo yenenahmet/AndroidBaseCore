@@ -2,16 +2,16 @@ package com.yenen.ahmet.basecorelibrary.base.ui
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.widget.DatePicker
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 import java.util.*
 
-abstract class BaseDateDaggerLoadingActivity <VM : BaseViewModel, DB : ViewDataBinding,VDB: ViewDataBinding>(
+abstract class BaseDateDaggerLoadingActivity<VM : BaseViewModel, DB : ViewDataBinding, VDB : ViewDataBinding>(
     viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int, @LayoutRes private val loadingLayoutResId: Int
-):BaseDaggerLoadingActivity<VM,DB,VDB>(viewModelClass,layoutRes,loadingLayoutResId), DatePickerDialog.OnDateSetListener {
+) : BaseDaggerLoadingActivity<VM, DB, VDB>(viewModelClass, layoutRes, loadingLayoutResId),
+    DatePickerDialog.OnDateSetListener {
 
 
     private var dateDialog: DatePickerDialog? = null
@@ -28,8 +28,16 @@ abstract class BaseDateDaggerLoadingActivity <VM : BaseViewModel, DB : ViewDataB
         dateDialog = DatePickerDialog(this, this, year, month, day)
     }
 
+    protected fun showDatePicker() {
+        dateDialog?.show()
+    }
+
+    protected fun dismissDatePicker() {
+        dateDialog?.dismiss()
+    }
+
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        onSetDate(view,year,month,dayOfMonth)
+        onSetDate(view, year, month, dayOfMonth)
     }
 
     override fun onDestroy() {
