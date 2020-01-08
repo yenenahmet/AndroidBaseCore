@@ -13,8 +13,8 @@ abstract class BaseDateDaggerLoadingActivity<VM : BaseViewModel, DB : ViewDataBi
 ) : BaseDaggerLoadingActivity<VM, DB, VDB>(viewModelClass, layoutRes, loadingLayoutResId),
     DatePickerDialog.OnDateSetListener {
 
-
     private var dateDialog: DatePickerDialog? = null
+    private var dateListener:DatePickerDialog.OnDateSetListener?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +25,8 @@ abstract class BaseDateDaggerLoadingActivity<VM : BaseViewModel, DB : ViewDataBi
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
-        dateDialog = DatePickerDialog(this, this, year, month, day)
+        dateListener = this
+        dateDialog = DatePickerDialog(this, dateListener, year, month, day)
     }
 
     protected fun showDatePicker() {
@@ -44,6 +45,7 @@ abstract class BaseDateDaggerLoadingActivity<VM : BaseViewModel, DB : ViewDataBi
         super.onDestroy()
         dateDialog?.dismiss()
         dateDialog = null
+        dateListener = null
     }
 
     protected abstract fun onSetDate(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int)

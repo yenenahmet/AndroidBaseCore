@@ -12,10 +12,10 @@ abstract class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
 ) :
     BaseRecyclerViewAdapter<T, BaseViewBindingRecyclerViewAdapter<T, VDB>.ViewHolder>(mutableListOf()) {
 
-    private var listener: ClickListener<T>? = null
+    private var listener: ClickListener<T,VDB>? = null
 
-    interface ClickListener<T> {
-        fun onItemClick(item: T, position: Int)
+    interface ClickListener<T,VDB> {
+        fun onItemClick(item: T, position: Int,rowBinding: VDB)
     }
 
 
@@ -33,7 +33,7 @@ abstract class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
             holder.bind(it,position)
             if (listener != null) {
                 holder.binding.root.setOnClickListener { _ ->
-                    listener?.onItemClick(it, position)
+                    listener?.onItemClick(it, position,holder.binding as VDB)
                 }
             }
         }
@@ -49,7 +49,7 @@ abstract class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
     }
 
 
-    fun setListener(listener: ClickListener<T>) {
+    fun setListener(listener: ClickListener<T,VDB>) {
         this.listener = listener
     }
 
