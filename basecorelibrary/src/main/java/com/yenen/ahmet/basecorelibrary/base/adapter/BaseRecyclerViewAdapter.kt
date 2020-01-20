@@ -37,7 +37,7 @@ protected constructor(private var items: MutableList<T>) : RecyclerView.Adapter<
         } else null
     }
 
-    protected fun getItemPosition(item: T): Int {
+    fun getItemPosition(item: T): Int {
         if (items.isNotEmpty()) {
             var i = 0
             var pos = -1
@@ -55,24 +55,24 @@ protected constructor(private var items: MutableList<T>) : RecyclerView.Adapter<
     // GET FUN //
 
     // ADD  Fun//
-    protected fun addItem(item: T) {
+    fun addItem(item: T) {
         items.add(item)
         val position = items.size - 1
         notifyItemInserted(position)
     }
 
-    protected fun addItemNotNotify(item: T) {
+    fun addItemNotNotify(item: T) {
         items.add(item)
     }
 
-    protected fun addRestoreItem(item: T, pos: Int) {
+    fun addRestoreItem(item: T, pos: Int) {
         if (pos > -1) {
             items.add(pos, item)
             notifyItemInserted(pos)
         }
     }
 
-    protected fun addItems(items: List<T>) {
+    fun addItems(items: List<T>) {
         if (items.isNotEmpty()) {
             val x = items.size - 1
             this.items.addAll(items)
@@ -83,14 +83,14 @@ protected constructor(private var items: MutableList<T>) : RecyclerView.Adapter<
     // ADD  Fun//
 
     //Remove Fun//
-    protected fun removeItem(position: Int) {
+    fun removeItem(position: Int) {
         if (position > -1 && items.isNotEmpty()) {
             items.removeAt(position)
             notifyItemRemoved(position)
         }
     }
 
-    protected fun removeItem(item: T) {
+    fun removeItem(item: T) {
         val pos = getItemPosition(item)
         if (pos > -1) {
             items.remove(item)
@@ -101,7 +101,7 @@ protected constructor(private var items: MutableList<T>) : RecyclerView.Adapter<
     //Remove Fun//
 
     // Other Fun //
-    protected fun getInflater(parent: ViewGroup): LayoutInflater {
+    fun getInflater(parent: ViewGroup): LayoutInflater {
         return LayoutInflater.from(parent.context)
     }
 
