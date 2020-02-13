@@ -145,4 +145,13 @@ class SharedPreferencesHelper constructor(context: Context) {
         addValueApply("LANGUAGE", language)
     }
 
+
+    fun getDeviceId(): String {
+        return getValue("DEVICE_ID", "")
+    }
+
+    fun addDeviceId(deviceId: String) {
+        addValueApply("DEVICE_ID", deviceId)
+    }
+
 }
