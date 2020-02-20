@@ -23,7 +23,19 @@ object DateUtils {
             val time = "${cal.get(Calendar.HOUR_OF_DAY)}:${cal.get(Calendar.MINUTE)}"
             return "$day $mont $time"
         } catch (ex: Exception) {
-            return ""
+            return dateTime
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun compareToDay(dateTime: String):Int{
+        try{
+            val simpleDateFormat = SimpleDateFormat(dfServer)
+            val date = simpleDateFormat.parse(dateTime)
+            val now = Date()
+            return now.compareTo(date)
+        }catch (ex:Exception){
+            return -2
         }
     }
 }
