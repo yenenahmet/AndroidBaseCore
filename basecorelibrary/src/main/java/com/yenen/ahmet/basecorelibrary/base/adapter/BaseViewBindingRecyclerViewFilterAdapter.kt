@@ -12,11 +12,11 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
         mutableListOf()
     ) {
 
-    private var listener: ClickListener<T>? = null
+    private var listener: ClickListener<T,VDB>? = null
     private var filterListener: FilterListener<T>? = null
     private var longListener: LongClickListener<T, VDB>? =null
 
-    interface ClickListener<T> {
+    interface ClickListener<T,VDB> {
         fun onItemClick(item: T, position: Int)
     }
 
@@ -66,13 +66,14 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
 
     abstract fun setBindingModel(item: T, binding: VDB)
 
-    fun setListener(listener: ClickListener<T>) {
+    fun setListener(listener: ClickListener<T,VDB>) {
         this.listener = listener
     }
 
     fun unBind() {
         listener = null
         filterListener = null
+        longListener = null
     }
 
     fun setLongClickListener(listener: LongClickListener<T, VDB>){

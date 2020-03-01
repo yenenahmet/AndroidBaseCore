@@ -70,7 +70,8 @@ abstract class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
     }
 
     open fun unBind() {
-        listener = null
+        this.listener = null
+        this.longListener =null
     }
 
     protected abstract fun setBindingModel(item: T, binding: VDB,position: Int)
