@@ -45,7 +45,7 @@ abstract class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
             if(longListener!= null){
                 holder.binding.root.setOnLongClickListener {
                     longListener?.onItemLongClick(item, position,holder.binding as VDB)
-                    false
+                    true
                 }
             }
         }
