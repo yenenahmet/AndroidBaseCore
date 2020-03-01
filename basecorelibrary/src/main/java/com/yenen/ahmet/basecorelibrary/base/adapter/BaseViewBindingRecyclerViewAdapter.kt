@@ -13,9 +13,14 @@ abstract class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
     BaseRecyclerViewAdapter<T, BaseViewBindingRecyclerViewAdapter<T, VDB>.ViewHolder>(mutableListOf()) {
 
     private var listener: ClickListener<T,VDB>? = null
+    private var longListener:LongClickListener<T,VDB>? =null
 
     interface ClickListener<T,VDB> {
         fun onItemClick(item: T, position: Int,rowBinding: VDB)
+    }
+
+    interface LongClickListener<T,VDB>{
+        fun onItemLongClick(item: T, position: Int,rowBinding: VDB)
     }
 
 
@@ -29,11 +34,18 @@ abstract class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
         holder: BaseViewBindingRecyclerViewAdapter<T, VDB>.ViewHolder,
         position: Int
     ) {
-        getItem(position)?.let {
-            holder.bind(it,position)
+        getItem(position)?.let {item->
+            holder.bind(item,position)
             if (listener != null) {
                 holder.binding.root.setOnClickListener { _ ->
-                    listener?.onItemClick(it, position,holder.binding as VDB)
+                    listener?.onItemClick(item, position,holder.binding as VDB)
+                }
+            }
+
+            if(longListener!= null){
+                holder.binding.root.setOnLongClickListener {
+                    longListener?.onItemLongClick(item, position,holder.binding as VDB)
+                    false
                 }
             }
         }
@@ -51,6 +63,10 @@ abstract class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
 
     fun setListener(listener: ClickListener<T,VDB>) {
         this.listener = listener
+    }
+
+    fun setLongClickListener(listener:LongClickListener<T,VDB>){
+        this.longListener = listener
     }
 
     open fun unBind() {

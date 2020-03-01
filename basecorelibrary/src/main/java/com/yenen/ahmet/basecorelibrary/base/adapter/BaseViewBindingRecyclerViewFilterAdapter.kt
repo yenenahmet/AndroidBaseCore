@@ -14,6 +14,7 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
 
     private var listener: ClickListener<T>? = null
     private var filterListener: FilterListener<T>? = null
+    private var longListener: LongClickListener<T, VDB>? =null
 
     interface ClickListener<T> {
         fun onItemClick(item: T, position: Int)
@@ -22,6 +23,11 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
     interface FilterListener<T> {
         fun onFilterFinish(results: List<T>)
     }
+
+    interface LongClickListener<T,VDB>{
+        fun onItemLongClick(item: T, position: Int,rowBinding: VDB)
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = DataBindingUtil.inflate<VDB>(getInflater(parent), layoutRes, parent, false)
@@ -32,11 +38,18 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
         holder: BaseViewBindingRecyclerViewFilterAdapter<T, VDB>.ViewHolder,
         position: Int
     ) {
-        getItem(position)?.let {
-            holder.bind(it)
+        getItem(position)?.let {item->
+            holder.bind(item)
             if (listener != null) {
                 holder.binding.root.setOnClickListener { _ ->
-                    listener?.onItemClick(it, position)
+                    listener?.onItemClick(item, position)
+                }
+            }
+
+            if(longListener!= null){
+                holder.binding.root.setOnLongClickListener {
+                    longListener?.onItemLongClick(item, position,holder.binding as VDB)
+                    false
                 }
             }
         }
@@ -60,6 +73,10 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
     fun unBind() {
         listener = null
         filterListener = null
+    }
+
+    fun setLongClickListener(listener: LongClickListener<T, VDB>){
+        this.longListener = listener
     }
 
     fun setFilterListener(listener: FilterListener<T>) {
