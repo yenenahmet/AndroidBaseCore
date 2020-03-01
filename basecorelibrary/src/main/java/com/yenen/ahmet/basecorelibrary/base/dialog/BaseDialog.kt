@@ -9,7 +9,7 @@ import com.yenen.ahmet.basecorelibrary.R
 
 open class BaseDialog(private val context: Activity, layoutId: Int) {
 
-    private var dialog: AlertDialog? = null
+    protected var dialog: AlertDialog? = null
     protected var view: View? = null
 
     init {

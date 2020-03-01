@@ -11,7 +11,7 @@ import androidx.databinding.ViewDataBinding
 
 open class BaseBindingDialog<VDB : ViewDataBinding>(private var activity: Activity?,@LayoutRes private val layoutId: Int) {
 
-    private val alertDialog: AlertDialog
+    val alertDialog: AlertDialog
     var binding: VDB
 
      init {
