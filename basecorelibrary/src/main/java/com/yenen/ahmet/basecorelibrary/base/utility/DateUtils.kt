@@ -38,4 +38,10 @@ object DateUtils {
             return -2
         }
     }
+
+    @SuppressLint("SimpleDateFormat")
+    fun getNowDate():String{
+        val dateFormat = SimpleDateFormat(dfServer)
+        return dateFormat.format(Date())
+    }
 }
