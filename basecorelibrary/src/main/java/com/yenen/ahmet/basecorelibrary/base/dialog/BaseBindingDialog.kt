@@ -9,30 +9,27 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 
-open class BaseBindingDialog<VDB : ViewDataBinding>(private var activity: Activity?,@LayoutRes private val layoutId: Int) {
+open class BaseBindingDialog<VDB : ViewDataBinding>(private var activity: Activity?, @LayoutRes private val layoutId: Int) {
 
     val alertDialog: AlertDialog
     var binding: VDB
 
-     init {
+    init {
         val parent = activity?.window?.decorView?.rootView as? ViewGroup
         binding = DataBindingUtil.inflate(activity?.layoutInflater!!, layoutId, parent, false)
-        this.alertDialog = AlertDialog.Builder(activity).setView(binding.root).setCancelable(false).create()
+        this.alertDialog =
+            AlertDialog.Builder(activity).setView(binding.root).setCancelable(false).create()
         val color = ColorDrawable(Color.TRANSPARENT)
         val window = alertDialog.window
         window?.setBackgroundDrawable(color)
     }
 
     fun show() {
-        if (!alertDialog.isShowing) {
-            activity!!.runOnUiThread { alertDialog.show() }
-        }
+        activity!!.runOnUiThread { alertDialog.show() }
     }
 
     fun dismiss() {
-        if (alertDialog.isShowing) {
-            activity!!.runOnUiThread { alertDialog.dismiss() }
-        }
+        alertDialog.dismiss()
     }
 
     fun unBind() {
