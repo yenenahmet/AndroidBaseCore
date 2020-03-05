@@ -15,7 +15,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 import java.io.File
 import java.lang.Exception
@@ -26,7 +26,7 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
 ) : Fragment() {
 
     protected val viewModel by lazy {
-        ViewModelProviders.of(this).get(viewModelClass)
+        ViewModelProvider(this).get(viewModelClass)
     }
 
     protected var binding: DB? = null

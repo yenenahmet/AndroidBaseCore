@@ -14,7 +14,7 @@ import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.yenen.ahmet.basecorelibrary.base.di.factory.AppViewModelFactory
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 import dagger.android.support.DaggerFragment
@@ -32,7 +32,7 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
     protected var binding: DB? = null
 
     protected val viewModel by lazy {
-        ViewModelProviders.of(this, providerFactory).get(viewModelClass)
+        ViewModelProvider(this, providerFactory).get(viewModelClass)
     }
 
     override fun onCreateView(

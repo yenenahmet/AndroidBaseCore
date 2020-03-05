@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -13,7 +14,7 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.yenen.ahmet.basecorelibrary.base.local.LocaleManager
 import com.yenen.ahmet.basecorelibrary.base.local.SharedPreferencesHelper
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
@@ -30,7 +31,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
     }
 
     protected val viewModel by lazy {
-        ViewModelProviders.of(this).get(viewModelClass)
+        ViewModelProvider(this).get(viewModelClass)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -197,5 +198,31 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         } catch (ex: Exception) {
             false
         }
+    }
+
+
+    protected fun openMultipleGallery(requestCode:Int){
+        val nt = Intent(Intent.ACTION_GET_CONTENT).apply {
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
+            setType("image/*")
+        }
+        startActivityForResult(nt,requestCode)
+    }
+
+    protected fun openSelectedVideo(requestCode: Int){
+        val ntGallery = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
+        val ntCamera = Intent(MediaStore.ACTION_VIDEO_CAPTURE).apply {
+            putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1)
+        }
+
+        val ntList= mutableListOf<Intent>()
+        ntList.add(ntGallery)
+        ntList.add(ntCamera)
+
+        val ntChooser = Intent.createChooser(ntGallery,"Video Seçimi").apply {
+            putExtra("android.intent.extra.INITIAL_INTENTS", ntList.toTypedArray())
+        }
+
+        startActivityForResult(ntChooser,requestCode)
     }
 }
