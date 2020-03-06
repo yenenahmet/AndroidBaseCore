@@ -4,14 +4,14 @@ import android.annotation.SuppressLint
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
-
+@SuppressLint("SimpleDateFormat")
 object DateUtils {
     val monthNames =
         arrayOf("Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara")
 
     val dfServer = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+    var showFormat = "dd.MM.yyyy HH:mm"
 
-    @SuppressLint("SimpleDateFormat")
     fun getServerDateTimeFormatShort(dateTime: String): String {
         try {
             val simpleDateFormat = SimpleDateFormat(dfServer)
@@ -27,7 +27,7 @@ object DateUtils {
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
+
     fun compareToDay(dateTime: String):Int{
         try{
             val simpleDateFormat = SimpleDateFormat(dfServer)
@@ -39,9 +39,25 @@ object DateUtils {
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
+
     fun getNowDate():String{
         val dateFormat = SimpleDateFormat(dfServer)
         return dateFormat.format(Date())
+    }
+
+
+    fun getDateTimeShowFormat(date:String):String{
+        try{
+            val dateFormat = SimpleDateFormat(dfServer)
+            val showFormat = SimpleDateFormat(showFormat)
+            dateFormat.parse(date)?.let {
+               return showFormat.format(it)
+            }
+
+        }catch (ex:Exception){
+
+        }
+
+        return ""
     }
 }
