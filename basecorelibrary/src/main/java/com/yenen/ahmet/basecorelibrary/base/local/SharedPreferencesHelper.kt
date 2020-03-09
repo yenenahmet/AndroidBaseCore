@@ -77,7 +77,7 @@ class SharedPreferencesHelper constructor(context: Context) {
     fun clearPreferences() {
         sharedPref.edit().let {
             it.clear()
-            it.apply()
+            it.commit()
         }
     }
 
