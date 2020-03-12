@@ -201,10 +201,10 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
     }
 
 
-    protected fun getMediaPath(uri: Uri?,mProjection:String): String? {
+    protected fun getMediaPath(uri: Uri?, mProjection: String): String? {
         uri?.let {
             val projection = arrayOf(mProjection)
-            var path :String?= null
+            var path: String? = null
             contentResolver.query(it, projection, null, null, null)?.use {
                 val column_index = it.getColumnIndexOrThrow(mProjection)
                 it.moveToFirst()
@@ -215,15 +215,14 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         return null
     }
 
-    protected fun openForResultMediaImage(title:String,requestCode:Int){
-        val intent = Intent(Intent.ACTION_PICK).apply {
-            intent.type = "image/*"
-        }
+    protected fun openForResultMediaImage(title: String, requestCode: Int) {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
         startActivityForResult(Intent.createChooser(intent, title), requestCode)
     }
 
-    protected fun openForResultMediaVideo(title:String,requestCode:Int){
-        val intent = Intent(Intent.ACTION_PICK,MediaStore.Video.Media.EXTERNAL_CONTENT_URI).apply {
+    protected fun openForResultMediaVideo(title: String, requestCode: Int) {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI).apply {
             intent.type = "video/*"
         }
         startActivityForResult(Intent.createChooser(intent, title), requestCode)

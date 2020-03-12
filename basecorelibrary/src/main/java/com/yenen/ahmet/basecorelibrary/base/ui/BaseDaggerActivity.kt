@@ -28,7 +28,7 @@ import javax.inject.Inject
 // Binding nerde ve nasıl kullanacağı standartlaştırılmıştır
 // binding ve viewmodel  bu sınıf içinde ayarlanmıştır.
 abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
-    private val viewModelClass: Class<VM>,@LayoutRes private val layoutRes: Int
+    private val viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int
 ) : DaggerAppCompatActivity() {
 
     @Inject
@@ -76,6 +76,7 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         super.onPause()
         hideKeybord()
     }
+
     override fun onDestroy() {
         super.onDestroy()
         onBindingClear(binding)
@@ -91,7 +92,7 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
-    protected fun hideKeybord(){
+    protected fun hideKeybord() {
         currentFocus?.let {
             val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputManager?.hideSoftInputFromWindow(it.windowToken, 0)
@@ -112,7 +113,7 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         startActivity(intent)
     }
 
-    protected fun startActivity(sClass: Class<*>,bundle: Bundle) {
+    protected fun startActivity(sClass: Class<*>, bundle: Bundle) {
         val intent = Intent(this, sClass)
         intent.putExtras(bundle)
         startActivity(intent)
@@ -129,13 +130,13 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         startActivityForResult(intent, req)
     }
 
-    protected fun setNewLocale(language :String,localeManager: LocaleManager) {
-        localeManager.setNewLocale(this,language)
+    protected fun setNewLocale(language: String, localeManager: LocaleManager) {
+        localeManager.setNewLocale(this, language)
         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
         finish()
     }
 
-    protected fun reStartApp(sClass: Class<*>){
+    protected fun reStartApp(sClass: Class<*>) {
         val intent = Intent(applicationContext, sClass)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
@@ -143,11 +144,11 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         System.exit(0)
     }
 
-    protected open fun onBundle(bundle: Bundle){
+    protected open fun onBundle(bundle: Bundle) {
 
     }
 
-    protected fun openFile(uri: Uri, fileType:String,title:String):Boolean{
+    protected fun openFile(uri: Uri, fileType: String, title: String): Boolean {
         val target = Intent(Intent.ACTION_VIEW)
         target.setDataAndType(uri, fileType)
         target.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
@@ -203,10 +204,10 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         }
     }
 
-    protected fun getMediaPath(uri: Uri?,mProjection:String): String? {
+    protected fun getMediaPath(uri: Uri?, mProjection: String): String? {
         uri?.let {
             val projection = arrayOf(mProjection)
-            var path :String?= null
+            var path: String? = null
             contentResolver.query(it, projection, null, null, null)?.use {
                 val column_index = it.getColumnIndexOrThrow(mProjection)
                 it.moveToFirst()
@@ -217,15 +218,14 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         return null
     }
 
-    protected fun openForResultMediaImage(title:String,requestCode:Int){
-        val intent = Intent(Intent.ACTION_PICK).apply {
-            intent.type = "image/*"
-        }
+    protected fun openForResultMediaImage(title: String, requestCode: Int) {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
         startActivityForResult(Intent.createChooser(intent, title), requestCode)
     }
 
-    protected fun openForResultMediaVideo(title:String,requestCode:Int){
-        val intent = Intent(Intent.ACTION_PICK,MediaStore.Video.Media.EXTERNAL_CONTENT_URI).apply {
+    protected fun openForResultMediaVideo(title: String, requestCode: Int) {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI).apply {
             intent.type = "video/*"
         }
         startActivityForResult(Intent.createChooser(intent, title), requestCode)
