@@ -32,7 +32,7 @@ open class BaseBindingDialog<VDB : ViewDataBinding>(private var activity: Activi
         activity!!.runOnUiThread { alertDialog.dismiss() }
     }
 
-    fun unBind() {
+    open fun unBind() {
         dismiss()
         activity = null
     }

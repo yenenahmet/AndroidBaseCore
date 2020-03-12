@@ -203,29 +203,31 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         }
     }
 
-    protected fun openMultipleSelectedImageGallery(requestCode:Int){
-        val nt = Intent(Intent.ACTION_GET_CONTENT).apply {
-            putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
-            setType("image/*")
+    protected fun getMediaPath(uri: Uri?,mProjection:String): String? {
+        uri?.let {
+            val projection = arrayOf(mProjection)
+            var path :String?= null
+            contentResolver.query(it, projection, null, null, null)?.use {
+                val column_index = it.getColumnIndexOrThrow(mProjection)
+                it.moveToFirst()
+                path = it.getString(column_index)
+            }
+            return path
         }
-        startActivityForResult(nt,requestCode)
+        return null
     }
 
-
-    protected fun openSelectedVideo(requestCode: Int){
-        val ntGallery = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
-        val ntCamera = Intent(MediaStore.ACTION_VIDEO_CAPTURE).apply {
-            putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1)
+    protected fun openForResultMediaImage(title:String,requestCode:Int){
+        val intent = Intent(Intent.ACTION_PICK).apply {
+            intent.type = "image/*"
         }
+        startActivityForResult(Intent.createChooser(intent, title), requestCode)
+    }
 
-        val ntList= mutableListOf<Intent>()
-        ntList.add(ntGallery)
-        ntList.add(ntCamera)
-
-        val ntChooser = Intent.createChooser(ntGallery,"Video Seçimi").apply {
-                putExtra("android.intent.extra.INITIAL_INTENTS", ntList.toTypedArray())
+    protected fun openForResultMediaVideo(title:String,requestCode:Int){
+        val intent = Intent(Intent.ACTION_PICK,MediaStore.Video.Media.EXTERNAL_CONTENT_URI).apply {
+            intent.type = "video/*"
         }
-
-        startActivityForResult(ntChooser,requestCode)
+        startActivityForResult(Intent.createChooser(intent, title), requestCode)
     }
 }
