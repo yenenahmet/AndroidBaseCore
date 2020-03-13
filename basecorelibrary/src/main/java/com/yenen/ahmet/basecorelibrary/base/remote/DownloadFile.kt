@@ -14,7 +14,7 @@ class DownloadFile constructor(
     fun writeInputStreamToDisk() {
         try {
             val filePath = File(path)
-            val file = File("${filePath.path}/$subPath")
+            val file = File("${filePath.absolutePath}/$subPath")
 
             if (!filePath.exists())
                 filePath.mkdirs()
