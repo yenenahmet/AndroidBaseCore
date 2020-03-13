@@ -39,7 +39,7 @@ class DownloadFile constructor(
                 }
                 it.flush()
             }
-            listener.onSuccess(fileSizeDownloaded,file.absolutePath)
+            listener.onSuccess(fileSizeDownloaded,file)
         } catch (ex: Exception) {
             listener.onError(ex)
         }
