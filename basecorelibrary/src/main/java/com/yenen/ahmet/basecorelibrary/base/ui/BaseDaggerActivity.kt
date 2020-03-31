@@ -225,9 +225,8 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
     }
 
     protected fun openForResultMediaVideo(title: String, requestCode: Int) {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI).apply {
-            intent.type = "video/*"
-        }
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
+        intent.type = "video/*"
         startActivityForResult(Intent.createChooser(intent, title), requestCode)
     }
 }

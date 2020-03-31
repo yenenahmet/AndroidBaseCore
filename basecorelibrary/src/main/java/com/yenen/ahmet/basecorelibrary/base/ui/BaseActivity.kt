@@ -205,10 +205,14 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         uri?.let {
             val projection = arrayOf(mProjection)
             var path: String? = null
-            contentResolver.query(it, projection, null, null, null)?.use {
-                val column_index = it.getColumnIndexOrThrow(mProjection)
-                it.moveToFirst()
-                path = it.getString(column_index)
+            contentResolver.query(it, projection, null, null, null)?.use {cursor->
+                val idColumn  = cursor.getColumnIndexOrThrow(mProjection)
+                cursor.moveToFirst()
+                val contentUri: Uri = Uri.withAppendedPath(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    cursor.getString(idColumn)
+                )
+                path = contentUri.toString()
             }
             return path
         }
@@ -222,9 +226,8 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
     }
 
     protected fun openForResultMediaVideo(title: String, requestCode: Int) {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI).apply {
-            intent.type = "video/*"
-        }
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
+        intent.type = "video/*"
         startActivityForResult(Intent.createChooser(intent, title), requestCode)
     }
 }

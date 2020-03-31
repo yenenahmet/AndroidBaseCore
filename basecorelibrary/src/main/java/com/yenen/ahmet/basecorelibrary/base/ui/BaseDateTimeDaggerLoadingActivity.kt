@@ -10,6 +10,7 @@ import androidx.databinding.ViewDataBinding
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 import java.util.*
 
+
 abstract class BaseDateTimeDaggerLoadingActivity<VM : BaseViewModel, DB : ViewDataBinding, VDB : ViewDataBinding>(
     viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int, @LayoutRes private val loadingLayoutResId: Int
 ) : BaseDaggerLoadingActivity<VM, DB, VDB>(viewModelClass, layoutRes, loadingLayoutResId),
