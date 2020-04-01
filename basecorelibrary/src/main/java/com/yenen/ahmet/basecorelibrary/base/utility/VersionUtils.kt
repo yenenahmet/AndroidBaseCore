@@ -11,8 +11,7 @@ import java.io.File
 object VersionUtils {
 
 
-    fun openFileApk(filePath:String,context:Activity, authority:String){
-        val file = File(filePath)
+    fun openFileApk(file:File,context:Activity, authority:String){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val intent = Intent(Intent.ACTION_INSTALL_PACKAGE)
             val apkUri = FileProvider.getUriForFile(
