@@ -32,11 +32,14 @@ object VersionUtils {
         }
     }
 
-    fun openUnknownSource(context: Activity,requestCode:Int,packageName:String){
+    fun openUnknownSource(context: Activity,requestCode:Int,packageName:String):Boolean{
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !context.packageManager.canRequestPackageInstalls()) {
             val nt = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
             nt.data = Uri.parse(String.format("package:%s",packageName))
             context.startActivityForResult(nt, requestCode)
+            return false
+        }else{
+            return true
         }
     }
 
