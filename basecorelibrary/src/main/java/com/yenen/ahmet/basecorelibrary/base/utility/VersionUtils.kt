@@ -1,10 +1,10 @@
 package com.yenen.ahmet.basecorelibrary.base.utility
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import androidx.core.content.FileProvider
 import java.io.File
 
@@ -32,6 +32,13 @@ object VersionUtils {
         }
     }
 
+    fun openUnknownSource(context: Activity,requestCode:Int,packageName:String){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !context.packageManager.canRequestPackageInstalls()) {
+            val nt = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
+            nt.data = Uri.parse(String.format("package:%s",packageName))
+            context.startActivityForResult(nt, requestCode)
+        }
+    }
 
 
 }
