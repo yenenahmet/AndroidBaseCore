@@ -58,6 +58,7 @@ abstract class BaseViewBindingRecyclerViewInputAdapter<T, VDB : ViewDataBinding>
     private var timer: Timer? = null
     private var focusPosition: Int = -1
     private var focusView: View? = null
+    private var isHideKeyboard = false
     private var isScroll: Boolean = false
     private var onScrollListener: RecyclerView.OnScrollListener? = null
 
@@ -91,6 +92,10 @@ abstract class BaseViewBindingRecyclerViewInputAdapter<T, VDB : ViewDataBinding>
             activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     }
 
+    fun isHideKetBoard(isHideKeyboard:Boolean){
+        this.isHideKeyboard = isHideKeyboard
+    }
+
     // Class Fun //
     private fun runOnChange(position: Int, view: View?) {
         clearTimer()
@@ -104,8 +109,10 @@ abstract class BaseViewBindingRecyclerViewInputAdapter<T, VDB : ViewDataBinding>
     }
 
     private fun hideKeyboard() {
-        recyclerView?.let {
-            inputManager?.hideSoftInputFromWindow(it.windowToken, 0)
+        if(isHideKeyboard){
+            recyclerView?.let {
+                inputManager?.hideSoftInputFromWindow(it.windowToken, 0)
+            }
         }
     }
 
