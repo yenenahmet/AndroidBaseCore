@@ -20,7 +20,19 @@ object DateUtils {
             cal.time = date!!
             val day = cal.get(Calendar.DAY_OF_MONTH).toString()
             val mont = monthNames[cal.get(Calendar.MONTH)]
-            val time = "${cal.get(Calendar.HOUR_OF_DAY)}:${cal.get(Calendar.MINUTE)}"
+            val hour = cal.get(Calendar.HOUR_OF_DAY)
+            val h  =if(hour>9){
+                hour.toString()
+            }else{
+                "0${hour}"
+            }
+            val minute = cal.get(Calendar.MINUTE)
+            val m = if(minute>9){
+                minute.toString()
+            }else{
+                "0${minute}"
+            }
+            val time = "${h}:${m}"
             return "$day $mont $time"
         } catch (ex: Exception) {
             return dateTime
