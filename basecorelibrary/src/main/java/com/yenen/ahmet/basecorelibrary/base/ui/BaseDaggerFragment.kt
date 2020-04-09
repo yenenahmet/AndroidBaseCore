@@ -29,7 +29,7 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
     @Inject
     lateinit var providerFactory: AppViewModelFactory
 
-    protected var binding: DB? = null
+    protected lateinit var binding: DB
 
     protected val viewModel by lazy {
         ViewModelProvider(this, providerFactory).get(viewModelClass)
@@ -41,15 +41,15 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater,layoutRes, container, false)
-        viewModel.setViewDataBinding(binding!!)
+        viewModel.setViewDataBinding(binding)
         initViewModel(viewModel)
 
-        onBindingCreate(binding!!)
+        onBindingCreate(binding)
 
         arguments?.let {
             onBundle(it)
         }
-        return binding?.root
+        return binding.root
     }
 
 
@@ -78,11 +78,11 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
 
     override fun onDestroyView() {
         super.onDestroyView()
-        hideKeybord()
-        onBindingClear(binding!!)
+        hideKeyboard()
+        onBindingClear(binding)
     }
 
-    protected fun hideKeybord(){
+    protected fun hideKeyboard(){
         activity?.currentFocus?.let {
             val inputManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputManager?.hideSoftInputFromWindow(it.windowToken, 0)

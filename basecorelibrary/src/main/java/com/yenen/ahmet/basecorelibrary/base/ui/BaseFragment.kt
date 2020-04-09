@@ -29,7 +29,7 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
         ViewModelProvider(this).get(viewModelClass)
     }
 
-    protected var binding: DB? = null
+    protected lateinit var binding: DB
 
 
     override fun onCreateView(
@@ -38,16 +38,16 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, layoutRes, container, false)
-        viewModel.setViewDataBinding(binding!!)
+        viewModel.setViewDataBinding(binding)
 
         initViewModel(viewModel)
 
-        onBindingCreate(binding!!)
+        onBindingCreate(binding)
 
         arguments?.let {
             onBundle(it)
         }
-        return binding?.root
+        return binding.root
     }
 
 
@@ -77,7 +77,7 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
     override fun onDestroyView() {
         super.onDestroyView()
         hideKeyboard()
-        onBindingClear(binding!!)
+        onBindingClear(binding)
     }
 
 
