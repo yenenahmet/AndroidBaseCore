@@ -1,10 +1,13 @@
 package com.yenen.ahmet.basecorelibrary.base.ui
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.view.LayoutInflater
 import android.view.View
@@ -12,13 +15,17 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.LayoutRes
+import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 import java.io.File
+import java.io.IOException
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
@@ -170,5 +177,31 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
         } catch (ex: Exception) {
             false
         }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    @Throws(IOException::class)
+    protected fun createFileForFileProvider():File{
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        )
+    }
+
+    @Throws(IOException::class)
+    protected fun takePicture(requestCode:Int,authority:String) {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val file: File = createFileForFileProvider()
+
+        val uri: Uri = FileProvider.getUriForFile(
+            activity!!,
+            authority,
+            file
+        )
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+        startActivityForResult(intent, requestCode)
     }
 }

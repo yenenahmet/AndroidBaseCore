@@ -1,16 +1,19 @@
 package com.yenen.ahmet.basecorelibrary.base.ui
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.LayoutRes
+import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
@@ -20,7 +23,10 @@ import com.yenen.ahmet.basecorelibrary.base.local.SharedPreferencesHelper
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 import dagger.android.support.DaggerAppCompatActivity
 import java.io.File
+import java.io.IOException
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 //  Her Activity Üzerinde tekrar edebilecek yapılar bu class altından toplanmıştır.
@@ -228,5 +234,31 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
         intent.type = "video/*"
         startActivityForResult(Intent.createChooser(intent, title), requestCode)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    @Throws(IOException::class)
+    protected fun createFileForFileProvider():File{
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        )
+    }
+
+    @Throws(IOException::class)
+    protected fun takePicture(requestCode:Int,authority:String) {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val file: File = createFileForFileProvider()
+
+        val uri: Uri = FileProvider.getUriForFile(
+            this,
+            authority,
+            file
+        )
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+        startActivityForResult(intent, requestCode)
     }
 }
