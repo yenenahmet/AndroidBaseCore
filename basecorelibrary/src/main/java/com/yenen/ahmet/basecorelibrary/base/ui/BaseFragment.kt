@@ -192,7 +192,7 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
     }
 
     @Throws(IOException::class)
-    protected fun takePicture(requestCode:Int,authority:String) {
+    protected fun takePicture(requestCode:Int,authority:String) :String{
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val file: File = createFileForFileProvider()
 
@@ -203,5 +203,6 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
         )
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
         startActivityForResult(intent, requestCode)
+        return file.absolutePath
     }
 }
