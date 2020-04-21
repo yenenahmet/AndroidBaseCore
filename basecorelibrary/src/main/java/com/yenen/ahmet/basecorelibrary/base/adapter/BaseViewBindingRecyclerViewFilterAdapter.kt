@@ -67,6 +67,7 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
     abstract fun setBindingModel(item: T, binding: VDB)
 
     fun setListener(listener: ClickListener<T,VDB>) {
+        this.listener = null
         this.listener = listener
     }
 
@@ -77,10 +78,12 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
     }
 
     fun setLongClickListener(listener: LongClickListener<T, VDB>){
+        this.longListener = null
         this.longListener = listener
     }
 
     fun setFilterListener(listener: FilterListener<T>) {
+        this.filterListener = null
         this.filterListener = listener
     }
 

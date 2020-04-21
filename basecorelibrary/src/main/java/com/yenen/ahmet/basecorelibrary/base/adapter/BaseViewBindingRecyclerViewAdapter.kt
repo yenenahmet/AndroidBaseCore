@@ -62,10 +62,12 @@ abstract class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
 
 
     fun setListener(listener: ClickListener<T,VDB>) {
+        this.listener = null
         this.listener = listener
     }
 
     fun setLongClickListener(listener:LongClickListener<T,VDB>){
+        this.longListener = null
         this.longListener = listener
     }
 
