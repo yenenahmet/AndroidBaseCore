@@ -43,7 +43,7 @@ class DownloadManagerListener(private val downloadManager: DownloadManager) : Br
                         reason = it.getInt(columnReason)
                     }
                 }
-                listener?.onResult(status,reason)
+                listener?.onResult(status,reason,ids[0])
             }
         }
     }

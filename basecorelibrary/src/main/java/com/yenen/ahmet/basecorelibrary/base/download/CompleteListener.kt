@@ -1,5 +1,5 @@
 package com.yenen.ahmet.basecorelibrary.base.download
 
 interface CompleteListener {
-    fun onResult(status:Int,reason:Int)
+    fun onResult(status:Int,reason:Int,requestId:Long)
 }
