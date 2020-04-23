@@ -15,6 +15,10 @@ class DownloadManagerListener(private val downloadManager: DownloadManager) : Br
         this.listener = listener
     }
 
+    fun unBind(){
+        this.listener =null
+    }
+
     fun addRequestIds(requestId: Long) {
         requestIds.add(requestId)
     }
