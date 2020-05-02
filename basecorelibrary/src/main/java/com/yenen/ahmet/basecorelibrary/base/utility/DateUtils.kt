@@ -82,7 +82,7 @@ object DateUtils {
             val date1Date = date1Format.parse(date1)
 
             val date2Format = SimpleDateFormat(format)
-            val date2Date = date1Format.parse(date2)
+            val date2Date = date2Format.parse(date2)
 
             val diff = date1Date.time - date2Date.time
 
