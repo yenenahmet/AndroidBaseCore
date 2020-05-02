@@ -24,15 +24,15 @@ object DateUtils {
             val day = cal.get(Calendar.DAY_OF_MONTH).toString()
             val mont = monthNames[cal.get(Calendar.MONTH)]
             val hour = cal.get(Calendar.HOUR_OF_DAY)
-            val h  =if(hour>9){
+            val h = if (hour > 9) {
                 hour.toString()
-            }else{
+            } else {
                 "0${hour}"
             }
             val minute = cal.get(Calendar.MINUTE)
-            val m = if(minute>9){
+            val m = if (minute > 9) {
                 minute.toString()
-            }else{
+            } else {
                 "0${minute}"
             }
             val time = "${h}:${m}"
@@ -43,40 +43,40 @@ object DateUtils {
     }
 
 
-    fun compareToDay(dateTime: String):Int{
-        try{
+    fun compareToDay(dateTime: String): Int {
+        try {
             val simpleDateFormat = SimpleDateFormat(dfServer)
             val date = simpleDateFormat.parse(dateTime)
             val now = Date()
             return now.compareTo(date)
-        }catch (ex:Exception){
+        } catch (ex: Exception) {
             return -2
         }
     }
 
 
-    fun getNowDate():String{
+    fun getNowDate(): String {
         val dateFormat = SimpleDateFormat(dfServer)
         return dateFormat.format(Date())
     }
 
 
-    fun getDateTimeShowFormat(date:String):String{
-        try{
+    fun getDateTimeShowFormat(date: String): String {
+        try {
             val dateFormat = SimpleDateFormat(dfServer)
             val showFormat = SimpleDateFormat(showFormat)
             dateFormat.parse(date)?.let {
-               return showFormat.format(it)
+                return showFormat.format(it)
             }
 
-        }catch (ex:Exception){
+        } catch (ex: Exception) {
 
         }
 
         return ""
     }
 
-    fun getBetweenTheTwoTimes(date1:String,date2:String,format:String):String{
+    fun getBetweenTheTwoTimes(date1: String, date2: String, format: String): String {
         try {
             val date1Format = SimpleDateFormat(format)
             val date1Date = date1Format.parse(date1)
@@ -92,21 +92,31 @@ object DateUtils {
             val days = hours / 24
             val sb = StringBuilder()
 
-            if(days>0){
+            if (days > 0) {
                 sb.append("${days} gün ")
             }
 
-            if(hours>0){
-                sb.append("${hours} saat ")
+            if (hours > 0) {
+                var removeDays = 0L
+                if (days > 0) {
+                    removeDays = days * 24
+                }
+                val cal = hours - removeDays
+                sb.append("${cal} saat ")
             }
 
-            if(minutes>0){
-                sb.append("${minutes} dakika ")
+            if (minutes > 0) {
+                var removeHours = 0L
+                if (hours > 0) {
+                    removeHours = hours * 60
+                }
+                val cal = minutes - removeHours
+                sb.append("${cal} dakika ")
             }
 
             return sb.toString()
 
-        }catch (ex:Exception){
+        } catch (ex: Exception) {
             return ""
         }
     }
