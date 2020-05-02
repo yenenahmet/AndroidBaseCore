@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
+import java.lang.StringBuilder
+
+
 @SuppressLint("SimpleDateFormat")
 object DateUtils {
     val monthNames =
@@ -71,5 +74,40 @@ object DateUtils {
         }
 
         return ""
+    }
+
+    fun getBetweenTheTwoTimes(date1:String,date2:String,format:String):String{
+        try {
+            val date1Format = SimpleDateFormat(format)
+            val date1Date = date1Format.parse(date1)
+
+            val date2Format = SimpleDateFormat(format)
+            val date2Date = date1Format.parse(date2)
+
+            val diff = date1Date.time - date2Date.time
+
+            val seconds = diff / 1000
+            val minutes = seconds / 60
+            val hours = minutes / 60
+            val days = hours / 24
+            val sb = StringBuilder()
+
+            if(days>0){
+                sb.append("${days} gün ")
+            }
+
+            if(hours>0){
+                sb.append("${hours} saat ")
+            }
+
+            if(minutes>0){
+                sb.append("${minutes} dakika ")
+            }
+
+            return sb.toString()
+
+        }catch (ex:Exception){
+            return ""
+        }
     }
 }
