@@ -2,21 +2,22 @@ package com.yenen.ahmet.basecorelibrary.base.filter
 
 import android.annotation.SuppressLint
 import android.widget.Filter
+import java.util.*
 
-abstract class BaseFilter<T> protected constructor(filterItems: List<T>) : Filter() {
+abstract class BaseFilter<T> protected constructor(filterItems: List<T>,private  val locale:Locale) : Filter() {
     private var allItems: MutableList<T>? = null
+
 
     init {
         this.allItems = filterItems as MutableList<T>
     }
 
-    @SuppressLint("DefaultLocale")
     override fun performFiltering(constraint: CharSequence?): FilterResults {
         synchronized(this) {
             val results = FilterResults()
             if (constraint != null && constraint.length > 2) {
                 val list: MutableList<T> = mutableListOf()
-                val constLowerCase = constraint.toString().toLowerCase()
+                val constLowerCase = constraint.toString().toLowerCase(locale)
                 val controlParameter = constLowerCase.substring(0, 2)
                 val lowerCase = constLowerCase.substring(2, constLowerCase.length)
                 allItems?.forEach {
@@ -59,7 +60,7 @@ abstract class BaseFilter<T> protected constructor(filterItems: List<T>) : Filte
 
     @SuppressLint("DefaultLocale")
     fun isContainsLower(model: T, value: String, constLowerCase: String): T? {
-        return if (value.toLowerCase().contains(constLowerCase)) {
+        return if (value.toLowerCase(locale).contains(constLowerCase)) {
             model
         } else null
     }

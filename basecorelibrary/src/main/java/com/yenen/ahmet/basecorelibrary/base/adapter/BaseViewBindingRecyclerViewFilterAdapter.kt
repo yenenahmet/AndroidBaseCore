@@ -4,12 +4,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import java.util.*
 
 abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding> constructor(
-    private val layoutRes: Int
+    private val layoutRes: Int,locale:Locale
 ) :
     BaseRecyclerViewFilterAdapter<T, BaseViewBindingRecyclerViewFilterAdapter<T, VDB>.ViewHolder>(
-        mutableListOf()
+        mutableListOf(),locale
     ) {
 
     private var listener: ClickListener<T,VDB>? = null

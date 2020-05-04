@@ -4,6 +4,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.yenen.ahmet.basecorelibrary.base.filter.BaseFilter
+import java.util.*
 
 /*
     Extends alınan adapter içinde Filterable implement edilmesinin tekrarının kalkması.
@@ -11,7 +12,7 @@ import com.yenen.ahmet.basecorelibrary.base.filter.BaseFilter
     bağımlılığını kaldırmak ve Filtreleme işlemi için yazılan adapterların
     kod kalabalığını azaltmak için oluşturulmuştur.
  */
-abstract class BaseRecyclerViewFilterAdapter<T, E : RecyclerView.ViewHolder> constructor(items: MutableList<T>) :
+abstract class BaseRecyclerViewFilterAdapter<T, E : RecyclerView.ViewHolder> constructor(items: MutableList<T>,private val locale:Locale) :
     BaseRecyclerViewAdapter<T, E>(items), Filterable {
 
     private var filter: RecyclerViewFilter? = null
@@ -19,7 +20,7 @@ abstract class BaseRecyclerViewFilterAdapter<T, E : RecyclerView.ViewHolder> con
     // Filterable //
     override fun getFilter(): Filter {
         if (filter == null) {
-            filter = RecyclerViewFilter(getItems())
+            filter = RecyclerViewFilter(getItems(),locale)
         }
         return filter as RecyclerViewFilter
     }
@@ -32,8 +33,8 @@ abstract class BaseRecyclerViewFilterAdapter<T, E : RecyclerView.ViewHolder> con
         getFilter().filter(filterValue)
     }
 
-    inner class RecyclerViewFilter internal constructor(filterItems: List<T>) :
-        BaseFilter<T>(filterItems) {
+    inner class RecyclerViewFilter internal constructor(filterItems: List<T>,locale:Locale) :
+        BaseFilter<T>(filterItems,locale) {
 
         override fun getFilterItem(constLowerCase: String, value: T, controlParameter: String): T? {
             if (filter != null) {
