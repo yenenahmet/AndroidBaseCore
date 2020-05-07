@@ -83,9 +83,12 @@ object DateUtils {
 
             val date2Format = SimpleDateFormat(format)
             val date2Date = date2Format.parse(date2)
-
-            val diff = date1Date.time - date2Date.time
-
+            var isNegative = false
+            var diff = date1Date.time - date2Date.time
+            if(diff <0){
+                isNegative = true
+                diff *= -1
+            }
             val seconds = diff / 1000
             val minutes = seconds / 60
             val hours = minutes / 60
@@ -112,6 +115,12 @@ object DateUtils {
                 }
                 val cal = minutes - removeHours
                 sb.append("${cal} dakika ")
+            }
+
+            if(isNegative){
+                sb.append("sonra")
+            }else{
+                sb.append("önce")
             }
 
             return sb.toString()
