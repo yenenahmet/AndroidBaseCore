@@ -126,7 +126,7 @@ object DateUtils {
             return sb.toString()
 
         } catch (ex: Exception) {
-            return ""
+            return "-"
         }
     }
 }
