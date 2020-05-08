@@ -14,9 +14,9 @@ protected constructor(private var items: MutableList<T>) : RecyclerView.Adapter<
 
     // Set New Items -- Using Diff Util//
     fun setItems(newItems: List<T>) {
-        this.items = newItems as MutableList<T>
         val diff = BaseDiffUtil<T>(items, newItems)
         diff.calculateAndDispatch(this)
+        this.items = newItems as MutableList<T>
     }
 
 
