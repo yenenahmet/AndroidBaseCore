@@ -74,8 +74,28 @@ object FileUtils {
             Log.e("saveToFile", ex.toString())
             false
         }
-
     }
 
+
+    fun getFileSizeText(byteSize:Double,round:Int):String{
+        if(byteSize>1024){
+            val kb = (byteSize/1024).round(round)
+            if(kb>1024){
+                val mb = (kb/1024).round(round)
+                if(mb>1024){
+                    val gb =(mb/1024).round(round)
+                    return "$gb GB"
+                }else{
+                    return "$mb MB"
+                }
+            }else{
+                return "$kb KB"
+            }
+        }else{
+            return "$byteSize bytes"
+        }
+    }
+
+    fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
 
 }
