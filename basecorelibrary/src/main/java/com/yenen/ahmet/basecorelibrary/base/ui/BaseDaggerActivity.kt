@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -23,6 +24,7 @@ import com.yenen.ahmet.basecorelibrary.base.local.SharedPreferencesHelper
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 import dagger.android.support.DaggerAppCompatActivity
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Exception
 import java.text.SimpleDateFormat
@@ -261,5 +263,54 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
         startActivityForResult(intent, requestCode)
         return file.absolutePath
+    }
+
+    protected fun writeFileContent(uri: Uri): String {
+        var filePath = ""
+        contentResolver?.openInputStream(uri)?.use { selectedFileInputStream ->
+            val certCacheDir =
+                File(getExternalFilesDir(null),"Cache")
+            var isCertCacheDirExists = certCacheDir.exists()
+            if (!isCertCacheDirExists) {
+                isCertCacheDirExists = certCacheDir.mkdirs()
+            }
+
+            if (isCertCacheDirExists) {
+                filePath = "${certCacheDir.absolutePath}/${getFileDisplayName(uri)}"
+                FileOutputStream(filePath).use { selectedFileOutPutStream ->
+                    val buffer = ByteArray(1024)
+                    while (true) {
+                        val length = selectedFileInputStream.read(buffer)
+                        if (length <= 0) {
+                            break
+                        }
+                        selectedFileOutPutStream.write(buffer, 0, length)
+                    }
+                }
+            }
+        }
+        return filePath
+    }
+
+    protected fun getFileDisplayName(uri: Uri): String {
+        var displayName = ""
+        contentResolver
+            .query(uri, null, null, null, null, null).use {
+                if (it != null && it.moveToFirst()) {
+                    val index: Int = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                    displayName = it.getString(index)
+                }
+            }
+        return displayName
+    }
+
+    protected fun openDocument(requestCode:Int) {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            flags =
+                Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+            type = "*/*"
+        }
+        startActivityForResult(intent, requestCode)
     }
 }
