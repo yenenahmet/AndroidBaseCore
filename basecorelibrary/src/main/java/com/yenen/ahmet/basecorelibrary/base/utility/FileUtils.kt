@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import java.io.File
 import java.io.FileOutputStream
@@ -103,5 +104,14 @@ object FileUtils {
     }
 
     fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
+
+    fun getMimeType(path: String): String {
+        MimeTypeMap.getFileExtensionFromUrl(path)?.let {
+            MimeTypeMap.getSingleton().getMimeTypeFromExtension(it)?.let { type->
+                return type
+            }
+        }
+        return ""
+    }
 
 }
