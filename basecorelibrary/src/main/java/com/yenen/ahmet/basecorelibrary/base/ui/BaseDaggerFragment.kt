@@ -253,4 +253,15 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
         }
         startActivityForResult(intent, requestCode)
     }
+
+    protected fun getFileSize(uri: Uri): String {
+        var size = ""
+        activity?.contentResolver?.query(uri, null, null, null, null, null).use {
+            if (it != null && it.moveToFirst()) {
+                val index: Int = it.getColumnIndex(OpenableColumns.SIZE)
+                size = it.getString(index)
+            }
+        }
+        return size
+    }
 }

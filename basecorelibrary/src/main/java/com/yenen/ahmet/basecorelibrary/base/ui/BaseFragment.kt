@@ -246,6 +246,16 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
         return displayName
     }
 
+    protected fun getFileSize(uri: Uri): String {
+        var size = ""
+        activity?.contentResolver?.query(uri, null, null, null, null, null).use {
+            if (it != null && it.moveToFirst()) {
+                val index: Int = it.getColumnIndex(OpenableColumns.SIZE)
+                size = it.getString(index)
+            }
+        }
+        return size
+    }
 
     protected fun openDocument(requestCode:Int) {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
