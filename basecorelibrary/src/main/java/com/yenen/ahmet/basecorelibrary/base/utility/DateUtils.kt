@@ -42,24 +42,21 @@ object DateUtils {
         }
     }
 
-
     fun compareToDay(dateTime: String): Int {
-        try {
+        return try {
             val simpleDateFormat = SimpleDateFormat(dfServer)
             val date = simpleDateFormat.parse(dateTime)
             val now = Date()
-            return now.compareTo(date)
+            now.compareTo(date)
         } catch (ex: Exception) {
-            return -2
+            -2
         }
     }
-
 
     fun getNowDate(): String {
         val dateFormat = SimpleDateFormat(dfServer)
         return dateFormat.format(Date())
     }
-
 
     fun getDateTimeShowFormat(date: String): String {
         try {
@@ -127,6 +124,30 @@ object DateUtils {
 
         } catch (ex: Exception) {
             return "-"
+        }
+    }
+
+    fun getDateHoursLater(hours:Int):String{
+        return try{
+            val cal = Calendar.getInstance()
+            cal.time = Date()
+            cal.add(Calendar.HOUR,hours)
+            val format = SimpleDateFormat(dfServer)
+            format.format(cal.time)
+        }catch (ex:Exception){
+            ""
+        }
+    }
+
+    fun getDateWeeksLater(week:Int):String{
+        return try{
+            val cal = Calendar.getInstance()
+            cal.time = Date()
+            cal.add(Calendar.WEEK_OF_YEAR,week)
+            val format = SimpleDateFormat(dfServer)
+            format.format(cal.time)
+        }catch (ex:Exception){
+            ""
         }
     }
 }
