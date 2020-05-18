@@ -103,7 +103,7 @@ object FileUtils {
         return (mb / 1024).round(round)
     }
 
-    fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
+    fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).replace(",", ".").toDouble()
 
     fun getMimeType(path: String): String {
         MimeTypeMap.getFileExtensionFromUrl(path)?.let {
