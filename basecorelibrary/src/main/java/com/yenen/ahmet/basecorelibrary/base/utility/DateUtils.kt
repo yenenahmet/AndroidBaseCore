@@ -73,6 +73,21 @@ object DateUtils {
         return ""
     }
 
+    fun getDateTimeShowFormat(date: String,format:String): String {
+        try {
+            val dateFormat = SimpleDateFormat(format)
+            val showFormat = SimpleDateFormat(showFormat)
+            dateFormat.parse(date)?.let {
+                return showFormat.format(it)
+            }
+
+        } catch (ex: Exception) {
+
+        }
+
+        return ""
+    }
+
     fun getBetweenTheTwoTimes(date1: String, date2: String, format: String): String {
         try {
             val date1Format = SimpleDateFormat(format)
