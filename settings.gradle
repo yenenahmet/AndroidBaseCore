@@ -1,2 +1,3 @@
 include ':app', ':basecorelibrary'
 rootProject.name='AndroidBaseCore'
+include ':base-exoplayer'
