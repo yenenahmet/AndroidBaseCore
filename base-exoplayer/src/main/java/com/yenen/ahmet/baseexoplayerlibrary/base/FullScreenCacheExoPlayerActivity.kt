@@ -49,7 +49,7 @@ class FullScreenCacheExoPlayerActivity : AppCompatActivity() {
         }else{
             LeastRecentlyUsedCacheEvictor((8 * 1024 * 1024) * 50)
         }
-        val exoDatabaseProvider = ExoDatabaseProvider(application)
+        val exoDatabaseProvider = ExoDatabaseProvider(this)
         simpleCache =SimpleCache(cacheDir,usedCache,exoDatabaseProvider)
     }
 
