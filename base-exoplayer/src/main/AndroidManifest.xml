@@ -3,7 +3,7 @@
     package="com.yenen.ahmet.base_exoplayer">
 
     <application>
-
+        <activity android:name="com.yenen.ahmet.baseexoplayerlibrary.base.FullScreenExoPlayerActivity"></activity>
     </application>
 
 </manifest>
