@@ -12,6 +12,8 @@
 
 	dependencies {
 	        implementation 'com.github.yenenahmet:AndroidBaseCore:version'
+		implementation 'com.github.yenenahmet.AndroidBaseCore:basecorelibrary:version'
+    		implementation 'com.github.yenenahmet.AndroidBaseCore:base-exoplayer:version'
 	}
   
  * To facilitate structures that can be used throughout the project
