@@ -1,2 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yenen.ahmet.base_exoplayer" />
+    package="com.yenen.ahmet.base_exoplayer">
+
+    <application>
+        <activity
+            android:name="com.yenen.ahmet.baseexoplayerlibrary.base.FullScreenCacheExoPlayerActivity"
+            android:configChanges="orientation|screenSize|layoutDirection" />
+    </application>
+
+</manifest>
