@@ -12,6 +12,7 @@
 
 	dependencies {
 	        implementation 'com.github.yenenahmet:AndroidBaseCore:version'
+		// or //
 		implementation 'com.github.yenenahmet.AndroidBaseCore:basecorelibrary:version'
     		implementation 'com.github.yenenahmet.AndroidBaseCore:base-exoplayer:version'
 	}
