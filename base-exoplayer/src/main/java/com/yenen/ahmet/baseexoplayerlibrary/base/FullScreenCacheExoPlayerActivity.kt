@@ -20,7 +20,7 @@ import com.google.android.exoplayer2.upstream.cache.SimpleCache
 import com.google.android.exoplayer2.util.Util
 import com.yenen.ahmet.base_exoplayer.R
 
-abstract class BaseFullScreenCacheExoPlayerActivity : AppCompatActivity() {
+class FullScreenCacheExoPlayerActivity : AppCompatActivity() {
 
     companion object{
         const val USED_CACHE_SIZE = "CACHE"
@@ -50,7 +50,7 @@ abstract class BaseFullScreenCacheExoPlayerActivity : AppCompatActivity() {
         }else{
             LeastRecentlyUsedCacheEvictor((8 * 1024 * 1024) * 50)
         }
-        val exoDatabaseProvider = ExoDatabaseProvider(getContext())
+        val exoDatabaseProvider = ExoDatabaseProvider(this)
         simpleCache =SimpleCache(cacheDir,usedCache,exoDatabaseProvider)
     }
 
@@ -146,5 +146,5 @@ abstract class BaseFullScreenCacheExoPlayerActivity : AppCompatActivity() {
         if (hasFocus) hideSystemUI()
     }
 
-    protected abstract fun getContext():Context
+
 }

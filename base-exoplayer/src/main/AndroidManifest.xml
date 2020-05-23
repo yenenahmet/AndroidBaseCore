@@ -3,9 +3,7 @@
     package="com.yenen.ahmet.base_exoplayer">
 
     <application>
-        <activity
-            android:name="com.yenen.ahmet.baseexoplayerlibrary.base.FullScreenCacheExoPlayerActivity"
-            android:configChanges="orientation|screenSize|layoutDirection" />
+
     </application>
 
 </manifest>
