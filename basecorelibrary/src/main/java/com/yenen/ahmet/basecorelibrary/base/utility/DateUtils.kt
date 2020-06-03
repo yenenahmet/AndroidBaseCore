@@ -142,6 +142,60 @@ object DateUtils {
         }
     }
 
+    fun getTheDifferenceBetweenThePresentTime(date: String, format: String): String {
+        try {
+            val date2Format = SimpleDateFormat(format)
+            val date = date2Format.parse(date)
+
+            var isNegative = false
+            var diff = Date().time - date.time
+            if(diff <0){
+                isNegative = true
+                diff *= -1
+            }
+            val seconds = diff / 1000
+            val minutes = seconds / 60
+            val hours = minutes / 60
+            val days = hours / 24
+            val sb = StringBuilder()
+
+            if (days > 0) {
+                sb.append("$days gün ")
+            }
+
+            if (hours > 0) {
+                var removeDays = 0L
+                if (days > 0) {
+                    removeDays = days * 24
+                }
+                val cal = hours - removeDays
+                sb.append("$cal saat ")
+            }
+
+            if (minutes > 0) {
+                var removeHours = 0L
+                if (hours > 0) {
+                    removeHours = hours * 60
+                }
+                val cal = minutes - removeHours
+                sb.append("$cal dakika ")
+            }
+
+            if(isNegative){
+                sb.append("sonra")
+            }else{
+                sb.append("önce")
+            }
+
+            return sb.toString()
+
+        } catch (ex: Exception) {
+            return "-"
+        }
+    }
+
+
+
     fun getDateHoursLater(hours:Int):String{
         return try{
             val cal = Calendar.getInstance()
