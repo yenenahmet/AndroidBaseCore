@@ -36,7 +36,7 @@ class DownloadManagerListener(private val downloadManager: DownloadManager) : Br
             val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             val ids = requestIds.filter { it == id }
             if (!ids.isNullOrEmpty()) {
-                val query = DownloadManager.Query().setFilterById(ids[0])
+                val query = DownloadManager.Query().setFilterById(id)
                 var status =0
                 var reason = 0
                 downloadManager.query(query)?.use {
@@ -47,7 +47,7 @@ class DownloadManagerListener(private val downloadManager: DownloadManager) : Br
                         reason = it.getInt(columnReason)
                     }
                 }
-                listener?.onResult(status,reason,ids[0])
+                listener?.onResult(status,reason,id)
             }
         }
     }
