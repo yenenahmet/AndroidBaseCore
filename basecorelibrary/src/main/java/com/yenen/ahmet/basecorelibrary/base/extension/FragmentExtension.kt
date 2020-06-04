@@ -2,7 +2,7 @@ package com.yenen.ahmet.basecorelibrary.base.extension
 
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
-import android.content.Context
+import android.content.ContentUris
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -10,21 +10,18 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.provider.Settings
-import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.Exception
-import android.content.ContentUris
 
-
-fun AppCompatActivity.openFile(uri: Uri, fileType: String, title: String): Boolean {
+fun Fragment.openFile(uri: Uri, fileType: String, title: String): Boolean {
     val target = Intent(Intent.ACTION_VIEW)
     target.setDataAndType(uri, fileType)
     target.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
@@ -39,7 +36,7 @@ fun AppCompatActivity.openFile(uri: Uri, fileType: String, title: String): Boole
 }
 
 
-fun AppCompatActivity.shareFile(
+fun Fragment.shareFile(
     fileType: String,
     file: File,
     filUri: Uri,
@@ -68,57 +65,25 @@ fun AppCompatActivity.shareFile(
 }
 
 
-fun AppCompatActivity.openAppPermissionPage(): Boolean {
+fun Fragment.openAppPermissionPage(): Boolean {
     return try {
         val intent = Intent().apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-            data = Uri.fromParts("package", packageName, null)
+            data = Uri.fromParts("package", activity?.packageName, null)
         }
-        startActivity(intent)
+        activity?.startActivity(intent)
         true
     } catch (ex: Exception) {
         false
     }
 }
 
-
-fun AppCompatActivity.getMediaPath(uri: Uri?, mProjection: String): String? {
-    uri?.let {
-        val projection = arrayOf(mProjection)
-        var path: String? = null
-        contentResolver.query(it, projection, null, null, null)?.use { cursor ->
-            val idColumn = cursor.getColumnIndexOrThrow(mProjection)
-            cursor.moveToFirst()
-            val contentUri: Uri = Uri.withAppendedPath(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                cursor.getString(idColumn)
-            )
-            path = contentUri.toString()
-        }
-        return path
-    }
-    return null
-}
-
-fun AppCompatActivity.openForResultMediaImage(title: String, requestCode: Int) {
-    val intent = Intent(Intent.ACTION_PICK)
-    intent.type = "image/*"
-    startActivityForResult(Intent.createChooser(intent, title), requestCode)
-}
-
-fun AppCompatActivity.openForResultMediaVideo(title: String, requestCode: Int) {
-    val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
-    intent.type = "video/*"
-    startActivityForResult(Intent.createChooser(intent, title), requestCode)
-}
-
-
 @SuppressLint("SimpleDateFormat")
 @Throws(IOException::class)
-fun AppCompatActivity.createFileForFileProvider(): File {
+fun Fragment.createFileForFileProvider(): File {
     val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-    val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+    val storageDir: File? = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
     return File.createTempFile(
         "JPEG_${timeStamp}_", /* prefix */
         ".jpg", /* suffix */
@@ -127,12 +92,12 @@ fun AppCompatActivity.createFileForFileProvider(): File {
 }
 
 @Throws(IOException::class)
-fun AppCompatActivity.takePicture(requestCode: Int, authority: String): String {
+fun Fragment.takePicture(requestCode: Int, authority: String): String {
     val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
     val file: File = createFileForFileProvider()
 
     val uri: Uri = FileProvider.getUriForFile(
-        this,
+        activity!!,
         authority,
         file
     )
@@ -141,11 +106,11 @@ fun AppCompatActivity.takePicture(requestCode: Int, authority: String): String {
     return file.absolutePath
 }
 
-fun AppCompatActivity.writeFileContent(uri: Uri): String {
+fun Fragment.writeFileContent(uri: Uri): String {
     var filePath = ""
-    contentResolver?.openInputStream(uri)?.use { selectedFileInputStream ->
+    activity?.contentResolver?.openInputStream(uri)?.use { selectedFileInputStream ->
         val certCacheDir =
-            File(getExternalFilesDir(null), "Cache")
+            File(activity?.getExternalFilesDir(null), "Cache")
         var isCertCacheDirExists = certCacheDir.exists()
         if (!isCertCacheDirExists) {
             isCertCacheDirExists = certCacheDir.mkdirs()
@@ -168,19 +133,33 @@ fun AppCompatActivity.writeFileContent(uri: Uri): String {
     return filePath
 }
 
-fun AppCompatActivity.getFileDisplayName(uri: Uri): String {
+fun Fragment.getFileDisplayName(uri: Uri): String {
     var displayName = ""
-    contentResolver
-        .query(uri, null, null, null, null, null).use {
-            if (it != null && it.moveToFirst()) {
-                val index: Int = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                displayName = it.getString(index)
-            }
+    activity?.contentResolver?.query(uri, null, null, null, null, null).use {
+        if (it != null && it.moveToFirst()) {
+            val index: Int = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            displayName = it.getString(index)
         }
+    }
     return displayName
 }
 
-fun AppCompatActivity.openDocument(requestCode: Int) {
+fun Fragment.showToast(text: String) {
+    Toast.makeText(activity, text, Toast.LENGTH_LONG).show()
+}
+
+fun Fragment.getFileSize(uri: Uri): String {
+    var size = ""
+    activity?.contentResolver?.query(uri, null, null, null, null, null).use {
+        if (it != null && it.moveToFirst()) {
+            val index: Int = it.getColumnIndex(OpenableColumns.SIZE)
+            size = it.getString(index)
+        }
+    }
+    return size
+}
+
+fun Fragment.openDocument(requestCode: Int) {
     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
         addCategory(Intent.CATEGORY_OPENABLE)
         flags =
@@ -190,40 +169,7 @@ fun AppCompatActivity.openDocument(requestCode: Int) {
     startActivityForResult(intent, requestCode)
 }
 
-fun AppCompatActivity.getFileSize(uri: Uri): String {
-    var size = ""
-    contentResolver?.query(uri, null, null, null, null, null).use {
-        if (it != null && it.moveToFirst()) {
-            val index: Int = it.getColumnIndex(OpenableColumns.SIZE)
-            size = it.getString(index)
-        }
-    }
-    return size
-}
-
-fun AppCompatActivity.showToast(text: String) {
-    Toast.makeText(this, text, Toast.LENGTH_LONG).show()
-}
-
-
-fun AppCompatActivity.hideKeyboard() {
-    currentFocus?.let {
-        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        inputManager?.hideSoftInputFromWindow(it.windowToken, 0)
-    }
-}
-
-fun AppCompatActivity.screenBarClear() {
-    window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
-            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-            or View.SYSTEM_UI_FLAG_FULLSCREEN)
-}
-
-
-fun AppCompatActivity.shareFacebookMessenger(id: Long, warningMessage: String) {
+fun Fragment.shareFacebookMessenger(id: Long, warningMessage: String) {
     if (isPackageExisted("com.facebook.orca")) {
         var uri = Uri.parse("fb-messenger://user/")
         uri = ContentUris.withAppendedId(uri, id)
@@ -237,10 +183,10 @@ fun AppCompatActivity.shareFacebookMessenger(id: Long, warningMessage: String) {
     }
 }
 
-fun AppCompatActivity.shareTwitter( warningMessage: String,message:String) {
+fun Fragment.shareTwitter(warningMessage: String, message: String) {
     if (isPackageExisted("com.twitter.android")) {
         val tweetIntent = Intent(Intent.ACTION_SEND);
-        tweetIntent.putExtra(Intent.EXTRA_TEXT,message)
+        tweetIntent.putExtra(Intent.EXTRA_TEXT, message)
         tweetIntent.type = "text/plain"
         startActivity(tweetIntent)
     } else {
@@ -251,10 +197,10 @@ fun AppCompatActivity.shareTwitter( warningMessage: String,message:String) {
     }
 }
 
-fun AppCompatActivity.isPackageExisted(targetPackage: String): Boolean {
+fun Fragment.isPackageExisted(targetPackage: String): Boolean {
     try {
-        val pm = packageManager
-        val info = pm.getPackageInfo(targetPackage, PackageManager.GET_META_DATA)
+        val pm = activity?.packageManager
+        val info = pm?.getPackageInfo(targetPackage, PackageManager.GET_META_DATA)
     } catch (ex: Exception) {
         return false
     }
