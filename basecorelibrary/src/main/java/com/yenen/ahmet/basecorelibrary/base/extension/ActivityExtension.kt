@@ -22,6 +22,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.Exception
 import android.content.ContentUris
+import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils
+import java.io.BufferedOutputStream
 
 
 fun AppCompatActivity.openFile(uri: Uri, fileType: String, title: String): Boolean {
@@ -259,4 +261,24 @@ fun AppCompatActivity.isPackageExisted(targetPackage: String): Boolean {
         return false
     }
     return true
+}
+
+
+fun AppCompatActivity.openFileDefaultAvailableApp(filePath:String):Boolean{
+    val file = File(filePath)
+    var mime = FileUtils.getMimeType(file.name)
+
+    if(mime.isEmpty()){
+        mime = "*/*"
+    }
+    val nt = Intent(Intent.ACTION_VIEW)
+    val data = Uri.fromFile(file)
+    nt.setDataAndType(data,mime)
+
+    return try {
+        startActivity(nt)
+        true
+    }catch (ex:java.lang.Exception){
+        false
+    }
 }

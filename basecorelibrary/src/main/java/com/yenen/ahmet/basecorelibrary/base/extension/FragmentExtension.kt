@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -205,4 +206,25 @@ fun Fragment.isPackageExisted(targetPackage: String): Boolean {
         return false
     }
     return true
+}
+
+
+fun Fragment.openFileDefaultAvailableApp(filePath:String):Boolean{
+    val file = File(filePath)
+    var mime = FileUtils.getMimeType(file.name)
+
+    if(mime.isEmpty()){
+        mime = "*/*"
+    }
+
+    val nt = Intent(Intent.ACTION_VIEW)
+    val data = Uri.fromFile(file)
+    nt.setDataAndType(data,mime)
+
+    return try {
+        startActivity(nt)
+        true
+    }catch (ex:Exception){
+        false
+    }
 }
