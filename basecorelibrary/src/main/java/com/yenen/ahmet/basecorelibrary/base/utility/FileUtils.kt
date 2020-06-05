@@ -105,13 +105,13 @@ object FileUtils {
 
     fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).replace(",", ".").toDouble()
 
-    fun getMimeType(path: String): String {
-        MimeTypeMap.getFileExtensionFromUrl(path)?.let {
+    fun getMimeType(url: String): String {
+        MimeTypeMap.getFileExtensionFromUrl(url)?.let {
             MimeTypeMap.getSingleton().getMimeTypeFromExtension(it)?.let { type->
                 return type
             }
         }
-        return ""
+        return "*/*"
     }
 
 }
