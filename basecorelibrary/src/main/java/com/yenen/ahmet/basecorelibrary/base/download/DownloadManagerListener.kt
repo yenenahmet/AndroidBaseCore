@@ -48,7 +48,8 @@ class DownloadManagerListener(private val downloadManager: DownloadManager) : Br
                     }
                 }
                 val uri = downloadManager.getUriForDownloadedFile(id)
-                listener?.onResult(status,reason,id,uri)
+                val mimeType = downloadManager.getMimeTypeForDownloadedFile(id)
+                listener?.onResult(status,reason,id,uri,mimeType)
             }
         }
     }

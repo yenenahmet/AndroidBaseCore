@@ -11,7 +11,6 @@ import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.provider.Settings
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils
@@ -214,7 +213,6 @@ fun Fragment.isPackageExisted(targetPackage: String): Boolean {
     return true
 }
 
-
 fun Fragment.openFileDefaultAvailableApp(filePath:String):Boolean{
     val file = File(filePath)
     var mime = FileUtils.getMimeType(file.name)
@@ -223,9 +221,13 @@ fun Fragment.openFileDefaultAvailableApp(filePath:String):Boolean{
         mime = "*/*"
     }
 
+    val uri = Uri.fromFile(file)
+    return openFileDefaultAvailableApp(uri,mime)
+}
+
+ fun Fragment.openFileDefaultAvailableApp(uri:Uri,mimeType:String):Boolean{
     val nt = Intent(Intent.ACTION_VIEW)
-    val data = Uri.fromFile(file)
-    nt.setDataAndType(data,mime)
+    nt.setDataAndType(uri,mimeType)
 
     return try {
         startActivity(nt)

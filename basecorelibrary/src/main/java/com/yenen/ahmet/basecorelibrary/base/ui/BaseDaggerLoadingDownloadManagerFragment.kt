@@ -17,9 +17,9 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
 
     private var downloadManagerListener: DownloadManagerListener? = null
 
-    override fun onResult(status: Int, reason: Int, requestId: Long,uri:Uri?) {
+    override fun onResult(status: Int, reason: Int, requestId: Long,uri:Uri?,mimeType:String) {
         removeDownloadRequestId(requestId)
-        onCompleted(status, reason, requestId,uri)
+        onCompleted(status, reason, requestId,uri,mimeType)
     }
 
     override fun onResume() {
@@ -53,6 +53,6 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
         downloadManagerListener=null
     }
 
-    protected abstract fun onCompleted(status: Int, reason: Int, requestId: Long,uri:Uri?)
+    protected abstract fun onCompleted(status: Int, reason: Int, requestId: Long,uri:Uri?,mimeType: String)
 
 }

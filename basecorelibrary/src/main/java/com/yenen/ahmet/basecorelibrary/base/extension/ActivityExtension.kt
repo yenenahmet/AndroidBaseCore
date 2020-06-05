@@ -23,8 +23,6 @@ import java.util.*
 import kotlin.Exception
 import android.content.ContentUris
 import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils
-import java.io.BufferedOutputStream
-
 
 fun AppCompatActivity.openFile(uri: Uri, fileType: String, title: String): Boolean {
     val target = Intent(Intent.ACTION_VIEW)
@@ -225,14 +223,12 @@ fun AppCompatActivity.screenBarClear() {
 }
 
 
-fun AppCompatActivity.shareFacebookMessenger(id: Long, warningMessage: String,message: String) {
+fun AppCompatActivity.shareFacebookMessenger(id: Long, warningMessage: String) {
     if (isPackageExisted("com.facebook.orca")) {
         var uri = Uri.parse("fb-messenger://user/")
         uri = ContentUris.withAppendedId(uri, id)
-        val intent = Intent(Intent.ACTION_SEND, uri).apply {
+        val intent = Intent(Intent.ACTION_VIEW, uri).apply {
             setPackage("com.facebook.orca")
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT,message)
         }
         startActivity(intent)
     } else {
@@ -246,9 +242,9 @@ fun AppCompatActivity.shareFacebookMessenger(id: Long, warningMessage: String,me
 fun AppCompatActivity.shareTwitter( warningMessage: String,message:String) {
     if (isPackageExisted("com.twitter.android")) {
         val tweetIntent = Intent(Intent.ACTION_SEND).apply {
-            setPackage("com.twitter.android")
-            putExtra(Intent.EXTRA_TEXT, message)
+            putExtra(Intent.EXTRA_TEXT,message)
             type = "text/plain"
+            setPackage("com.twitter.android")
         }
         startActivity(tweetIntent)
     } else {
@@ -269,7 +265,6 @@ fun AppCompatActivity.isPackageExisted(targetPackage: String): Boolean {
     return true
 }
 
-
 fun AppCompatActivity.openFileDefaultAvailableApp(filePath:String):Boolean{
     val file = File(filePath)
     var mime = FileUtils.getMimeType(file.name)
@@ -277,14 +272,19 @@ fun AppCompatActivity.openFileDefaultAvailableApp(filePath:String):Boolean{
     if(mime.isEmpty()){
         mime = "*/*"
     }
+
+    val uri = Uri.fromFile(file)
+    return openFileDefaultAvailableApp(uri,mime)
+}
+
+fun AppCompatActivity.openFileDefaultAvailableApp(uri:Uri, mimeType:String):Boolean{
     val nt = Intent(Intent.ACTION_VIEW)
-    val data = Uri.fromFile(file)
-    nt.setDataAndType(data,mime)
+    nt.setDataAndType(uri,mimeType)
 
     return try {
         startActivity(nt)
         true
-    }catch (ex:java.lang.Exception){
+    }catch (ex: java.lang.Exception){
         false
     }
 }
