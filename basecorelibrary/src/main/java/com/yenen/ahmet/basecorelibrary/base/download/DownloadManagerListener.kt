@@ -47,7 +47,8 @@ class DownloadManagerListener(private val downloadManager: DownloadManager) : Br
                         reason = it.getInt(columnReason)
                     }
                 }
-                listener?.onResult(status,reason,id)
+                val uri = downloadManager.getUriForDownloadedFile(id)
+                listener?.onResult(status,reason,id,uri)
             }
         }
     }

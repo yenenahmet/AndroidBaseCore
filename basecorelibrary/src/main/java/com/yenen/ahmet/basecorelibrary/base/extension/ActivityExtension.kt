@@ -225,25 +225,31 @@ fun AppCompatActivity.screenBarClear() {
 }
 
 
-fun AppCompatActivity.shareFacebookMessenger(id: Long, warningMessage: String) {
+fun AppCompatActivity.shareFacebookMessenger(id: Long, warningMessage: String,message: String) {
     if (isPackageExisted("com.facebook.orca")) {
         var uri = Uri.parse("fb-messenger://user/")
         uri = ContentUris.withAppendedId(uri, id)
-        val intent = Intent(Intent.ACTION_VIEW, uri)
+        val intent = Intent(Intent.ACTION_SEND, uri).apply {
+            setPackage("com.facebook.orca")
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT,message)
+        }
         startActivity(intent)
     } else {
         showToast(warningMessage)
         val uri = Uri.parse("market://details?id=com.facebook.orca")
-        val intent = Intent(Intent.ACTION_VIEW, uri);
+        val intent = Intent(Intent.ACTION_VIEW, uri)
         startActivity(intent);
     }
 }
 
 fun AppCompatActivity.shareTwitter( warningMessage: String,message:String) {
     if (isPackageExisted("com.twitter.android")) {
-        val tweetIntent = Intent(Intent.ACTION_SEND);
-        tweetIntent.putExtra(Intent.EXTRA_TEXT,message)
-        tweetIntent.type = "text/plain"
+        val tweetIntent = Intent(Intent.ACTION_SEND).apply {
+            setPackage("com.twitter.android")
+            putExtra(Intent.EXTRA_TEXT, message)
+            type = "text/plain"
+        }
         startActivity(tweetIntent)
     } else {
         showToast(warningMessage)

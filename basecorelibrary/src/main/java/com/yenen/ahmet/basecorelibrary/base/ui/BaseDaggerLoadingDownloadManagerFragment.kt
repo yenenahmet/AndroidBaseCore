@@ -3,6 +3,7 @@ package com.yenen.ahmet.basecorelibrary.base.ui
 import android.app.DownloadManager
 import android.content.Context
 import android.content.IntentFilter
+import android.net.Uri
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import com.yenen.ahmet.basecorelibrary.base.download.CompleteListener
@@ -16,15 +17,17 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
 
     private var downloadManagerListener: DownloadManagerListener? = null
 
-    override fun onResult(status: Int, reason: Int, requestId: Long) {
+    override fun onResult(status: Int, reason: Int, requestId: Long,uri:Uri?) {
         removeDownloadRequestId(requestId)
-        onCompleted(status, reason, requestId)
+        onCompleted(status, reason, requestId,uri)
     }
 
     override fun onResume() {
         super.onResume()
-        downloadManagerListener = DownloadManagerListener(activity?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager)
+        val downloadManager = activity?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        downloadManagerListener = DownloadManagerListener(downloadManager)
         downloadManagerListener?.setListener(this)
+
         val filter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
         activity?.registerReceiver(downloadManagerListener, filter)
     }
@@ -50,6 +53,6 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
         downloadManagerListener=null
     }
 
-    protected abstract fun onCompleted(status: Int, reason: Int, requestId: Long)
+    protected abstract fun onCompleted(status: Int, reason: Int, requestId: Long,uri:Uri?)
 
 }
