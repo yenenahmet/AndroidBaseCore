@@ -169,14 +169,12 @@ fun Fragment.openDocument(requestCode: Int) {
     startActivityForResult(intent, requestCode)
 }
 
-fun Fragment.shareFacebookMessenger(id: Long, warningMessage: String,message: String) {
+fun Fragment.openUserFacebookMessenger(id: Long, warningMessage: String) {
     if (isPackageExisted("com.facebook.orca")) {
         var uri = Uri.parse("fb-messenger://user/")
         uri = ContentUris.withAppendedId(uri, id)
-        val intent = Intent(Intent.ACTION_SEND, uri).apply {
+        val intent = Intent(Intent.ACTION_VIEW, uri).apply {
             setPackage("com.facebook.orca")
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT,message)
         }
         startActivity(intent)
     } else {
