@@ -226,8 +226,11 @@ fun Fragment.openFileDefaultAvailableApp(filePath:String):Boolean{
 }
 
  fun Fragment.openFileDefaultAvailableApp(uri:Uri,mimeType:String):Boolean{
-    val nt = Intent(Intent.ACTION_VIEW)
-    nt.setDataAndType(uri,mimeType)
+     val nt = Intent(Intent.ACTION_VIEW).apply {
+         setDataAndType(uri,mimeType)
+         flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+     }
 
     return try {
         startActivity(nt)
