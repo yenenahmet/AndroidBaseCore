@@ -24,6 +24,7 @@ import kotlin.Exception
 import android.content.ContentUris
 import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils
 
+
 fun AppCompatActivity.openFile(uri: Uri, fileType: String, title: String): Boolean {
     val target = Intent(Intent.ACTION_VIEW)
     target.setDataAndType(uri, fileType)
@@ -239,10 +240,10 @@ fun AppCompatActivity.shareFacebookMessenger(id: Long, warningMessage: String) {
     }
 }
 
-fun AppCompatActivity.shareTwitter( warningMessage: String,message:String) {
+fun AppCompatActivity.shareTwitter(warningMessage: String, message: String) {
     if (isPackageExisted("com.twitter.android")) {
         val tweetIntent = Intent(Intent.ACTION_SEND).apply {
-            putExtra(Intent.EXTRA_TEXT,message)
+            putExtra(Intent.EXTRA_TEXT, message)
             type = "text/plain"
             setPackage("com.twitter.android")
         }
@@ -250,6 +251,22 @@ fun AppCompatActivity.shareTwitter( warningMessage: String,message:String) {
     } else {
         showToast(warningMessage)
         val uri = Uri.parse("market://details?id=com.twitter.android")
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        startActivity(intent)
+    }
+}
+
+ fun AppCompatActivity.shareBip(warningMessage: String) {
+    if (isPackageExisted("com.turkcell.bip")) {
+        val uri =
+            Uri.parse("https://862b.adj.st/officialAccounts?oaid=23673&at=subscribe&adjust_t=3x4jfvd_9p2100o&adjust_deeplink=bip%3A%2F%2FofficialAccounts%3Foaid%3D23673%26at%3Dsubscribe&adjust_deeplink_js=1")
+        val intent = Intent(Intent.ACTION_VIEW, uri).apply {
+            setPackage("com.turkcell.bip")
+        }
+        startActivity(intent)
+    } else {
+        showToast(warningMessage)
+        val uri = Uri.parse("market://details?id=com.turkcell.bip")
         val intent = Intent(Intent.ACTION_VIEW, uri)
         startActivity(intent)
     }
@@ -265,21 +282,21 @@ fun AppCompatActivity.isPackageExisted(targetPackage: String): Boolean {
     return true
 }
 
-fun AppCompatActivity.openFileDefaultAvailableApp(filePath:String):Boolean{
+fun AppCompatActivity.openFileDefaultAvailableApp(filePath: String): Boolean {
     val file = File(filePath)
     var mime = FileUtils.getMimeType(file.name)
 
-    if(mime.isEmpty()){
+    if (mime.isEmpty()) {
         mime = "*/*"
     }
 
     val uri = Uri.fromFile(file)
-    return openFileDefaultAvailableApp(uri,mime)
+    return openFileDefaultAvailableApp(uri, mime)
 }
 
-fun AppCompatActivity.openFileDefaultAvailableApp(uri:Uri, mimeType:String):Boolean{
+fun AppCompatActivity.openFileDefaultAvailableApp(uri: Uri, mimeType: String): Boolean {
     val nt = Intent(Intent.ACTION_VIEW).apply {
-        setDataAndType(uri,mimeType)
+        setDataAndType(uri, mimeType)
         flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
@@ -287,7 +304,7 @@ fun AppCompatActivity.openFileDefaultAvailableApp(uri:Uri, mimeType:String):Bool
     return try {
         startActivity(nt)
         true
-    }catch (ex: java.lang.Exception){
+    } catch (ex: java.lang.Exception) {
         false
     }
 }
