@@ -237,3 +237,19 @@ fun Fragment.openFileDefaultAvailableApp(filePath:String):Boolean{
         false
     }
 }
+
+fun Fragment.shareBip(warningMessage: String) {
+    if (isPackageExisted("com.turkcell.bip")) {
+        val uri =
+            Uri.parse("https://862b.adj.st/officialAccounts?oaid=23673&at=subscribe&adjust_t=3x4jfvd_9p2100o&adjust_deeplink=bip%3A%2F%2FofficialAccounts%3Foaid%3D23673%26at%3Dsubscribe&adjust_deeplink_js=1")
+        val intent = Intent(Intent.ACTION_VIEW, uri).apply {
+            setPackage("com.turkcell.bip")
+        }
+        startActivity(intent)
+    } else {
+        showToast(warningMessage)
+        val uri = Uri.parse("market://details?id=com.turkcell.bip")
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        startActivity(intent)
+    }
+}
