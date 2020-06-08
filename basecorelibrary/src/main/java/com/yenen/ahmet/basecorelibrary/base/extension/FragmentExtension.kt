@@ -211,40 +211,36 @@ fun Fragment.isPackageExisted(targetPackage: String): Boolean {
     return true
 }
 
-fun Fragment.openFileDefaultAvailableApp(filePath:String):Boolean{
+fun Fragment.openFileDefaultAvailableApp(filePath: String): Boolean {
     val file = File(filePath)
     var mime = FileUtils.getMimeType(file.name)
 
-    if(mime.isEmpty()){
+    if (mime.isEmpty()) {
         mime = "*/*"
     }
 
     val uri = Uri.fromFile(file)
-    return openFileDefaultAvailableApp(uri,mime)
+    return openFileDefaultAvailableApp(uri, mime)
 }
 
- fun Fragment.openFileDefaultAvailableApp(uri:Uri,mimeType:String):Boolean{
-     val nt = Intent(Intent.ACTION_VIEW).apply {
-         setDataAndType(uri,mimeType)
-         flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-     }
+fun Fragment.openFileDefaultAvailableApp(uri: Uri, mimeType: String): Boolean {
+    val nt = Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(uri, mimeType)
+        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
 
     return try {
         startActivity(nt)
         true
-    }catch (ex:Exception){
+    } catch (ex: Exception) {
         false
     }
 }
 
-fun Fragment.shareBip(warningMessage: String) {
+fun Fragment.shareBip(warningMessage: String, mUri: Uri) {
     if (isPackageExisted("com.turkcell.bip")) {
-        val uri =
-            Uri.parse("https://862b.adj.st/officialAccounts?oaid=23673&at=subscribe&adjust_t=3x4jfvd_9p2100o&adjust_deeplink=bip%3A%2F%2FofficialAccounts%3Foaid%3D23673%26at%3Dsubscribe&adjust_deeplink_js=1")
-        val intent = Intent(Intent.ACTION_VIEW, uri).apply {
-            setPackage("com.turkcell.bip")
-        }
+        val intent = Intent(Intent.ACTION_VIEW, mUri)
         startActivity(intent)
     } else {
         showToast(warningMessage)

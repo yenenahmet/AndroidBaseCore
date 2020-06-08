@@ -256,13 +256,9 @@ fun AppCompatActivity.shareTwitter(warningMessage: String, message: String) {
     }
 }
 
- fun AppCompatActivity.shareBip(warningMessage: String) {
+fun AppCompatActivity.shareBip(warningMessage: String, mUri: Uri) {
     if (isPackageExisted("com.turkcell.bip")) {
-        val uri =
-            Uri.parse("https://862b.adj.st/officialAccounts?oaid=23673&at=subscribe&adjust_t=3x4jfvd_9p2100o&adjust_deeplink=bip%3A%2F%2FofficialAccounts%3Foaid%3D23673%26at%3Dsubscribe&adjust_deeplink_js=1")
-        val intent = Intent(Intent.ACTION_VIEW, uri).apply {
-            setPackage("com.turkcell.bip")
-        }
+        val intent = Intent(Intent.ACTION_VIEW, mUri)
         startActivity(intent)
     } else {
         showToast(warningMessage)
