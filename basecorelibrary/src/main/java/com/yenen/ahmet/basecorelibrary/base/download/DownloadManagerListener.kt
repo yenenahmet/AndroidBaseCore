@@ -30,6 +30,9 @@ class DownloadManagerListener(private val downloadManager: DownloadManager) : Br
     fun clearRequestIds(){
         requestIds.clear()
     }
+    fun getDownloadManager():DownloadManager{
+        return downloadManager
+    }
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (DownloadManager.ACTION_DOWNLOAD_COMPLETE == intent?.action) {
