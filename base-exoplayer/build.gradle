@@ -42,6 +42,4 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer:2.11.2'
 
 
-    implementation 'com.android.support:appcompat-v7:29.+'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 }

@@ -22,7 +22,7 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
 
     override fun onResult(status: Int, reason: Int, requestId: Long, uri: Uri?, mimeType: String) {
         removeDownloadRequestId(requestId)
-        onCompleted(status, reason, requestId, uri, mimeType,"")
+        onCompleted(status, reason, requestId, uri, mimeType, "")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +62,7 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
         fileName: String,
         token: String?
     ) {
-        try{
+        try {
             val request = DownloadManager.Request(Uri.parse(path)).apply {
                 setTitle(fileName)
                 setDescription("Dosya indiriliyor...")
@@ -75,12 +75,12 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
                     addRequestHeader("Authorization", it)
                 }
             }
+            val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            val req = downloadManager.enqueue(request)
+            addDownloadRequestId(req)
 
-            downloadManagerListener?.getDownloadManager()?.enqueue(request)?.let {
-                addDownloadRequestId(it)
-            }
-        }catch (ex:Exception){
-            onCompleted(-1,-1,-1,null,"",ex.toString())
+        } catch (ex: Exception) {
+            onCompleted(-1, -1, -1, null, "", ex.toString())
         }
 
     }
@@ -91,6 +91,6 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
         requestId: Long,
         uri: Uri?,
         mimeType: String,
-        err:String
+        err: String
     )
 }

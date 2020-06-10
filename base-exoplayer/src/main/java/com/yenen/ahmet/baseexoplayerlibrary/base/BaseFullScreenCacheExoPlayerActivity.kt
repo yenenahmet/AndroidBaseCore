@@ -8,15 +8,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.database.ExoDatabaseProvider
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
-import com.google.android.exoplayer2.upstream.cache.CacheDataSource
-import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory
-import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor
-import com.google.android.exoplayer2.upstream.cache.SimpleCache
+import com.google.android.exoplayer2.upstream.cache.*
 import com.google.android.exoplayer2.util.Util
 import com.yenen.ahmet.base_exoplayer.R
 
@@ -56,22 +54,24 @@ abstract class BaseFullScreenCacheExoPlayerActivity : AppCompatActivity() {
 
 
     private fun buildMediaSource(fileUrl: String): MediaSource {
+
         val uri = Uri.parse(fileUrl)
         val cacheDataSourceFactory = if (fileUrl.startsWith("http")) {
             CacheDataSourceFactory(
                     simpleCache,
-                    DefaultHttpDataSourceFactory("base_exo"),
+                    DefaultHttpDataSourceFactory(Util.getUserAgent(this,getString(R.string.app_name))),
                     CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR
             )
         } else {
             CacheDataSourceFactory(
                     simpleCache,
-                    DefaultDataSourceFactory(this, "base_exo"),
+                    DefaultDataSourceFactory(this,  Util.getUserAgent(this,getString(R.string.app_name))),
                     CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR
             )
         }
         return ProgressiveMediaSource.Factory(
-                cacheDataSourceFactory
+                cacheDataSourceFactory,
+                DefaultExtractorsFactory()
         ).createMediaSource(uri)
 
     }
