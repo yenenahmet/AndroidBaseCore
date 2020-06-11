@@ -60,4 +60,13 @@ object ControlUtils {
         }
         return false
     }
+
+    fun isIpValid(ip:String):Boolean{
+        if (ip.trim().length > 6) {
+            return Pattern.compile(
+                "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
+            ).matcher(ip).matches()
+        }
+        return false
+    }
 }
