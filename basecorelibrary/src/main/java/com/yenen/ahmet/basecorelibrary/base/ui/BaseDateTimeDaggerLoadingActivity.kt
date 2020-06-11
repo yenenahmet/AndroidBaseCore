@@ -10,7 +10,6 @@ import androidx.databinding.ViewDataBinding
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 import java.util.*
 
-
 abstract class BaseDateTimeDaggerLoadingActivity<VM : BaseViewModel, DB : ViewDataBinding, VDB : ViewDataBinding>(
     viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int, @LayoutRes private val loadingLayoutResId: Int
 ) : BaseDaggerLoadingActivity<VM, DB, VDB>(viewModelClass, layoutRes, loadingLayoutResId),
@@ -20,6 +19,7 @@ abstract class BaseDateTimeDaggerLoadingActivity<VM : BaseViewModel, DB : ViewDa
     private var dateListener: DatePickerDialog.OnDateSetListener? = null
     private var timeDialog: TimePickerDialog? = null
     private var timeListener: TimePickerDialog.OnTimeSetListener? = null
+    private var date: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,20 +56,42 @@ abstract class BaseDateTimeDaggerLoadingActivity<VM : BaseViewModel, DB : ViewDa
         dateDialog?.dismiss()
     }
 
-    protected fun showTimePicker(){
+    protected fun showTimePicker() {
         timeDialog?.show()
     }
 
-    protected fun dismissTimePicker(){
+    protected fun dismissTimePicker() {
         timeDialog?.dismiss()
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        onSetDate(view, year, month, dayOfMonth)
+        val mMonth:String = if(month>9){
+            month.toString()
+        }else{
+            "0${month+1}"
+        }
+
+        val mDay:String = if(dayOfMonth>9){
+            dayOfMonth.toString()
+        }else{
+            "0${dayOfMonth}"
+        }
+        date = "$year-$mMonth-${mDay}T"
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        onSetTime(view, hourOfDay, minute)
+       val mHours:String = if(hourOfDay>9){
+           hourOfDay.toString()
+       }else{
+           "0${hourOfDay}"
+       }
+        val mMinute:String = if(minute>9){
+            minute.toString()
+        }else{
+            "0${minute}"
+        }
+        val dateTime = "${date}${mHours}:${mMinute}.000"
+        onDateTime(dateTime)
     }
 
     override fun onDestroy() {
@@ -82,7 +104,5 @@ abstract class BaseDateTimeDaggerLoadingActivity<VM : BaseViewModel, DB : ViewDa
         timeListener = null
     }
 
-    protected abstract fun onSetDate(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int)
-
-    protected abstract fun onSetTime(view: TimePicker?, hourOfDay: Int, minute: Int)
+    protected abstract fun onDateTime(dateTime: String)
 }
