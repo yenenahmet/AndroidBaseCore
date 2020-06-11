@@ -59,13 +59,13 @@ abstract class BaseFullScreenCacheExoPlayerActivity : AppCompatActivity() {
         val cacheDataSourceFactory = if (fileUrl.startsWith("http")) {
             CacheDataSourceFactory(
                     simpleCache,
-                    DefaultHttpDataSourceFactory(Util.getUserAgent(this,getString(R.string.app_name))),
+                    DefaultHttpDataSourceFactory(Util.getUserAgent(this,getAppName())),
                     CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR
             )
         } else {
             CacheDataSourceFactory(
                     simpleCache,
-                    DefaultDataSourceFactory(this,  Util.getUserAgent(this,getString(R.string.app_name))),
+                    DefaultDataSourceFactory(this,  Util.getUserAgent(this,getAppName())),
                     CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR
             )
         }
@@ -146,5 +146,6 @@ abstract class BaseFullScreenCacheExoPlayerActivity : AppCompatActivity() {
         if (hasFocus) hideSystemUI()
     }
 
+    abstract protected fun getAppName():String
 
 }
