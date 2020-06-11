@@ -56,7 +56,7 @@ abstract class BaseDateTimeDaggerLoadingActivity<VM : BaseViewModel, DB : ViewDa
         dateDialog?.dismiss()
     }
 
-    protected fun showTimePicker() {
+    private fun showTimePicker() {
         timeDialog?.show()
     }
 
@@ -77,6 +77,7 @@ abstract class BaseDateTimeDaggerLoadingActivity<VM : BaseViewModel, DB : ViewDa
             "0${dayOfMonth}"
         }
         date = "$year-$mMonth-${mDay}T"
+        showTimePicker()
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
