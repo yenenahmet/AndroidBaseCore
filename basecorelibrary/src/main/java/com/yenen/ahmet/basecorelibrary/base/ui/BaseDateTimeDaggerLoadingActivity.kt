@@ -91,7 +91,7 @@ abstract class BaseDateTimeDaggerLoadingActivity<VM : BaseViewModel, DB : ViewDa
         }else{
             "0${minute}"
         }
-        val dateTime = "${date}${mHours}:${mMinute}.000"
+        val dateTime = "${date}${mHours}:${mMinute}:00.000"
         onDateTime(dateTime)
     }
 
