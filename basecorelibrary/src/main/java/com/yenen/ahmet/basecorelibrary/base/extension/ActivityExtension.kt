@@ -290,6 +290,8 @@ fun AppCompatActivity.openFileDefaultAvailableApp(filePath: String): Boolean {
     return openFileDefaultAvailableApp(uri, mime)
 }
 
+
+
 fun AppCompatActivity.openFileDefaultAvailableApp(uri: Uri, mimeType: String): Boolean {
     val nt = Intent(Intent.ACTION_VIEW).apply {
         setDataAndType(uri, mimeType)
@@ -303,4 +305,30 @@ fun AppCompatActivity.openFileDefaultAvailableApp(uri: Uri, mimeType: String): B
     } catch (ex: java.lang.Exception) {
         false
     }
+}
+
+fun AppCompatActivity.openNavigationGoogleMap(location:String):Boolean {
+    val gmmIntentUri = Uri.parse("google.navigation:q=$location&mode=l")
+    val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri).apply {
+        setPackage("com.google.android.apps.maps")
+    }
+    if (mapIntent.resolveActivity(packageManager) != null) {
+        startActivity(mapIntent)
+        return true
+    }
+    return false
+}
+
+fun AppCompatActivity.openNavigationYandexMap(latitude:String,longitude:String):Boolean {
+    val yandex = Intent("ru.yandex.yandexnavi.action.BUILD_ROUTE_ON_MAP").apply {
+        setPackage("ru.yandex.yandexnavi")
+        putExtra("lat_to", latitude)
+        putExtra("lon_to", longitude)
+    }
+
+    if (yandex.resolveActivity(packageManager) != null) {
+        startActivity(yandex)
+        return true
+    }
+    return false
 }

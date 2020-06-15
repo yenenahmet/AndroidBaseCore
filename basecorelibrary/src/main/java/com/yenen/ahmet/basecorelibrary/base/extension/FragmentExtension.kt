@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.provider.Settings
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils
@@ -248,4 +249,30 @@ fun Fragment.shareBip(warningMessage: String, mUri: Uri) {
         val intent = Intent(Intent.ACTION_VIEW, uri)
         startActivity(intent)
     }
+}
+
+fun Fragment.openNavigationGoogleMap(location:String):Boolean {
+    val gmmIntentUri = Uri.parse("google.navigation:q=$location&mode=l")
+    val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri).apply {
+        setPackage("com.google.android.apps.maps")
+    }
+    if (mapIntent.resolveActivity(activity!!.packageManager) != null) {
+        startActivity(mapIntent)
+        return true
+    }
+    return false
+}
+
+fun Fragment.openNavigationYandexMap(latitude:String, longitude:String):Boolean {
+    val yandex = Intent("ru.yandex.yandexnavi.action.BUILD_ROUTE_ON_MAP").apply {
+        setPackage("ru.yandex.yandexnavi")
+        putExtra("lat_to", latitude)
+        putExtra("lon_to", longitude)
+    }
+
+    if (yandex.resolveActivity(activity!!.packageManager) != null) {
+        startActivity(yandex)
+        return true
+    }
+    return false
 }
