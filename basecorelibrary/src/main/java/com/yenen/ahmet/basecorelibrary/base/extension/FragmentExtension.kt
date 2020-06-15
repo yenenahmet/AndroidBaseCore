@@ -11,7 +11,6 @@ import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.provider.Settings
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils
@@ -252,7 +251,7 @@ fun Fragment.shareBip(warningMessage: String, mUri: Uri) {
 }
 
 fun Fragment.openNavigationGoogleMap(location:String):Boolean {
-    val gmmIntentUri = Uri.parse("google.navigation:q=$location&mode=l")
+    val gmmIntentUri = Uri.parse("google.navigation:q=$location")
     val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri).apply {
         setPackage("com.google.android.apps.maps")
     }

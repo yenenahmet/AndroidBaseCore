@@ -308,7 +308,7 @@ fun AppCompatActivity.openFileDefaultAvailableApp(uri: Uri, mimeType: String): B
 }
 
 fun AppCompatActivity.openNavigationGoogleMap(location:String):Boolean {
-    val gmmIntentUri = Uri.parse("google.navigation:q=$location&mode=l")
+    val gmmIntentUri = Uri.parse("google.navigation:q=$location")
     val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri).apply {
         setPackage("com.google.android.apps.maps")
     }
