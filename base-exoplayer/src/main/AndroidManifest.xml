@@ -3,7 +3,9 @@
     package="com.yenen.ahmet.base_exoplayer">
 
     <application>
-        <activity android:name="com.yenen.ahmet.baseexoplayerlibrary.base.FullScreenExoPlayerActivity"></activity>
+        <activity
+            android:name="com.yenen.ahmet.baseexoplayerlibrary.base.FullScreenExoPlayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection" />
     </application>
 
 </manifest>
