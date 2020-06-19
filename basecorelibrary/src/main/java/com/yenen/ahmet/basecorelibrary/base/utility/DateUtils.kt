@@ -194,7 +194,15 @@ object DateUtils {
         }
     }
 
-
+    fun getTheDifferenceBetweenThePresentLongTime(date: String, format: String): Long {
+        return try {
+            val date2Format = SimpleDateFormat(format)
+            val date = date2Format.parse(date)
+            Date().time - date.time
+        } catch (ex: Exception) {
+            Long.MAX_VALUE
+        }
+    }
 
     fun getDateHoursLater(hours:Int):String{
         return try{
