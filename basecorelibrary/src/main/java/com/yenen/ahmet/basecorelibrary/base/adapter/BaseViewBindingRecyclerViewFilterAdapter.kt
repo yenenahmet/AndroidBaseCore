@@ -22,7 +22,7 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
     }
 
     interface FilterListener<T> {
-        fun onFilterFinish(results: List<T>)
+        fun onFilterFinish(results: List<T>):Boolean
     }
 
     interface LongClickListener<T,VDB>{
@@ -88,7 +88,7 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
         this.filterListener = listener
     }
 
-    override fun onFilterFinish(results: List<T>) {
-        filterListener?.onFilterFinish(results)
+    override fun onFilterFinish(results: List<T>) :Boolean{
+        return filterListener?.onFilterFinish(results)?:false
     }
 }
