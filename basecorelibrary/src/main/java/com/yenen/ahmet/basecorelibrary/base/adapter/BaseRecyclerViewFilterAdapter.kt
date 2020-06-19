@@ -46,7 +46,7 @@ abstract class BaseRecyclerViewFilterAdapter<T, E : RecyclerView.ViewHolder> con
         @Suppress("UNCHECKED_CAST")
         override fun pubslishResults(results: List<*>) {
             if(!onFilterFinish(results as List<T>)){
-                setItems(results as List<T>)
+                setItems(results)
             }
         }
     }

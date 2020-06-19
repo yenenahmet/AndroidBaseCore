@@ -204,7 +204,7 @@ fun Fragment.shareTwitter(warningMessage: String, message: String) {
 fun Fragment.isPackageExisted(targetPackage: String): Boolean {
     try {
         val pm = activity?.packageManager
-        val info = pm?.getPackageInfo(targetPackage, PackageManager.GET_META_DATA)
+        pm?.getPackageInfo(targetPackage, PackageManager.GET_META_DATA)
     } catch (ex: Exception) {
         return false
     }

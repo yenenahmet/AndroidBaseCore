@@ -6,6 +6,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
+@Suppress("UNCHECKED_CAST")
 abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding> constructor(
     private val layoutRes: Int,locale:Locale
 ) :

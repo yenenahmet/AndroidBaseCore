@@ -14,7 +14,7 @@ object DateUtils {
 
     val dfServer = "yyyy-MM-dd'T'HH:mm:ss.SSS"
     var showFormat = "dd.MM.yyyy HH:mm"
-
+    var dfDate = "dd.MM.yyyy"
     fun getServerDateTimeFormatShort(dateTime: String): String {
         try {
             val simpleDateFormat = SimpleDateFormat(dfServer)
@@ -53,10 +53,17 @@ object DateUtils {
         }
     }
 
-    fun getNowDate(): String {
+    fun getNowDateTime(): String {
         val dateFormat = SimpleDateFormat(dfServer)
         return dateFormat.format(Date())
     }
+
+    fun getNowDate(): String {
+        val dateFormat = SimpleDateFormat(dfDate)
+        return dateFormat.format(Date())
+    }
+
+
 
     fun getDateTimeShowFormat(date: String): String {
         try {
@@ -96,7 +103,7 @@ object DateUtils {
             val date2Format = SimpleDateFormat(format)
             val date2Date = date2Format.parse(date2)
             var isNegative = false
-            var diff = date1Date.time - date2Date.time
+            var diff = date1Date!!.time - date2Date!!.time
             if(diff <0){
                 isNegative = true
                 diff *= -1
@@ -145,10 +152,10 @@ object DateUtils {
     fun getTheDifferenceBetweenThePresentTime(date: String, format: String): String {
         try {
             val date2Format = SimpleDateFormat(format)
-            val date = date2Format.parse(date)
+            val mDate = date2Format.parse(date)
 
             var isNegative = false
-            var diff = Date().time - date.time
+            var diff = Date().time - mDate.time
             if(diff <0){
                 isNegative = true
                 diff *= -1
@@ -197,8 +204,8 @@ object DateUtils {
     fun getTheDifferenceBetweenThePresentLongTime(date: String, format: String): Long {
         return try {
             val date2Format = SimpleDateFormat(format)
-            val date = date2Format.parse(date)
-            Date().time - date.time
+            val mDate = date2Format.parse(date)
+            Date().time - mDate!!.time
         } catch (ex: Exception) {
             Long.MAX_VALUE
         }

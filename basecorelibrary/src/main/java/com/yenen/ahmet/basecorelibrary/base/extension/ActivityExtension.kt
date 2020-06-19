@@ -271,7 +271,7 @@ fun AppCompatActivity.shareBip(warningMessage: String, mUri: Uri) {
 fun AppCompatActivity.isPackageExisted(targetPackage: String): Boolean {
     try {
         val pm = packageManager
-        val info = pm.getPackageInfo(targetPackage, PackageManager.GET_META_DATA)
+        pm.getPackageInfo(targetPackage, PackageManager.GET_META_DATA)
     } catch (ex: Exception) {
         return false
     }
