@@ -32,6 +32,10 @@ open class BaseBindingDialog<VDB : ViewDataBinding>(private var activity: Activi
         activity!!.runOnUiThread { alertDialog.dismiss() }
     }
 
+    fun isShowing():Boolean{
+        return alertDialog.isShowing
+    }
+
     open fun unBind() {
         dismiss()
         activity = null
