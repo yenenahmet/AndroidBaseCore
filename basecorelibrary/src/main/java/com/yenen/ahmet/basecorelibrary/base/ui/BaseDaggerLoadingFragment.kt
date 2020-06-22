@@ -21,6 +21,10 @@ abstract class BaseDaggerLoadingFragment<VM : BaseViewModel, DB : ViewDataBindin
         loadingDialog?.show()
     }
 
+    protected fun isShowing():Boolean{
+        return loadingDialog?.isShowing()?: false
+    }
+
     protected fun dismissDialog() {
         loadingDialog?.dismiss()
     }

@@ -26,6 +26,10 @@ abstract class BaseDaggerLoadingActivity<VM : BaseViewModel, DB : ViewDataBindin
         loadingDialog?.dismiss()
     }
 
+    protected fun isShowing():Boolean{
+       return loadingDialog?.isShowing()?: false
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         loadingDialog?.dismiss()

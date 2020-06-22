@@ -25,6 +25,10 @@ abstract class BaseLoadingFragment<VM : BaseViewModel, DB : ViewDataBinding, VDB
         loadingDialog?.dismiss()
     }
 
+    protected fun isShowing():Boolean{
+        return loadingDialog?.isShowing()?: false
+    }
+
     override fun onDetach() {
         super.onDetach()
         loadingDialog?.dismiss()

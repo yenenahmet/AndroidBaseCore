@@ -22,6 +22,10 @@ abstract class BaseLoadingActivity<VM : BaseViewModel, DB : ViewDataBinding, VDB
         loadingDialog?.show()
     }
 
+    protected fun isShowing():Boolean{
+        return loadingDialog?.isShowing()?: false
+    }
+
     protected fun dismisDialog() {
         loadingDialog?.dismiss()
     }
