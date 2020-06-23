@@ -63,8 +63,6 @@ object DateUtils {
         return dateFormat.format(Date())
     }
 
-
-
     fun getDateTimeShowFormat(date: String): String {
         try {
             val dateFormat = SimpleDateFormat(dfServer)
@@ -84,6 +82,21 @@ object DateUtils {
         try {
             val dateFormat = SimpleDateFormat(format)
             val showFormat = SimpleDateFormat(showFormat)
+            dateFormat.parse(date)?.let {
+                return showFormat.format(it)
+            }
+
+        } catch (ex: Exception) {
+
+        }
+
+        return ""
+    }
+
+    fun getTimeForDateTime(date: String,format:String):String{
+        try {
+            val dateFormat = SimpleDateFormat(format)
+            val showFormat = SimpleDateFormat("HH:mm")
             dateFormat.parse(date)?.let {
                 return showFormat.format(it)
             }
