@@ -23,9 +23,9 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
 
     private var downloadManagerListener: DownloadManagerListener? = null
 
-    override fun onResult(status: Int, reason: Int, requestId: Long, uri: Uri?, mimeType: String) {
+    override fun onResult(status: Int, reason: Int, requestId: Long, uri: Uri?, mimeType: String,notificationVisibility: Int) {
         removeDownloadRequestId(requestId)
-        onCompleted(status, reason, requestId, uri, mimeType, "")
+        onCompleted(status, reason, requestId, uri, mimeType, "",notificationVisibility)
     }
 
     override fun onResume() {
@@ -39,17 +39,14 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
         activity?.registerReceiver(downloadManagerListener, filter)
     }
 
-    private fun addDownloadRequestId(requestId: Long) {
-        downloadManagerListener?.addRequestIds(requestId)
+    private fun addDownloadRequestId(requestId: Long,notificationVisibility: Int) {
+        downloadManagerListener?.addRequestIds(requestId,notificationVisibility)
     }
 
-    protected fun removeDownloadRequestId(requestId: Long) {
+    private fun removeDownloadRequestId(requestId: Long) {
         downloadManagerListener?.removeRequestIds(requestId)
     }
 
-    protected fun clearDownloadRequestIds() {
-        downloadManagerListener?.clearRequestIds()
-    }
 
     override fun onPause() {
         super.onPause()
@@ -57,7 +54,6 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
             activity?.unregisterReceiver(it)
             it.unBind()
         }
-        downloadManagerListener = null
     }
 
     protected fun downloadManagerDownload(
@@ -97,11 +93,11 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
                         }
                     }
 
-                    onCompleted(0, 0, 0, uri, mimeType, "")
+                    onCompleted(0, 0, 0, uri, mimeType, "",notificationVisibility)
                 }
             }
         } catch (ex: Exception) {
-            onCompleted(-1, -1, -1, null, "", ex.toString())
+            onCompleted(-1, -1, -1, null, "", ex.toString(),notificationVisibility)
         }
     }
 
@@ -125,7 +121,7 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
         val downloadManager =
             activity?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val req = downloadManager.enqueue(request)
-        addDownloadRequestId(req)
+        addDownloadRequestId(req,notificationVisibility)
     }
 
     private fun getFile(fileName: String): File {
@@ -138,7 +134,8 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
         requestId: Long,
         uri: Uri?,
         mimeType: String,
-        err: String
+        err: String,
+        notificationVisibility: Int
     )
 
 }

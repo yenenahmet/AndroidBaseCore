@@ -7,40 +7,51 @@ import android.content.Intent
 
 class DownloadManagerListener(private val downloadManager: DownloadManager) : BroadcastReceiver() {
 
-    private val requestIds = mutableListOf<Long>()
-
+    private val requestIds = mutableListOf<DownloadManagerModel>()
     private var listener: CompleteListener? = null
 
     fun setListener(listener: CompleteListener) {
+        this.listener = null
         this.listener = listener
     }
 
-    fun unBind(){
-        this.listener =null
+    fun unBind() {
+        this.listener = null
     }
 
-    fun addRequestIds(requestId: Long) {
-        requestIds.add(requestId)
+    fun addRequestIds(requestId: Long, notificationVisibility: Int) {
+        val model = DownloadManagerModel(requestId, notificationVisibility)
+        requestIds.add(model)
     }
 
     fun removeRequestIds(requestId: Long) {
-        requestIds.remove(requestId)
+        var position: Int = -1
+        requestIds.forEachIndexed { index, downloadManagerModel ->
+            if (downloadManagerModel.requestId == requestId) {
+                position = index
+            }
+        }
+        if (position > -1) {
+            requestIds.removeAt(position)
+        }
+
     }
 
-    fun clearRequestIds(){
+    fun clearRequestIds() {
         requestIds.clear()
     }
-    fun getDownloadManager():DownloadManager{
+
+    fun getDownloadManager(): DownloadManager {
         return downloadManager
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (DownloadManager.ACTION_DOWNLOAD_COMPLETE == intent?.action) {
             val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-            val ids = requestIds.filter { it == id }
+            val ids = requestIds.filter { it.requestId == id }
             if (!ids.isNullOrEmpty()) {
                 val query = DownloadManager.Query().setFilterById(id)
-                var status =0
+                var status = 0
                 var reason = 0
                 downloadManager.query(query)?.use {
                     if (it.moveToFirst()) {
@@ -52,9 +63,14 @@ class DownloadManagerListener(private val downloadManager: DownloadManager) : Br
                 }
                 val uri = downloadManager.getUriForDownloadedFile(id)
                 val mimeType = downloadManager.getMimeTypeForDownloadedFile(id)
-                listener?.onResult(status,reason,id,uri,mimeType)
+                listener?.onResult(status, reason, id, uri, mimeType,ids[0].notificationVisibility)
             }
         }
     }
+
+    data class DownloadManagerModel(
+        val requestId: Long,
+        val notificationVisibility: Int
+    )
 
 }
