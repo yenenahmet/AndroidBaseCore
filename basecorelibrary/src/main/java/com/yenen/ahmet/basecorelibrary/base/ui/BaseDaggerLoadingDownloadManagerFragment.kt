@@ -89,7 +89,14 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
                         )
                     }
 
-                    val mimeType = FileUtils.getMimeType(fileName)
+                    var mimeType = FileUtils.getMimeType(fileName)
+                    if (mimeType == "*/*") {
+                        mimeType = FileUtils.getMimeType(file.name)
+                        if(mimeType == "*/*"){
+                            mimeType = FileUtils.getExtensionMimeType(file.name)
+                        }
+                    }
+
                     onCompleted(0, 0, 0, uri, mimeType, "")
                 }
             }
