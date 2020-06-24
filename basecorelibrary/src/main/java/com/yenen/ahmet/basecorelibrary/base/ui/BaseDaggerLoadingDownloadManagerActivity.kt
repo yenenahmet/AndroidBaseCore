@@ -65,30 +65,37 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
         fileName: String,
         token: String?,
         downloadAgain: Boolean,
-        authority:String
+        authority: String
     ) {
         try {
-            if(downloadAgain){
+            if (downloadAgain) {
                 download(notificationVisibility, path, fileName, token)
-            }else{
+            } else {
                 val file = getFile(fileName)
                 if (!file.exists()) {
                     download(notificationVisibility, path, fileName, token)
                 } else {
-                    val uri  =if( Build.VERSION.SDK_INT >=  Build.VERSION_CODES.LOLLIPOP_MR1){
-                       FileProvider.getUriForFile(
+                    val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                        FileProvider.getUriForFile(
                             this,
                             authority,
                             file
                         )
-                    }else{
+                    } else {
                         Uri.withAppendedPath(
                             Uri.fromFile(getExternalFilesDir(null)),
                             fileName
                         )
                     }
 
-                    val mimeType = FileUtils.getMimeType(fileName)
+                    var mimeType = FileUtils.getMimeType(fileName)
+                    if (mimeType == "*/*") {
+                        mimeType = FileUtils.getMimeType(file.name)
+                        if(mimeType == "*/*"){
+                            mimeType = FileUtils.getExtensionMimeType(file.name)
+                        }
+                    }
+
                     onCompleted(0, 0, 0, uri, mimeType, "")
                 }
             }
@@ -102,12 +109,17 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
         notificationVisibility: Int,
         path: String,
         fileName: String,
-        token: String? ) {
+        token: String?
+    ) {
         val request = DownloadManager.Request(Uri.parse(path)).apply {
             setTitle(fileName)
             setDescription("Dosya indiriliyor...")
             setNotificationVisibility(notificationVisibility)
-            setDestinationInExternalFilesDir(this@BaseDaggerLoadingDownloadManagerActivity, null, fileName)
+            setDestinationInExternalFilesDir(
+                this@BaseDaggerLoadingDownloadManagerActivity,
+                null,
+                fileName
+            )
             setAllowedOverMetered(true)
             setAllowedOverRoaming(true)
             setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or DownloadManager.Request.NETWORK_WIFI)

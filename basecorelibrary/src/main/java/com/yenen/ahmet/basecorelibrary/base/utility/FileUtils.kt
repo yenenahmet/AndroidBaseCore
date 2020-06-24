@@ -103,15 +103,38 @@ object FileUtils {
         return (mb / 1024).round(round)
     }
 
-    fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).replace(",", ".").toDouble()
+    fun Double.round(decimals: Int = 2): Double =
+        "%.${decimals}f".format(this).replace(",", ".").toDouble()
 
     fun getMimeType(url: String): String {
         MimeTypeMap.getFileExtensionFromUrl(url)?.let {
-            MimeTypeMap.getSingleton().getMimeTypeFromExtension(it)?.let { type->
+            MimeTypeMap.getSingleton().getMimeTypeFromExtension(it)?.let { type ->
                 return type
             }
         }
         return "*/*"
     }
+
+
+    fun getExtension(fileName: String): String {
+        val arrayOfFilename = fileName.toCharArray()
+        for (i in arrayOfFilename.size - 1 downTo 1) {
+            if (arrayOfFilename[i] == '.') {
+                return fileName.substring(i + 1, fileName.length)
+            }
+        }
+        return ""
+    }
+
+    fun getExtensionMimeType(fileName: String) :String{
+        val extension = getExtension(fileName)
+        if (MimeTypeMap.getSingleton().hasExtension(extension)) {
+            MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)?.let {
+                return it
+            }
+        }
+        return "*/*"
+    }
+
 
 }
