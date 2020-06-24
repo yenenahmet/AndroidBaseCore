@@ -10,7 +10,9 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import com.yenen.ahmet.basecorelibrary.base.download.CompleteListener
 import com.yenen.ahmet.basecorelibrary.base.download.DownloadManagerListener
+import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
+import java.io.File
 import java.lang.Exception
 
 abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB : ViewDataBinding, VDB : ViewDataBinding>(
@@ -60,29 +62,55 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
         notificationVisibility: Int,
         path: String,
         fileName: String,
-        token: String?
+        token: String?,
+        downloadAgain: Boolean
     ) {
         try {
-            val request = DownloadManager.Request(Uri.parse(path)).apply {
-                setTitle(fileName)
-                setDescription("Dosya indiriliyor...")
-                setNotificationVisibility(notificationVisibility)
-                setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
-                setAllowedOverMetered(true)
-                setAllowedOverRoaming(true)
-                setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or DownloadManager.Request.NETWORK_WIFI)
-                token?.let {
-                    addRequestHeader("Authorization", it)
+            if(downloadAgain){
+                download(notificationVisibility, path, fileName, token)
+            }else{
+                if (!isDownloadFile(fileName)) {
+                    download(notificationVisibility, path, fileName, token)
+                } else {
+                    val uri = Uri.withAppendedPath(
+                        Uri.fromFile(getExternalFilesDir(null)),
+                        fileName
+                    )
+                    val mimeType = FileUtils.getMimeType(fileName)
+                    onCompleted(0, 0, 0, uri, mimeType, "")
                 }
             }
-            val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-            val req = downloadManager.enqueue(request)
-            addDownloadRequestId(req)
-
         } catch (ex: Exception) {
             onCompleted(-1, -1, -1, null, "", ex.toString())
         }
+    }
 
+
+    private fun download(
+        notificationVisibility: Int,
+        path: String,
+        fileName: String,
+        token: String? ) {
+        val request = DownloadManager.Request(Uri.parse(path)).apply {
+            setTitle(fileName)
+            setDescription("Dosya indiriliyor...")
+            setNotificationVisibility(notificationVisibility)
+            setDestinationInExternalFilesDir(this@BaseDaggerLoadingDownloadManagerActivity, null, fileName)
+            setAllowedOverMetered(true)
+            setAllowedOverRoaming(true)
+            setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or DownloadManager.Request.NETWORK_WIFI)
+            token?.let {
+                addRequestHeader("Authorization", it)
+            }
+        }
+        val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val req = downloadManager.enqueue(request)
+        addDownloadRequestId(req)
+    }
+
+    private fun isDownloadFile(fileName: String): Boolean {
+        val file = File(getExternalFilesDir(null), fileName)
+        return file.exists()
     }
 
     protected abstract fun onCompleted(
