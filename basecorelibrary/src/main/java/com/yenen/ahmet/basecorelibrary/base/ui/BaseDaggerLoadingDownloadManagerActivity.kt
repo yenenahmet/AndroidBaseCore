@@ -4,9 +4,10 @@ import android.app.DownloadManager
 import android.content.Context
 import android.content.IntentFilter
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import androidx.annotation.LayoutRes
+import androidx.core.content.FileProvider
 import androidx.databinding.ViewDataBinding
 import com.yenen.ahmet.basecorelibrary.base.download.CompleteListener
 import com.yenen.ahmet.basecorelibrary.base.download.DownloadManagerListener
@@ -63,19 +64,30 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
         path: String,
         fileName: String,
         token: String?,
-        downloadAgain: Boolean
+        downloadAgain: Boolean,
+        authority:String
     ) {
         try {
             if(downloadAgain){
                 download(notificationVisibility, path, fileName, token)
             }else{
-                if (!isDownloadFile(fileName)) {
+                val file = getFile(fileName)
+                if (!file.exists()) {
                     download(notificationVisibility, path, fileName, token)
                 } else {
-                    val uri = Uri.withAppendedPath(
-                        Uri.fromFile(getExternalFilesDir(null)),
-                        fileName
-                    )
+                    val uri  =if( Build.VERSION.SDK_INT >=  Build.VERSION_CODES.LOLLIPOP_MR1){
+                       FileProvider.getUriForFile(
+                            this,
+                            authority,
+                            file
+                        )
+                    }else{
+                        Uri.withAppendedPath(
+                            Uri.fromFile(getExternalFilesDir(null)),
+                            fileName
+                        )
+                    }
+
                     val mimeType = FileUtils.getMimeType(fileName)
                     onCompleted(0, 0, 0, uri, mimeType, "")
                 }
@@ -108,9 +120,8 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
         addDownloadRequestId(req)
     }
 
-    private fun isDownloadFile(fileName: String): Boolean {
-        val file = File(getExternalFilesDir(null), fileName)
-        return file.exists()
+    private fun getFile(fileName: String): File {
+        return File(getExternalFilesDir(null), fileName)
     }
 
     protected abstract fun onCompleted(
