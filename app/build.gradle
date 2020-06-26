@@ -33,4 +33,5 @@ dependencies {
     implementation project(':basecorelibrary')
     implementation project(':base-exoplayer')
     implementation project(':location-service')
+
 }
