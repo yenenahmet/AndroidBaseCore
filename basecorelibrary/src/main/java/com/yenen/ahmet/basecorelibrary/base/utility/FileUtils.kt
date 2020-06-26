@@ -97,6 +97,7 @@ object FileUtils {
         }
     }
 
+
     fun getFileSizeDoubleGb(byteSize: Double, round: Int): Double {
         val kb = (byteSize / 1024).round(round)
         val mb = (kb / 1024).round(round)
