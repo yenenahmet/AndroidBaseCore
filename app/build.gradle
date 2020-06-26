@@ -32,4 +32,5 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation project(':basecorelibrary')
     implementation project(':base-exoplayer')
+    implementation project(':location-service')
 }
