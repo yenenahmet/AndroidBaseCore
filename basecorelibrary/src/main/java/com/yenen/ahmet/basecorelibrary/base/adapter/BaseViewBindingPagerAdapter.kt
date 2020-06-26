@@ -12,6 +12,12 @@ abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
     @LayoutRes private val layoutRes: Int, private var items: MutableList<T>
 ) : PagerAdapter() {
 
+    private var listener :ClickListener<T>?=null
+
+    interface ClickListener<T>{
+        fun onItemClick(item:T,position: Int)
+    }
+
     @Suppress("UNCHECKED_CAST")
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val inflater = LayoutInflater.from(container.context)
@@ -19,6 +25,12 @@ abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
             DataBindingUtil.inflate<ViewDataBinding>(inflater, layoutRes, container, false) as VDB
         container.addView(binding.root)
         setBindingModel(binding, items[position], position)
+        listener?.let {listener->
+            binding.root.setOnClickListener {
+                listener.onItemClick(getItem(position),position)
+            }
+        }
+
         binding.executePendingBindings()
         return binding.root
     }
@@ -49,6 +61,15 @@ abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
     fun setItems(items: List<T>) {
         this.items = items as MutableList<T>
         notifyDataSetChanged()
+    }
+
+    fun setListener(listener:ClickListener<T>){
+        this.listener = null
+        this.listener =listener
+    }
+
+    fun unBind(){
+        this.listener = null
     }
 
     protected abstract fun setBindingModel(binding: VDB, item: T, position: Int)
