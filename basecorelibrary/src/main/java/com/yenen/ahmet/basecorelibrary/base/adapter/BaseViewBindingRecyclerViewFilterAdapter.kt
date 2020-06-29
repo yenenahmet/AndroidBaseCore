@@ -19,7 +19,7 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
     private var longListener: LongClickListener<T, VDB>? =null
 
     interface ClickListener<T,VDB> {
-        fun onItemClick(item: T, position: Int)
+        fun onItemClick(item: T, position: Int,binding:VDB)
     }
 
     interface FilterListener<T> {
@@ -44,7 +44,7 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
             holder.bind(item)
             if (listener != null) {
                 holder.binding.root.setOnClickListener { _ ->
-                    listener?.onItemClick(item, position)
+                    listener?.onItemClick(item, position,holder.binding as VDB)
                 }
             }
 
