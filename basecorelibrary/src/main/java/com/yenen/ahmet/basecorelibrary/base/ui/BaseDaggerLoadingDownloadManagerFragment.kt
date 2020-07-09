@@ -28,8 +28,7 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
         onCompleted(status, reason, requestId, uri, mimeType, "",notificationVisibility)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onBindingCreate(binding: DB) {
         val downloadManager =
             activity?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         downloadManagerListener = DownloadManagerListener(downloadManager)
@@ -37,6 +36,13 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
 
         val filter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
         activity?.registerReceiver(downloadManagerListener, filter)
+    }
+
+    override fun onBindingClear(binding: DB) {
+        downloadManagerListener?.let {
+            activity?.unregisterReceiver(it)
+            it.unBind()
+        }
     }
 
     private fun addDownloadRequestId(requestId: Long,notificationVisibility: Int) {
@@ -47,14 +53,6 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
         downloadManagerListener?.removeRequestIds(requestId)
     }
 
-
-    override fun onPause() {
-        super.onPause()
-        downloadManagerListener?.let {
-            activity?.unregisterReceiver(it)
-            it.unBind()
-        }
-    }
 
     protected fun downloadManagerDownload(
         notificationVisibility: Int,
