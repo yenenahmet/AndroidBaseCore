@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.core.content.FileProvider
 import androidx.databinding.ViewDataBinding
@@ -28,8 +29,8 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
         onCompleted(status, reason, requestId, uri, mimeType, "",notificationVisibility)
     }
 
-    override fun onBindingCreate(binding: DB) {
-        super.onBindingCreate(binding)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         clearRegister()
         createRegister()
     }
