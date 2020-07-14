@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.Exception
 import android.content.ContentUris
+import com.yenen.ahmet.basecorelibrary.base.local.LocaleManager
 import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils
 
 
@@ -331,4 +332,11 @@ fun AppCompatActivity.openNavigationYandexMap(latitude:String,longitude:String):
         return true
     }
     return false
+}
+
+
+fun AppCompatActivity.setNewLocale(language: String, localeManager: LocaleManager) {
+    localeManager.setNewLocale(this, language)
+    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+    finish()
 }

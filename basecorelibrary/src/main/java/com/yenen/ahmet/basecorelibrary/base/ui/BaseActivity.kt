@@ -1,10 +1,7 @@
 package com.yenen.ahmet.basecorelibrary.base.ui
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -12,7 +9,6 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
 import com.yenen.ahmet.basecorelibrary.base.extension.hideKeyboard
 import com.yenen.ahmet.basecorelibrary.base.local.LocaleManager
-import com.yenen.ahmet.basecorelibrary.base.local.SharedPreferencesHelper
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 
 abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
@@ -67,10 +63,6 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         hideKeyboard()
     }
 
-    override fun attachBaseContext(newBase: Context?) {
-        val localeManager = LocaleManager(SharedPreferencesHelper(newBase!!))
-        super.attachBaseContext(localeManager.setLocale(newBase))
-    }
 
     protected fun startActivity(sClass: Class<*>) {
         val intent = Intent(this, sClass)
