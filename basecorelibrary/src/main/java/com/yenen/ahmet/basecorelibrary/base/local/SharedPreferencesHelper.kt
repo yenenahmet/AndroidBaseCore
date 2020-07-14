@@ -2,11 +2,45 @@ package com.yenen.ahmet.basecorelibrary.base.local
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
+import java.lang.Exception
 
 class SharedPreferencesHelper constructor(context: Context) {
 
-    private val sharedPref: SharedPreferences =
-        context.getSharedPreferences("secret_shared_prefs", Context.MODE_PRIVATE)
+    private val sharedPref: SharedPreferences
+
+
+    init {
+        val spec = KeyGenParameterSpec.Builder(
+            MasterKey.DEFAULT_MASTER_KEY_ALIAS,
+            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+        )
+            .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+            .setKeySize(256)
+            .build()
+
+        val masterKey =MasterKey.Builder(context)
+            .setKeyGenParameterSpec(spec)
+            .build()
+
+        sharedPref = try{
+            EncryptedSharedPreferences.create(
+                context,
+                "secret_shared_prefs",
+                masterKey,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            )
+        }catch (ex:Exception){
+            context.getSharedPreferences("secret_shared_prefs", Context.MODE_PRIVATE)
+        }
+
+
+    }
 
     fun addValueApply(keyValue: String, stringValue: String) {
         val editor = sharedPref.edit()
@@ -153,5 +187,30 @@ class SharedPreferencesHelper constructor(context: Context) {
     fun addDeviceId(deviceId: String) {
         addValueApply("DEVICE_ID", deviceId)
     }
+
+    fun getProfileImgUrl(): String {
+        return getValue("PROFILE_IMG_URL", "")
+    }
+
+    fun addProfileImgUrl(url: String) {
+        addValueApply("PROFILE_IMG_URL", url)
+    }
+
+    fun getLoginType(): String {
+        return getValue("LOGIN_TYPE", "")
+    }
+
+    fun addLoginType(type: String) {
+        addValueApply("LOGIN_TYPE", type)
+    }
+
+    fun getBirthDay(): String {
+        return getValue("BIRTH_DAY", "")
+    }
+
+    fun addBirthDay(birthDay: String) {
+        addValueApply("BIRTH_DAY", birthDay)
+    }
+
 
 }
