@@ -1,34 +1,21 @@
 package com.yenen.ahmet.basecorelibrary.base.ui
 
-import android.annotation.SuppressLint
-import android.content.ActivityNotFoundException
+
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
-import android.provider.OpenableColumns
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.LayoutRes
-import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
 import com.yenen.ahmet.basecorelibrary.base.di.factory.AppViewModelFactory
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 import dagger.android.support.DaggerFragment
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.lang.Exception
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
