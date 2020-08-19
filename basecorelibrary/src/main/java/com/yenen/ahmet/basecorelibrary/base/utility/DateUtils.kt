@@ -248,4 +248,36 @@ object DateUtils {
         }
 
     }
+
+    fun getDayForDateTime(dateTime: String):Int{
+        val simpleDateFormat = SimpleDateFormat(dfServer)
+        val date = simpleDateFormat.parse(dateTime)
+        val cal = Calendar.getInstance()
+        cal.time = date!!
+        return cal.get(Calendar.DAY_OF_MONTH)
+    }
+
+    fun getMonthForDateTime(dateTime: String):Int{
+        val simpleDateFormat = SimpleDateFormat(dfServer)
+        val date = simpleDateFormat.parse(dateTime)
+        val cal = Calendar.getInstance()
+        cal.time = date!!
+        return cal.get(Calendar.MONTH)
+    }
+
+    fun getYearForDateTime(dateTime: String):Int{
+        val simpleDateFormat = SimpleDateFormat(dfServer)
+        val date = simpleDateFormat.parse(dateTime)
+        val cal = Calendar.getInstance()
+        cal.time = date!!
+        return cal.get(Calendar.YEAR)
+    }
+
+    fun getDayOfWeekForDateTime(dateTime: String):Int{
+        val simpleDateFormat = SimpleDateFormat(dfServer)
+        val date = simpleDateFormat.parse(dateTime)
+        val cal = Calendar.getInstance()
+        cal.time = date!!
+        return cal.get(Calendar.DAY_OF_WEEK)
+    }
 }
