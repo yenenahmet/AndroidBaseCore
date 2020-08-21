@@ -23,9 +23,17 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
 
     private var downloadManagerListener: DownloadManagerListener? = null
 
-    override fun onResult(status: Int, reason: Int, requestId: Long, uri: Uri?, mimeType: String,notificationVisibility: Int) {
+    override fun onResult(
+        status: Int,
+        reason: Int,
+        requestId: Long,
+        uri: Uri?,
+        mimeType: String,
+        notificationVisibility: Int,
+        title: String
+    ) {
         removeDownloadRequestId(requestId)
-        onCompleted(status, reason, requestId, uri, mimeType, "",notificationVisibility)
+        onCompleted(status, reason, requestId, uri, mimeType, "", notificationVisibility, title)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,8 +46,8 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
         registerReceiver(downloadManagerListener, filter)
     }
 
-    private fun addDownloadRequestId(requestId: Long,notificationVisibility: Int) {
-        downloadManagerListener?.addRequestIds(requestId,notificationVisibility)
+    private fun addDownloadRequestId(requestId: Long, notificationVisibility: Int) {
+        downloadManagerListener?.addRequestIds(requestId, notificationVisibility)
     }
 
     private fun removeDownloadRequestId(requestId: Long) {
@@ -55,7 +63,7 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
         }
     }
 
-    protected fun downloadManagerDownload(
+    protected fun runDownloadManager(
         notificationVisibility: Int,
         path: String,
         fileName: String,
@@ -71,33 +79,53 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
                 if (!file.exists()) {
                     download(notificationVisibility, path, fileName, token)
                 } else {
-                    val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    val uri =
                         FileProvider.getUriForFile(
                             this,
                             authority,
                             file
                         )
-                    } else {
-                        Uri.withAppendedPath(
-                            Uri.fromFile(getExternalFilesDir(null)),
-                            fileName
-                        )
-                    }
+
 
                     var mimeType = FileUtils.getMimeType(fileName)
                     if (mimeType == "*/*") {
                         mimeType = FileUtils.getMimeType(file.name)
-                        if(mimeType == "*/*"){
+                        if (mimeType == "*/*") {
                             mimeType = FileUtils.getExtensionMimeType(file.name)
                         }
                     }
 
-                    onCompleted(0, 0, 0, uri, mimeType, "",notificationVisibility)
+                    onCompleted(0, 0, 0, uri, mimeType, "", notificationVisibility, fileName)
                 }
             }
         } catch (ex: Exception) {
-            onCompleted(-1, -1, -1, null, "", ex.toString(),notificationVisibility)
+            onCompleted(-1, -1, -1, null, "", ex.toString(), notificationVisibility, fileName)
         }
+    }
+
+
+    // Visibility == VISIBLE // It haven't token//
+    protected fun runDownloadManager(path: String, fileName: String) {
+        runDownloadManager(
+            DownloadManager.Request.VISIBILITY_VISIBLE,
+            path,
+            fileName,
+            null,
+            false,
+            ""
+        )
+    }
+
+    // Visibility == VISIBLE // It have token//
+    protected fun runDownloadManager(path: String, fileName: String, token: String) {
+        runDownloadManager(
+            DownloadManager.Request.VISIBILITY_VISIBLE,
+            path,
+            fileName,
+            token,
+            false,
+            ""
+        )
     }
 
 
@@ -125,10 +153,10 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
         }
         val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val req = downloadManager.enqueue(request)
-        addDownloadRequestId(req,notificationVisibility)
+        addDownloadRequestId(req, notificationVisibility)
     }
 
-    private fun getFile(fileName: String): File {
+    protected fun getFile(fileName: String): File {
         return File(getExternalFilesDir(null), fileName)
     }
 
@@ -139,6 +167,7 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
         uri: Uri?,
         mimeType: String,
         err: String,
-        notificationVisibility:Int
+        notificationVisibility: Int,
+        title: String
     )
 }

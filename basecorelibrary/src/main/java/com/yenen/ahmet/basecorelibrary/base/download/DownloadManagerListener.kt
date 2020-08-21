@@ -53,17 +53,21 @@ class DownloadManagerListener(private val downloadManager: DownloadManager) : Br
                 val query = DownloadManager.Query().setFilterById(id)
                 var status = 0
                 var reason = 0
+                var title =""
                 downloadManager.query(query)?.use {
                     if (it.moveToFirst()) {
                         val columnIndex = it.getColumnIndex(DownloadManager.COLUMN_STATUS)
                         status = it.getInt(columnIndex)
                         val columnReason = it.getColumnIndex(DownloadManager.COLUMN_REASON)
                         reason = it.getInt(columnReason)
+                        val columnTitle = it.getColumnIndex(DownloadManager.COLUMN_TITLE)
+                        title = it.getString(columnTitle)
                     }
                 }
                 val uri = downloadManager.getUriForDownloadedFile(id)
                 val mimeType = downloadManager.getMimeTypeForDownloadedFile(id)
-                listener?.onResult(status, reason, id, uri, mimeType,ids[0].notificationVisibility)
+
+                listener?.onResult(status, reason, id, uri, mimeType,ids[0].notificationVisibility,title)
             }
         }
     }

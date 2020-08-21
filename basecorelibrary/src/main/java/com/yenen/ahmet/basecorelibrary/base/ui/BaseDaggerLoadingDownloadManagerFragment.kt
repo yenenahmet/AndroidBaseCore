@@ -24,9 +24,17 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
 
     private var downloadManagerListener: DownloadManagerListener? = null
 
-    override fun onResult(status: Int, reason: Int, requestId: Long, uri: Uri?, mimeType: String,notificationVisibility: Int) {
+    override fun onResult(
+        status: Int,
+        reason: Int,
+        requestId: Long,
+        uri: Uri?,
+        mimeType: String,
+        notificationVisibility: Int,
+        title: String
+    ) {
         removeDownloadRequestId(requestId)
-        onCompleted(status, reason, requestId, uri, mimeType, "",notificationVisibility)
+        onCompleted(status, reason, requestId, uri, mimeType, "", notificationVisibility, title)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -35,7 +43,7 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
         createRegister()
     }
 
-    private fun createRegister(){
+    private fun createRegister() {
         val downloadManager =
             activity?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         downloadManagerListener = DownloadManagerListener(downloadManager)
@@ -45,7 +53,7 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
         activity?.registerReceiver(downloadManagerListener, filter)
     }
 
-    private fun clearRegister(){
+    private fun clearRegister() {
         downloadManagerListener?.let {
             activity?.unregisterReceiver(it)
             it.unBind()
@@ -53,8 +61,8 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
     }
 
 
-    private fun addDownloadRequestId(requestId: Long,notificationVisibility: Int) {
-        downloadManagerListener?.addRequestIds(requestId,notificationVisibility)
+    private fun addDownloadRequestId(requestId: Long, notificationVisibility: Int) {
+        downloadManagerListener?.addRequestIds(requestId, notificationVisibility)
     }
 
     private fun removeDownloadRequestId(requestId: Long) {
@@ -62,56 +70,76 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
     }
 
 
-    protected fun downloadManagerDownload(
+    protected fun runDownloadManager(
         notificationVisibility: Int,
         path: String,
         fileName: String,
         token: String?,
         downloadAgain: Boolean,
-        authority:String
+        authority: String
     ) {
         try {
-            if(downloadAgain){
+            if (downloadAgain) {
                 download(notificationVisibility, path, fileName, token)
-            }else{
+            } else {
                 val file = getFile(fileName)
                 if (!file.exists()) {
                     download(notificationVisibility, path, fileName, token)
                 } else {
-                    val uri  =if( Build.VERSION.SDK_INT >=  Build.VERSION_CODES.LOLLIPOP_MR1){
+                    val uri =
                         FileProvider.getUriForFile(
                             activity!!,
                             authority,
                             file
                         )
-                    }else{
-                        Uri.withAppendedPath(
-                            Uri.fromFile(file),
-                            fileName
-                        )
-                    }
+
 
                     var mimeType = FileUtils.getMimeType(fileName)
                     if (mimeType == "*/*") {
                         mimeType = FileUtils.getMimeType(file.name)
-                        if(mimeType == "*/*"){
+                        if (mimeType == "*/*") {
                             mimeType = FileUtils.getExtensionMimeType(file.name)
                         }
                     }
 
-                    onCompleted(0, 0, 0, uri, mimeType, "",notificationVisibility)
+                    onCompleted(0, 0, 0, uri, mimeType, "", notificationVisibility, fileName)
                 }
             }
         } catch (ex: Exception) {
-            onCompleted(-1, -1, -1, null, "", ex.toString(),notificationVisibility)
+            onCompleted(-1, -1, -1, null, "", ex.toString(), notificationVisibility, fileName)
         }
+    }
+
+    // Visibility == VISIBLE // It haven't token//
+    protected fun runDownloadManager(path: String, fileName: String) {
+        runDownloadManager(
+            DownloadManager.Request.VISIBILITY_VISIBLE,
+            path,
+            fileName,
+            null,
+            false,
+            ""
+        )
+    }
+
+    // Visibility == VISIBLE // It have token//
+    protected fun runDownloadManager(path: String, fileName: String, token: String) {
+        runDownloadManager(
+            DownloadManager.Request.VISIBILITY_VISIBLE,
+            path,
+            fileName,
+            token,
+            false,
+            ""
+        )
     }
 
     private fun download(
         notificationVisibility: Int,
         path: String,
         fileName: String,
-        token: String? ) {
+        token: String?
+    ) {
         val request = DownloadManager.Request(Uri.parse(path)).apply {
             setTitle(fileName)
             setDescription("Dosya indiriliyor...")
@@ -127,10 +155,10 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
         val downloadManager =
             activity?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val req = downloadManager.enqueue(request)
-        addDownloadRequestId(req,notificationVisibility)
+        addDownloadRequestId(req, notificationVisibility)
     }
 
-    private fun getFile(fileName: String): File {
+    protected fun getFile(fileName: String): File {
         return File(activity?.getExternalFilesDir(null), fileName)
     }
 
@@ -141,7 +169,8 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
         uri: Uri?,
         mimeType: String,
         err: String,
-        notificationVisibility: Int
+        notificationVisibility: Int,
+        title: String
     )
 
     override fun onDetach() {
