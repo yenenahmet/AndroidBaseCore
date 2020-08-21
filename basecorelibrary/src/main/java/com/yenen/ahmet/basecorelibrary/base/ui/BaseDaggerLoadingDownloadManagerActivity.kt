@@ -111,7 +111,7 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
             path,
             fileName,
             null,
-            false,
+            true,
             ""
         )
     }
@@ -123,7 +123,7 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
             path,
             fileName,
             token,
-            false,
+            true,
             ""
         )
     }
