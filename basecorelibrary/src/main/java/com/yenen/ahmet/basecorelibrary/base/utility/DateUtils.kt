@@ -5,6 +5,7 @@ import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import java.lang.StringBuilder
+import java.util.Calendar.*
 
 
 @SuppressLint("SimpleDateFormat")
@@ -78,7 +79,7 @@ object DateUtils {
         return ""
     }
 
-    fun getDateTimeShowFormat(date: String,format:String): String {
+    fun getDateTimeShowFormat(date: String, format: String): String {
         try {
             val dateFormat = SimpleDateFormat(format)
             val showFormat = SimpleDateFormat(showFormat)
@@ -93,7 +94,7 @@ object DateUtils {
         return ""
     }
 
-    fun getTimeForDateTime(date: String,format:String):String{
+    fun getTimeForDateTime(date: String, format: String): String {
         try {
             val dateFormat = SimpleDateFormat(format)
             val showFormat = SimpleDateFormat("HH:mm")
@@ -108,6 +109,35 @@ object DateUtils {
         return ""
     }
 
+    fun getAge(date: String): Int {
+        try {
+            val nowCal = Calendar.getInstance()
+            nowCal.time = Date()
+
+            val date1Format = SimpleDateFormat(dfServer)
+            val date1Date = date1Format.parse(date)
+
+
+            val dateCal = Calendar.getInstance()
+            dateCal.time = date1Date
+
+
+            var diff = nowCal.get(YEAR) - dateCal.get(YEAR)
+            val bool1 = dateCal.get(MONTH) > nowCal.get(MONTH)
+            val bool2 =
+                dateCal.get(MONTH) == nowCal.get(MONTH) && dateCal.get(DATE) > nowCal.get(DATE)
+
+            if (bool1 || bool2) {
+                diff--
+            }
+            return diff
+        } catch (ex: Exception) {
+            return 0
+        }
+
+
+    }
+
     fun getBetweenTheTwoTimes(date1: String, date2: String, format: String): String {
         try {
             val date1Format = SimpleDateFormat(format)
@@ -117,7 +147,7 @@ object DateUtils {
             val date2Date = date2Format.parse(date2)
             var isNegative = false
             var diff = date1Date!!.time - date2Date!!.time
-            if(diff <0){
+            if (diff < 0) {
                 isNegative = true
                 diff *= -1
             }
@@ -149,9 +179,9 @@ object DateUtils {
                 sb.append("${cal} dakika ")
             }
 
-            if(isNegative){
+            if (isNegative) {
                 sb.append("sonra")
-            }else{
+            } else {
                 sb.append("önce")
             }
 
@@ -169,7 +199,7 @@ object DateUtils {
 
             var isNegative = false
             var diff = Date().time - mDate.time
-            if(diff <0){
+            if (diff < 0) {
                 isNegative = true
                 diff *= -1
             }
@@ -201,9 +231,9 @@ object DateUtils {
                 sb.append("$cal dakika ")
             }
 
-            if(isNegative){
+            if (isNegative) {
                 sb.append("sonra")
-            }else{
+            } else {
                 sb.append("önce")
             }
 
@@ -224,32 +254,32 @@ object DateUtils {
         }
     }
 
-    fun getDateHoursLater(hours:Int):String{
-        return try{
+    fun getDateHoursLater(hours: Int): String {
+        return try {
             val cal = Calendar.getInstance()
             cal.time = Date()
-            cal.add(Calendar.HOUR,hours)
+            cal.add(Calendar.HOUR, hours)
             val format = SimpleDateFormat(dfServer)
             format.format(cal.time)
-        }catch (ex:Exception){
+        } catch (ex: Exception) {
             ""
         }
     }
 
-    fun getDateWeeksLater(week:Int):String{
-        return try{
+    fun getDateWeeksLater(week: Int): String {
+        return try {
             val cal = Calendar.getInstance()
             cal.time = Date()
-            cal.add(Calendar.WEEK_OF_YEAR,week)
+            cal.add(Calendar.WEEK_OF_YEAR, week)
             val format = SimpleDateFormat(dfServer)
             format.format(cal.time)
-        }catch (ex:Exception){
+        } catch (ex: Exception) {
             ""
         }
 
     }
 
-    fun getDayForDateTime(dateTime: String):Int{
+    fun getDayForDateTime(dateTime: String): Int {
         val simpleDateFormat = SimpleDateFormat(dfServer)
         val date = simpleDateFormat.parse(dateTime)
         val cal = Calendar.getInstance()
@@ -257,7 +287,7 @@ object DateUtils {
         return cal.get(Calendar.DAY_OF_MONTH)
     }
 
-    fun getMonthForDateTime(dateTime: String):Int{
+    fun getMonthForDateTime(dateTime: String): Int {
         val simpleDateFormat = SimpleDateFormat(dfServer)
         val date = simpleDateFormat.parse(dateTime)
         val cal = Calendar.getInstance()
@@ -265,7 +295,7 @@ object DateUtils {
         return cal.get(Calendar.MONTH)
     }
 
-    fun getYearForDateTime(dateTime: String):Int{
+    fun getYearForDateTime(dateTime: String): Int {
         val simpleDateFormat = SimpleDateFormat(dfServer)
         val date = simpleDateFormat.parse(dateTime)
         val cal = Calendar.getInstance()
@@ -273,7 +303,7 @@ object DateUtils {
         return cal.get(Calendar.YEAR)
     }
 
-    fun getDayOfWeekForDateTime(dateTime: String):Int{
+    fun getDayOfWeekForDateTime(dateTime: String): Int {
         val simpleDateFormat = SimpleDateFormat(dfServer)
         val date = simpleDateFormat.parse(dateTime)
         val cal = Calendar.getInstance()
