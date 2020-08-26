@@ -38,14 +38,16 @@ abstract class BaseFilter<T> protected constructor(filterItems: List<T>,private 
     override fun publishResults(constraint: CharSequence, results: FilterResults?) {
         synchronized(this) {
             results?.values?.let {
+                val constLowerCase = constraint.toString().toLowerCase(locale)
+                val lowerCase = constLowerCase.substring(2, constLowerCase.length)
                 val arrayList: List<*> = it as List<*>
-                pubslishResults(arrayList)
+                pubslishResults(lowerCase,arrayList)
             }
         }
     }
 
 
-    protected abstract fun pubslishResults(results: List<*>)
+    protected abstract fun pubslishResults(lowerCase:String,results: List<*>)
 
     protected abstract fun getFilterItem(
         constLowerCase: String,

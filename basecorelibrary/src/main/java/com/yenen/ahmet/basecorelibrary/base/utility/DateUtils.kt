@@ -119,7 +119,7 @@ object DateUtils {
 
 
             val dateCal = Calendar.getInstance()
-            dateCal.time = date1Date
+            dateCal.time = date1Date!!
 
 
             var diff = nowCal.get(YEAR) - dateCal.get(YEAR)
@@ -198,7 +198,7 @@ object DateUtils {
             val mDate = date2Format.parse(date)
 
             var isNegative = false
-            var diff = Date().time - mDate.time
+            var diff = Date().time - mDate!!.time
             if (diff < 0) {
                 isNegative = true
                 diff *= -1

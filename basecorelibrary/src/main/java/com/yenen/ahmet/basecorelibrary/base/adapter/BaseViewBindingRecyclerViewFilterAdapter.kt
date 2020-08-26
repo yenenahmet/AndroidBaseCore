@@ -89,7 +89,7 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
         this.filterListener = listener
     }
 
-    override fun onFilterFinish(results: List<T>) :Boolean{
+    override fun onFilterFinish(lowerCase:String,results: List<T>) :Boolean{
         return filterListener?.onFilterFinish(results)?:false
     }
 }
