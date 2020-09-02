@@ -25,7 +25,7 @@ class MusicManager(
     private val controlView: PlayerControlView,
     private val appName: String,
     private val isHandleWeakLock: Boolean,
-    cacheDir:File
+    private val simpleCache: SimpleCache
 ) {
 
     private var oldSongUri: String? = null
@@ -33,13 +33,7 @@ class MusicManager(
     private var currentPosition: Long? = 0
     private var currentWindowIndex: Int? = 0
     private var eventListener: MusicManagerListener? = null
-    private val simpleCache: SimpleCache
 
-    init {
-        val usedCache = LeastRecentlyUsedCacheEvictor((8 * 1024 * 1024) * 50)
-        val exoDatabaseProvider = ExoDatabaseProvider(context)
-        simpleCache = SimpleCache(cacheDir, usedCache, exoDatabaseProvider)
-    }
 
     fun setEventListener(listener: MusicManagerListener) {
         this.eventListener = null
