@@ -114,9 +114,7 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
 
     }
 
-    protected fun createLiveData(lifecycleOwner: LifecycleOwner){
-
-    }
+    abstract protected fun createLiveData(lifecycleOwner: LifecycleOwner)
 
     protected open fun createListeners(){
 

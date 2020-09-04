@@ -107,9 +107,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
 
     }
 
-    protected fun createLiveData(){
-
-    }
+    abstract protected  fun createLiveData()
 
     protected open fun createListeners(){
 
