@@ -42,6 +42,8 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         intent.extras?.let {
             onBundle(it)
         }
+
+        createLiveData()
     }
 
     /*
@@ -107,5 +109,12 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
 
     }
 
+    protected fun createLiveData(){
+
+    }
+
+    protected open fun createListeners(){
+
+    }
 
 }

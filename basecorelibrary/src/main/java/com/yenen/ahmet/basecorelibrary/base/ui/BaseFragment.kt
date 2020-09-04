@@ -20,6 +20,7 @@ import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 import java.io.File
@@ -40,6 +41,10 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
 
     protected lateinit var binding: DB
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        createLiveData(viewLifecycleOwner)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -118,6 +123,15 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
     }
 
     protected open fun onBundle(bundle: Bundle) {
+
+    }
+
+
+    protected fun createLiveData(lifecycleOwner: LifecycleOwner){
+
+    }
+
+    protected open fun createListeners(){
 
     }
 

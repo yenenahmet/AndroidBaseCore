@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.yenen.ahmet.basecorelibrary.base.di.factory.AppViewModelFactory
 import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
@@ -29,6 +30,11 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
 
     protected val viewModel by lazy {
         ViewModelProvider(this, providerFactory).get(viewModelClass)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        createLiveData(viewLifecycleOwner)
     }
 
     override fun onCreateView(
@@ -105,6 +111,14 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
     }
 
     protected open fun onBundle(bundle: Bundle){
+
+    }
+
+    protected fun createLiveData(lifecycleOwner: LifecycleOwner){
+
+    }
+
+    protected open fun createListeners(){
 
     }
 
