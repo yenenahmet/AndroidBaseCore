@@ -126,6 +126,8 @@ class MusicManager(
     }
 
     fun stopPlayer(){
+        currentPosition = player?.currentPosition
+        currentWindowIndex = player?.currentWindowIndex
         player?.playWhenReady = false
         player?.playbackState
     }
