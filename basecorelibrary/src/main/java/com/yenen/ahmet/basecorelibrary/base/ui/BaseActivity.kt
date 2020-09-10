@@ -32,6 +32,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         intent.extras?.let {
             onBundle(it)
         }
+
         createLiveData()
     }
 
@@ -107,10 +108,13 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
 
     }
 
-    abstract protected  fun createLiveData()
-
-    protected open fun createListeners(){
+    protected open fun createLiveData() {
 
     }
+
+    protected open fun createListeners() {
+
+    }
+
 
 }

@@ -127,7 +127,9 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
     }
 
 
-    abstract protected fun createLiveData(lifecycleOwner: LifecycleOwner)
+    protected open fun createLiveData(lifecycleOwner: LifecycleOwner){
+
+    }
 
     protected open fun createListeners(){
 

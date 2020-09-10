@@ -22,8 +22,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.Exception
 import android.content.ContentUris
+import android.media.RingtoneManager
 import com.yenen.ahmet.basecorelibrary.base.local.LocaleManager
 import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils
+import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils.getUri
 
 
 fun AppCompatActivity.openFile(uri: Uri, fileType: String, title: String): Boolean {
@@ -182,6 +184,22 @@ fun AppCompatActivity.getFileDisplayName(uri: Uri): String {
     return displayName
 }
 
+
+fun AppCompatActivity.openRingToneScreen(ringToneType: Int, uriPath: String, requestCode: Int,title:String):Boolean {
+    getUri(uriPath)?.let { currentTone ->
+        val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, ringToneType)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, title)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, currentTone)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, currentTone)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+        startActivityForResult(intent, requestCode)
+        return true
+    }
+    return false
+}
+
 fun AppCompatActivity.openDocument(requestCode: Int) {
     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
         addCategory(Intent.CATEGORY_OPENABLE)
@@ -292,7 +310,6 @@ fun AppCompatActivity.openFileDefaultAvailableApp(filePath: String): Boolean {
 }
 
 
-
 fun AppCompatActivity.openFileDefaultAvailableApp(uri: Uri, mimeType: String): Boolean {
     val nt = Intent(Intent.ACTION_VIEW).apply {
         setDataAndType(uri, mimeType)
@@ -308,7 +325,7 @@ fun AppCompatActivity.openFileDefaultAvailableApp(uri: Uri, mimeType: String): B
     }
 }
 
-fun AppCompatActivity.openNavigationGoogleMap(location:String):Boolean {
+fun AppCompatActivity.openNavigationGoogleMap(location: String): Boolean {
     val gmmIntentUri = Uri.parse("google.navigation:q=$location")
     val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri).apply {
         setPackage("com.google.android.apps.maps")
@@ -320,7 +337,7 @@ fun AppCompatActivity.openNavigationGoogleMap(location:String):Boolean {
     return false
 }
 
-fun AppCompatActivity.openNavigationYandexMap(latitude:String,longitude:String):Boolean {
+fun AppCompatActivity.openNavigationYandexMap(latitude: String, longitude: String): Boolean {
     val yandex = Intent("ru.yandex.yandexnavi.action.BUILD_ROUTE_ON_MAP").apply {
         setPackage("ru.yandex.yandexnavi")
         putExtra("lat_to", latitude)

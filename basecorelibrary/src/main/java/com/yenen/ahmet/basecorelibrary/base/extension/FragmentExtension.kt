@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException
 import android.content.ContentUris
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
@@ -14,6 +15,7 @@ import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils
+import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils.getUri
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -142,6 +144,22 @@ fun Fragment.getFileDisplayName(uri: Uri): String {
         }
     }
     return displayName
+}
+
+
+fun Fragment.openRingToneScreen(ringToneType: Int, uriPath: String, requestCode: Int,title:String):Boolean {
+    getUri(uriPath)?.let { currentTone ->
+        val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, ringToneType)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, title)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, currentTone)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, currentTone)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+        startActivityForResult(intent, requestCode)
+        return true
+    }
+    return false
 }
 
 fun Fragment.showToast(text: String) {

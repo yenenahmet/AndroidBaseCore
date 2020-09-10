@@ -138,4 +138,16 @@ object FileUtils {
     }
 
 
+    fun getUri(uriPath: String): Uri? {
+        try {
+            if (uriPath.isNotEmpty()) {
+                return Uri.parse(uriPath)
+            }
+        } catch (ignored: Exception) {
+
+        }
+        return null
+    }
+
+
 }
