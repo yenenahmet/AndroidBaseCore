@@ -77,8 +77,10 @@ class MusicManager(
     }
 
     fun play(fileUrl: String) {
+
         if (player == null)
             initializePlayer()
+
 
         val mediaSource = buildMediaSource(fileUrl)
 
@@ -92,6 +94,8 @@ class MusicManager(
 
         player!!.prepare(mediaSource)
         player?.playWhenReady = true
+
+
         oldSongUri = fileUrl
     }
 
@@ -115,5 +119,19 @@ class MusicManager(
             cacheDataSourceFactory,
             DefaultExtractorsFactory()
         ).createMediaSource(uri)
+    }
+
+    fun isPlaying():Boolean{
+        return player?.isPlaying?:false
+    }
+
+    fun stopPlayer(){
+        player?.playWhenReady = false
+        player?.playbackState
+    }
+
+    fun startPlayer(){
+        player?.playWhenReady = true
+        player?.playbackState
     }
 }
