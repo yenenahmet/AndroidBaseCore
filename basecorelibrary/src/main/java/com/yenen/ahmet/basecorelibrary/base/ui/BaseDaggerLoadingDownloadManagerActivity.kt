@@ -28,7 +28,7 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
         reason: Int,
         requestId: Long,
         uri: Uri?,
-        mimeType: String,
+        mimeType: String?,
         notificationVisibility: Int,
         title: String
     ) {
@@ -165,7 +165,7 @@ abstract class BaseDaggerLoadingDownloadManagerActivity<VM : BaseViewModel, DB :
         reason: Int,
         requestId: Long,
         uri: Uri?,
-        mimeType: String,
+        mimeType: String?,
         err: String,
         notificationVisibility: Int,
         title: String
