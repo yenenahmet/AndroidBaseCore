@@ -210,6 +210,16 @@ fun AppCompatActivity.openDocument(requestCode: Int) {
     startActivityForResult(intent, requestCode)
 }
 
+fun AppCompatActivity.openDocumentByType(requestCode: Int,mType:String) {
+    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+        addCategory(Intent.CATEGORY_OPENABLE)
+        flags =
+            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+        type = mType
+    }
+    startActivityForResult(intent, requestCode)
+}
+
 fun AppCompatActivity.getFileSize(uri: Uri): String {
     var size = ""
     contentResolver?.query(uri, null, null, null, null, null).use {

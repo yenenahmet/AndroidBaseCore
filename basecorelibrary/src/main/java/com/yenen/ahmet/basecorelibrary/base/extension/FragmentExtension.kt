@@ -147,7 +147,12 @@ fun Fragment.getFileDisplayName(uri: Uri): String {
 }
 
 
-fun Fragment.openRingToneScreen(ringToneType: Int, uriPath: String, requestCode: Int,title:String):Boolean {
+fun Fragment.openRingToneScreen(
+    ringToneType: Int,
+    uriPath: String,
+    requestCode: Int,
+    title: String
+): Boolean {
     getUri(uriPath)?.let { currentTone ->
         val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, ringToneType)
@@ -183,6 +188,16 @@ fun Fragment.openDocument(requestCode: Int) {
         flags =
             Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
         type = "*/*"
+    }
+    startActivityForResult(intent, requestCode)
+}
+
+fun Fragment.openDocumentByType(requestCode: Int, mType: String) {
+    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+        addCategory(Intent.CATEGORY_OPENABLE)
+        flags =
+            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+        type = mType
     }
     startActivityForResult(intent, requestCode)
 }
@@ -268,7 +283,7 @@ fun Fragment.shareBip(warningMessage: String, mUri: Uri) {
     }
 }
 
-fun Fragment.openNavigationGoogleMap(location:String):Boolean {
+fun Fragment.openNavigationGoogleMap(location: String): Boolean {
     val gmmIntentUri = Uri.parse("google.navigation:q=$location")
     val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri).apply {
         setPackage("com.google.android.apps.maps")
@@ -280,7 +295,7 @@ fun Fragment.openNavigationGoogleMap(location:String):Boolean {
     return false
 }
 
-fun Fragment.openNavigationYandexMap(latitude:String, longitude:String):Boolean {
+fun Fragment.openNavigationYandexMap(latitude: String, longitude: String): Boolean {
     val yandex = Intent("ru.yandex.yandexnavi.action.BUILD_ROUTE_ON_MAP").apply {
         setPackage("ru.yandex.yandexnavi")
         putExtra("lat_to", latitude)
