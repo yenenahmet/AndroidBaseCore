@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
+import com.yenen.ahmet.basecorelibrary.R
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -127,7 +128,7 @@ object FileUtils {
         return ""
     }
 
-    fun getExtensionMimeType(fileName: String) :String{
+    fun getExtensionMimeType(fileName: String): String {
         val extension = getExtension(fileName)
         if (MimeTypeMap.getSingleton().hasExtension(extension)) {
             MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)?.let {
@@ -149,5 +150,44 @@ object FileUtils {
         return null
     }
 
+    fun getImageByType(type: String): Int {
+        when (type) {
+            "application/zip" -> {
+                return R.drawable.ic_zip
+            }
+            "psd" -> {
+                return R.drawable.ic_psd
+            }
+            "otf" -> {
+                return R.drawable.ic_default
+            }
+            "image/jpeg" -> {
+                return R.drawable.ic_jpg
+            }
+            "image/png" -> {
+                return R.drawable.ic_png
+            }
+            "application/pdf" -> {
+                return R.drawable.ic_pdf
+            }
+            "image/svg+xml" -> {
+                return R.drawable.ic_svg
+            }
+            "text/html" -> {
+                return R.drawable.ic_html
+            }
+            "text/css" -> {
+                return R.drawable.ic_css
+            }
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document" -> {
+                return R.drawable.ic_doc
+            }
+            else -> {
+                return R.drawable.ic_default
+            }
+        }
+
+
+    }
 
 }
