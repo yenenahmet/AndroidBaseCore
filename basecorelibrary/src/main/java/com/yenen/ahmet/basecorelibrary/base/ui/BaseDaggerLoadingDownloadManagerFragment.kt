@@ -39,18 +39,19 @@ abstract class BaseDaggerLoadingDownloadManagerFragment<VM : BaseViewModel, DB :
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        clearRegister()
         createRegister()
     }
 
     private fun createRegister() {
-        val downloadManager =
-            activity?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        downloadManagerListener = DownloadManagerListener(downloadManager)
-        downloadManagerListener?.setListener(this)
+        if(downloadManagerListener == null){
+            val downloadManager =
+                activity?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            downloadManagerListener = DownloadManagerListener(downloadManager)
+            downloadManagerListener?.setListener(this)
 
-        val filter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
-        activity?.registerReceiver(downloadManagerListener, filter)
+            val filter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+            activity?.registerReceiver(downloadManagerListener, filter)
+        }
     }
 
     private fun clearRegister() {
