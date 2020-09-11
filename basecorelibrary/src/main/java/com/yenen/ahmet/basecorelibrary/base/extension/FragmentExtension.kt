@@ -192,12 +192,22 @@ fun Fragment.openDocument(requestCode: Int) {
     startActivityForResult(intent, requestCode)
 }
 
-fun Fragment.openDocumentByType(requestCode: Int, mType: String) {
+fun Fragment.openDocument(requestCode: Int, mType: String) {
     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
         addCategory(Intent.CATEGORY_OPENABLE)
         flags =
             Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
         type = mType
+    }
+    startActivityForResult(intent, requestCode)
+}
+
+fun Fragment.openDocument(requestCode: Int, mType: List<String>) {
+    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+        addCategory(Intent.CATEGORY_OPENABLE)
+        flags =
+            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+        putExtra(Intent.EXTRA_MIME_TYPES,mType.toTypedArray())
     }
     startActivityForResult(intent, requestCode)
 }
