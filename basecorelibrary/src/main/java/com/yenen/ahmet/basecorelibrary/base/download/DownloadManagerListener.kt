@@ -4,6 +4,7 @@ import android.app.DownloadManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils
 
 class DownloadManagerListener(private val downloadManager: DownloadManager) : BroadcastReceiver() {
 
@@ -65,8 +66,13 @@ class DownloadManagerListener(private val downloadManager: DownloadManager) : Br
                     }
                 }
                 val uri = downloadManager.getUriForDownloadedFile(id)
-                val mimeType = downloadManager.getMimeTypeForDownloadedFile(id)
-
+                var mimeType:String? = downloadManager.getMimeTypeForDownloadedFile(id)
+                if(mimeType.isNullOrEmpty()){
+                    mimeType = FileUtils.getExtensionMimeType(title)
+                    if(mimeType == "*/*"){
+                        mimeType = FileUtils.getExtension(title)
+                    }
+                }
                 listener?.onResult(status, reason, id, uri, mimeType,ids[0].notificationVisibility,title)
             }
         }
