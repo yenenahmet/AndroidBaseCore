@@ -11,6 +11,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.provider.Settings
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -144,6 +145,15 @@ fun Fragment.getFileDisplayName(uri: Uri): String {
         }
     }
     return displayName
+}
+
+
+fun Fragment.getMimeTypeForUri(uri: Uri):String?{
+    activity?.contentResolver?.let {
+        val mm = MimeTypeMap.getSingleton()
+        return  mm.getExtensionFromMimeType(it.getType(uri))
+    }
+    return null
 }
 
 

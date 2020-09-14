@@ -23,6 +23,7 @@ import java.util.*
 import kotlin.Exception
 import android.content.ContentUris
 import android.media.RingtoneManager
+import android.webkit.MimeTypeMap
 import com.yenen.ahmet.basecorelibrary.base.local.LocaleManager
 import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils
 import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils.getUri
@@ -184,6 +185,14 @@ fun AppCompatActivity.getFileDisplayName(uri: Uri): String {
     return displayName
 }
 
+
+fun AppCompatActivity.getMimeTypeForUri(uri: Uri):String?{
+    contentResolver?.let {
+        val mm = MimeTypeMap.getSingleton()
+        return  mm.getExtensionFromMimeType(it.getType(uri))
+    }
+    return null
+}
 
 fun AppCompatActivity.openRingToneScreen(ringToneType: Int, uriPath: String, requestCode: Int,title:String):Boolean {
     getUri(uriPath)?.let { currentTone ->
