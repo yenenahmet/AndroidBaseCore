@@ -29,6 +29,27 @@ import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils
 import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils.getUri
 
 
+fun AppCompatActivity.openWebUrl(url: String): Boolean {
+
+    val i = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        setPackage("com.android.chrome")
+    }
+    try {
+        startActivity(i)
+        return true
+    } catch (ex: ActivityNotFoundException) {
+        try {
+            i.setPackage(null)
+            startActivity(i)
+            return true
+        } catch (ex: Exception) {
+
+        }
+    }
+    return false
+}
+
 fun AppCompatActivity.openFile(uri: Uri, fileType: String, title: String): Boolean {
     val target = Intent(Intent.ACTION_VIEW)
     target.setDataAndType(uri, fileType)
@@ -186,15 +207,20 @@ fun AppCompatActivity.getFileDisplayName(uri: Uri): String {
 }
 
 
-fun AppCompatActivity.getMimeTypeForUri(uri: Uri):String?{
+fun AppCompatActivity.getMimeTypeForUri(uri: Uri): String? {
     contentResolver?.let {
         val mm = MimeTypeMap.getSingleton()
-        return  mm.getExtensionFromMimeType(it.getType(uri))
+        return mm.getExtensionFromMimeType(it.getType(uri))
     }
     return null
 }
 
-fun AppCompatActivity.openRingToneScreen(ringToneType: Int, uriPath: String, requestCode: Int,title:String):Boolean {
+fun AppCompatActivity.openRingToneScreen(
+    ringToneType: Int,
+    uriPath: String,
+    requestCode: Int,
+    title: String
+): Boolean {
     getUri(uriPath)?.let { currentTone ->
         val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, ringToneType)
@@ -219,7 +245,7 @@ fun AppCompatActivity.openDocument(requestCode: Int) {
     startActivityForResult(intent, requestCode)
 }
 
-fun AppCompatActivity.openDocumentByType(requestCode: Int,mType:String) {
+fun AppCompatActivity.openDocumentByType(requestCode: Int, mType: String) {
     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
         addCategory(Intent.CATEGORY_OPENABLE)
         flags =
@@ -228,7 +254,6 @@ fun AppCompatActivity.openDocumentByType(requestCode: Int,mType:String) {
     }
     startActivityForResult(intent, requestCode)
 }
-
 
 
 fun AppCompatActivity.getFileSize(uri: Uri): String {

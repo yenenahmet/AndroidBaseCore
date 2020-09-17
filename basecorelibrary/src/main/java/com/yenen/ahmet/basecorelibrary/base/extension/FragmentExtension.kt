@@ -24,6 +24,29 @@ import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+fun Fragment.openWebUrl(url: String): Boolean {
+
+    val i = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        setPackage("com.android.chrome")
+    }
+    try {
+        startActivity(i)
+        return true
+    } catch (ex: ActivityNotFoundException) {
+        try {
+            i.setPackage(null)
+            startActivity(i)
+            return true
+        } catch (ex: Exception) {
+
+        }
+    }
+    return false
+}
+
+
 fun Fragment.openFile(uri: Uri, fileType: String, title: String): Boolean {
     val target = Intent(Intent.ACTION_VIEW)
     target.setDataAndType(uri, fileType)
