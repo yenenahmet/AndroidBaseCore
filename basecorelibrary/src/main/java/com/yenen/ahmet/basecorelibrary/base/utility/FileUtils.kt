@@ -193,17 +193,21 @@ object FileUtils {
 
     }
 
-    fun convertFileToBase64(filePath: String): String? {
-        BitmapFactory.decodeFile(filePath)?.let {
-            val os = ByteArrayOutputStream()
-            it.compress(Bitmap.CompressFormat.PNG, 100, os)
-            val imageBytes = os.toByteArray()
-            Base64.encodeToString(imageBytes, Base64.DEFAULT)?.let {
-                return it
+    fun convertFileToBase64(filePath: String,listener:CovertFileToBase64Listener) {
+       val thread = Thread(Runnable {
+            BitmapFactory.decodeFile(filePath)?.let {
+                val os = ByteArrayOutputStream()
+                it.compress(Bitmap.CompressFormat.PNG, 100, os)
+                val imageBytes = os.toByteArray()
+                Base64.encodeToString(imageBytes, Base64.DEFAULT)?.let {
+                    listener.onResult(it)
+                }
             }
 
-        }
-        return null
+            listener.onResult(null)
+        })
+        thread.start()
     }
+
 
 }
