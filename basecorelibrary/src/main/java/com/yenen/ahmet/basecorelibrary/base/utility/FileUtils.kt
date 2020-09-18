@@ -5,13 +5,16 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import com.yenen.ahmet.basecorelibrary.R
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -188,6 +191,19 @@ object FileUtils {
         }
 
 
+    }
+
+    fun convertFileToBase64(filePath: String): String? {
+        BitmapFactory.decodeFile(filePath)?.let {
+            val os = ByteArrayOutputStream()
+            it.compress(Bitmap.CompressFormat.PNG, 100, os)
+            val imageBytes = os.toByteArray()
+            Base64.encodeToString(imageBytes, Base64.DEFAULT)?.let {
+                return it
+            }
+
+        }
+        return null
     }
 
 }
