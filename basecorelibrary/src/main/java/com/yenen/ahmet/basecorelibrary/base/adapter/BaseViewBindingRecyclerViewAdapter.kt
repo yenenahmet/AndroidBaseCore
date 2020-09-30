@@ -5,6 +5,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.yenen.ahmet.basecorelibrary.base.extension.setSafeOnClickListener
 
 abstract class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
     (
@@ -37,7 +38,7 @@ abstract class BaseViewBindingRecyclerViewAdapter<T, VDB : ViewDataBinding>
         getItem(position)?.let {item->
             holder.bind(item,position)
             if (listener != null) {
-                holder.binding.root.setOnClickListener { _ ->
+                holder.binding.root.setSafeOnClickListener { _ ->
                     listener?.onItemClick(item, position,holder.binding as VDB)
                 }
             }

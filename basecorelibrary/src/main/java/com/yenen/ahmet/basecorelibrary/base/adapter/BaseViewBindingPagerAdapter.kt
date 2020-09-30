@@ -7,6 +7,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.viewpager.widget.PagerAdapter
+import com.yenen.ahmet.basecorelibrary.base.extension.setSafeOnClickListener
 
 abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
     @LayoutRes private val layoutRes: Int, private var items: MutableList<T>
@@ -26,7 +27,7 @@ abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
         container.addView(binding.root)
         setBindingModel(binding, items[position], position)
         listener?.let {listener->
-            binding.root.setOnClickListener {
+            binding.root.setSafeOnClickListener {
                 listener.onItemClick(getItem(position),position)
             }
         }

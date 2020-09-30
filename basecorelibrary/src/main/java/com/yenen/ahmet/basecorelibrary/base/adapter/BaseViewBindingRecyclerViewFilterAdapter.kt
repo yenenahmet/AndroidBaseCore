@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.yenen.ahmet.basecorelibrary.base.extension.setSafeOnClickListener
 import java.util.*
 
 @Suppress("UNCHECKED_CAST")
@@ -43,7 +44,7 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
         getItem(position)?.let {item->
             holder.bind(item)
             if (listener != null) {
-                holder.binding.root.setOnClickListener { _ ->
+                holder.binding.root.setSafeOnClickListener { _ ->
                     listener?.onItemClick(item, position,holder.binding as VDB)
                 }
             }
