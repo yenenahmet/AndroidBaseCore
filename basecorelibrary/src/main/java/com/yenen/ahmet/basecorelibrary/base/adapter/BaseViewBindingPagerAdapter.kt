@@ -24,6 +24,7 @@ abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
         val inflater = LayoutInflater.from(container.context)
         val binding =
             DataBindingUtil.inflate<ViewDataBinding>(inflater, layoutRes, container, false) as VDB
+        container.tag = binding
         container.addView(binding.root)
         setBindingModel(binding, items[position], position)
         listener?.let {listener->
@@ -36,8 +37,9 @@ abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
         return binding.root
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        destroyView(container, position, `object` as View)
+        destroyView(container.tag as VDB, position, `object` as View)
         container.removeView(`object` as View)
     }
 
@@ -75,7 +77,7 @@ abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
 
     protected abstract fun setBindingModel(binding: VDB, item: T, position: Int)
 
-    open fun destroyView(container: ViewGroup, position: Int, view: View){
+    open fun destroyView(binding: VDB, position: Int, view: View){
 
     }
 }
