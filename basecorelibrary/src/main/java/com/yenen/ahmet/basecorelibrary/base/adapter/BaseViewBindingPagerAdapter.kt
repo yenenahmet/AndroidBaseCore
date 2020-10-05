@@ -37,8 +37,8 @@ abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+        destroyView(container, position, `object` as View)
         container.removeView(`object` as View)
-        destroyView(container, position, `object`)
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
@@ -75,7 +75,7 @@ abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
 
     protected abstract fun setBindingModel(binding: VDB, item: T, position: Int)
 
-    open fun destroyView(container: ViewGroup, position: Int, `object`: Any){
+    open fun destroyView(container: ViewGroup, position: Int, view: View){
 
     }
 }
