@@ -6,12 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.yenen.ahmet.baseexoplayerlibrary.base.FullScreenExoPlayerActivity">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imgClose"
-        android:layout_margin="15dp"
-        android:src="@drawable/close"
-        android:layout_width="50dp"
-        android:layout_height="50dp" />
 
 
     <com.google.android.exoplayer2.ui.PlayerView
@@ -21,5 +15,14 @@
         android:layout_width="match_parent"
         app:use_controller="true"
         android:layout_height="match_parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgClose"
+        android:layout_margin="15dp"
+        android:padding="5dp"
+        android:src="@drawable/close"
+        android:layout_width="25dp"
+        android:layout_height="25dp" />
+
 
 </RelativeLayout>
