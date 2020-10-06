@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
@@ -33,6 +34,10 @@ class FullScreenExoPlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_full_screen_exo_player)
         videoView = findViewById(R.id.playerView)
+        val close = findViewById<AppCompatImageView>(R.id.imgClose)
+        close.setOnClickListener {
+            finish()
+        }
         fileUrl = intent.getStringExtra(BaseFullScreenCacheExoPlayerActivity.URL)
         playWhenReady = intent.getBooleanExtra(BaseFullScreenCacheExoPlayerActivity.PLAY_WHEN_READY, true)
 
