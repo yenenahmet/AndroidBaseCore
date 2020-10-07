@@ -83,11 +83,11 @@ object FileUtils {
 
 
     fun getFileSizeText(byteSize: Double, round: Int): String {
-        if (byteSize > 1024) {
+        if (byteSize >= 1024) {
             val kb = (byteSize / 1024).round(round)
-            if (kb > 1024) {
+            if (kb >= 1024) {
                 val mb = (kb / 1024).round(round)
-                if (mb > 1024) {
+                if (mb >= 1024) {
                     val gb = (mb / 1024).round(round)
                     return "$gb GB"
                 } else {
