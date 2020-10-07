@@ -65,7 +65,7 @@ abstract class BaseDateTimeDaggerLoadingActivity<VM : BaseViewModel, DB : ViewDa
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        val mMonth:String = if(month>9){
+        val mMonth:String = if(month+1>9){
             month.toString()
         }else{
             "0${month+1}"
