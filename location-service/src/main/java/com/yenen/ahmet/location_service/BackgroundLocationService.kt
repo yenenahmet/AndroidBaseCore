@@ -18,7 +18,7 @@ abstract class BackgroundLocationService constructor(
             locationService.setListener(object:LocationListener{
                 override fun onLocation(location: Location) {
                     locationService.unBind()
-                    onDoWork(location)
+                    onDoWork(location,context)
                 }
             })
             locationService.startLocation()
@@ -43,7 +43,7 @@ abstract class BackgroundLocationService constructor(
 
 
 
-            WorkManager.getInstance(context)
+         WorkManager.getInstance(context)
                 .enqueueUniquePeriodicWork(
                     "Location",
                     ExistingPeriodicWorkPolicy.REPLACE,
@@ -55,5 +55,5 @@ abstract class BackgroundLocationService constructor(
     }
 
 
-    protected abstract fun onDoWork(location:Location)
+    protected abstract fun onDoWork(location:Location,context: Context)
 }
