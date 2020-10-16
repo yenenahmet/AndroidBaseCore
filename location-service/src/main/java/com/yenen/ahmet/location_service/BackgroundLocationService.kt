@@ -1,11 +1,12 @@
 package com.yenen.ahmet.location_service
 
 import android.content.Context
+import android.location.Location
 import androidx.work.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class BackgroundLocationService constructor(
+abstract class BackgroundLocationService constructor(
     private val context: Context,
     workerParameters: WorkerParameters
 
@@ -14,7 +15,14 @@ class BackgroundLocationService constructor(
     override fun doWork(): Result {
         return try {
             val locationService = LocationService(context, true, 0, 0)
+            locationService.setListener(object:LocationListener{
+                override fun onLocation(location: Location) {
+                    locationService.unBind()
+                    onDoWork(location)
+                }
+            })
             locationService.startLocation()
+
             Result.success()
         } catch (ex: Exception) {
             Result.failure()
@@ -46,4 +54,6 @@ class BackgroundLocationService constructor(
         }
     }
 
+
+    protected abstract fun onDoWork(location:Location)
 }
