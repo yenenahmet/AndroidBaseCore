@@ -22,12 +22,13 @@ object VersionUtils {
             intent.data = apkUri
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
+            context.startActivity(intent)
         } else {
             val intent = Intent(Intent.ACTION_VIEW)
             val apkUri = Uri.fromFile(file)
             intent.setDataAndType(apkUri, "application/vnd.android.package-archive")
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(intent)
         }
     }
 
