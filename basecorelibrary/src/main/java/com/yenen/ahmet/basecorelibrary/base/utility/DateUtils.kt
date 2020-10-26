@@ -295,12 +295,28 @@ object DateUtils {
         return cal.get(Calendar.MONTH)
     }
 
+    fun getYearForDateTime(dateTime: String, format: String): Int {
+        try{
+            val simpleDateFormat = SimpleDateFormat(format)
+            val date = simpleDateFormat.parse(dateTime)
+            val cal = Calendar.getInstance()
+            cal.time = date!!
+            return cal.get(Calendar.YEAR)
+        }catch (ex:Exception){
+            return 0
+        }
+    }
+
     fun getYearForDateTime(dateTime: String): Int {
-        val simpleDateFormat = SimpleDateFormat(dfServer)
-        val date = simpleDateFormat.parse(dateTime)
-        val cal = Calendar.getInstance()
-        cal.time = date!!
-        return cal.get(Calendar.YEAR)
+        try{
+            val simpleDateFormat = SimpleDateFormat(dfServer)
+            val date = simpleDateFormat.parse(dateTime)
+            val cal = Calendar.getInstance()
+            cal.time = date!!
+            return cal.get(Calendar.YEAR)
+        }catch (ex:Exception){
+            return 0
+        }
     }
 
     fun getDayOfWeekForDateTime(dateTime: String): Int {
