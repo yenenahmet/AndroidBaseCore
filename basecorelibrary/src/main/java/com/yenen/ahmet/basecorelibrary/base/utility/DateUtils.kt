@@ -280,11 +280,29 @@ object DateUtils {
     }
 
     fun getDayForDateTime(dateTime: String): Int {
-        val simpleDateFormat = SimpleDateFormat(dfServer)
-        val date = simpleDateFormat.parse(dateTime)
-        val cal = Calendar.getInstance()
-        cal.time = date!!
-        return cal.get(Calendar.DAY_OF_MONTH)
+        try{
+            val simpleDateFormat = SimpleDateFormat(dfServer)
+            val date = simpleDateFormat.parse(dateTime)
+            val cal = Calendar.getInstance()
+            cal.time = date!!
+            return cal.get(Calendar.DAY_OF_MONTH)
+        }catch (ex:Exception){
+            return  0
+        }
+
+    }
+
+    fun getDayForDateTime(dateTime: String,format: String): Int {
+        try{
+            val simpleDateFormat = SimpleDateFormat(format)
+            val date = simpleDateFormat.parse(dateTime)
+            val cal = Calendar.getInstance()
+            cal.time = date!!
+            return cal.get(Calendar.DAY_OF_MONTH)
+        }catch (ex:Exception){
+            return 0
+        }
+
     }
 
     fun getMonthForDateTime(dateTime: String): Int {
