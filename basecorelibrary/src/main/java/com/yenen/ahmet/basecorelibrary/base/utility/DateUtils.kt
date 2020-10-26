@@ -320,10 +320,28 @@ object DateUtils {
     }
 
     fun getDayOfWeekForDateTime(dateTime: String): Int {
-        val simpleDateFormat = SimpleDateFormat(dfServer)
-        val date = simpleDateFormat.parse(dateTime)
-        val cal = Calendar.getInstance()
-        cal.time = date!!
-        return cal.get(Calendar.DAY_OF_WEEK)
+        try{
+            val simpleDateFormat = SimpleDateFormat(dfServer)
+            val date = simpleDateFormat.parse(dateTime)
+            val cal = Calendar.getInstance()
+            cal.time = date!!
+            return cal.get(Calendar.DAY_OF_WEEK)
+        }catch (ex:Exception){
+            return 0
+        }
+
+    }
+
+    fun getDayOfWeekForDateTime(dateTime: String,format: String): Int {
+        try{
+            val simpleDateFormat = SimpleDateFormat(format)
+            val date = simpleDateFormat.parse(dateTime)
+            val cal = Calendar.getInstance()
+            cal.time = date!!
+            return cal.get(Calendar.DAY_OF_WEEK)
+        }catch (ex:Exception){
+            return 0
+        }
+
     }
 }
