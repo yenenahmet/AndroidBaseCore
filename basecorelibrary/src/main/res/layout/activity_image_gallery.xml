@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    tools:context=".base.gallery.ImageGalleryActivity">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgClose"
+        android:layout_margin="15dp"
+        android:padding="5dp"
+        android:src="@drawable/close"
+        android:layout_width="25dp"
+        android:layout_height="25dp" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:id="@+id/rlIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_radius">
+        <ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator
+            android:layout_marginStart="10dp"
+            android:id="@+id/indicator"
+            android:layout_marginTop="3dp"
+            app:spi_dotSelectedSize="10dp"
+            app:spi_dotSize="8dp"
+            app:spi_visibleDotCount="9"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="3dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>
