@@ -44,4 +44,13 @@ class ImageGalleryActivity : AppCompatActivity() {
     }
 
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+
+        if(hasFocus){
+            screenBarClear()
+        }
+    }
+
+
 }
