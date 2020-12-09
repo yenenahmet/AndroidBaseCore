@@ -48,6 +48,11 @@ class SharedPreferencesHelper constructor(context: Context) {
         editor.apply()
     }
 
+    fun addValueCommit(keyValue: String, stringValue: String){
+        val editor = sharedPref.edit()
+        editor.putString(keyValue, stringValue)
+        editor.commit()
+    }
 
     fun addValueApply(keyValue: String, intValue: Int) {
         val editor = sharedPref.edit()
@@ -106,6 +111,7 @@ class SharedPreferencesHelper constructor(context: Context) {
     fun getValue(keyValue: String, defaultValue: Set<String>): Set<String> {
         return sharedPref.getStringSet(keyValue, defaultValue)!!
     }
+
 
 
     fun clearPreferences() {
