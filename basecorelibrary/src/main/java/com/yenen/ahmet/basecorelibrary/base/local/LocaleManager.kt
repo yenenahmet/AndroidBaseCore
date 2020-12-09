@@ -14,7 +14,7 @@ class LocaleManager constructor(private val sharedPreferencesHelper: SharedPrefe
     }
 
     fun setNewLocale(c: Context, language: String): Context {
-        sharedPreferencesHelper.addLanguage(language)
+        sharedPreferencesHelper.addValueCommit("LANGUAGE",language)
         return updateResources(c, sharedPreferencesHelper.getLanguage())
     }
 
