@@ -43,6 +43,7 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater,layoutRes, container, false)
+        onBaseCreateView(inflater, container, savedInstanceState)
         viewModel.setViewDataBinding(binding)
         initViewModel(viewModel)
 
@@ -52,6 +53,13 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
             onBundle(it)
         }
         return binding.root
+    }
+
+
+    open fun onBaseCreateView( inflater: LayoutInflater,
+                               container: ViewGroup?,
+                               savedInstanceState: Bundle?){
+
     }
 
 
