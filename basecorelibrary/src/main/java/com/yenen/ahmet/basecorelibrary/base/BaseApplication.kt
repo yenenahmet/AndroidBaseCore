@@ -4,7 +4,8 @@ import android.content.Context
 import android.content.res.Configuration
 import com.yenen.ahmet.basecorelibrary.base.local.LocaleManager
 import com.yenen.ahmet.basecorelibrary.base.local.SharedPreferencesHelper
-import dagger.android.support.DaggerApplication
+import dagger.android.DaggerApplication
+
 
 abstract class BaseApplication : DaggerApplication() {
 
