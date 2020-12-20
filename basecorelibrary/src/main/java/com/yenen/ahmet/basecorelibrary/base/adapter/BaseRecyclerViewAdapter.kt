@@ -80,14 +80,14 @@ protected constructor(private var items: MutableList<T>) : RecyclerView.Adapter<
     }
 
     fun addItems(items: List<T>) {
-        var x = items.size - 1
-        if(items.isEmpty()){
-            x =0
+        if(items.isNotEmpty()){
+            val x = this.items.size - 1
+            this.items.addAll(items)
+            val itemCount = this.items.size - 1
+            notifyItemRangeInserted(x, itemCount)
+            notifyDataSetChanged()
         }
-        this.items.addAll(items)
-        val itemCount = items.size - 1
-        notifyItemRangeInserted(x, itemCount)
-        notifyItemRangeChanged(x, itemCount)
+
     }
     // ADD  Fun//
 
