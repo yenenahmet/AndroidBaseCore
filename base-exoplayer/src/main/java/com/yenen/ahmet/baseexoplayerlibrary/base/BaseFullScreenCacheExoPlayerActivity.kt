@@ -31,7 +31,7 @@ abstract class BaseFullScreenCacheExoPlayerActivity : AppCompatActivity() {
     private var fileUrl: String? = ""
     private var currentPosition: Long? = 0
     private var currentWindowIndex: Int? = 0
-    private lateinit var simpleCache: SimpleCache
+    private var simpleCache: SimpleCache?=null
     private var playWhenReady = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,13 +43,14 @@ abstract class BaseFullScreenCacheExoPlayerActivity : AppCompatActivity() {
         fileUrl = intent.getStringExtra(URL)
         playWhenReady = intent.getBooleanExtra(PLAY_WHEN_READY,true)
 
-        val usedCache =if(cacheBundle!=null && cacheBundle>0){
-            LeastRecentlyUsedCacheEvictor(cacheBundle)
-        }else{
-            LeastRecentlyUsedCacheEvictor((8 * 1024 * 1024) * 50)
-        }
         val exoDatabaseProvider = ExoDatabaseProvider(this)
-        simpleCache =SimpleCache(cacheDir,usedCache,exoDatabaseProvider)
+
+       if(cacheBundle!=null && cacheBundle>0){
+            val usedCache = LeastRecentlyUsedCacheEvictor(cacheBundle)
+            simpleCache =SimpleCache(cacheDir,usedCache,exoDatabaseProvider)
+        }
+
+
     }
 
 
