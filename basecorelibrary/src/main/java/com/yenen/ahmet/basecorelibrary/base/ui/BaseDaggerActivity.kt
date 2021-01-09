@@ -131,7 +131,7 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         }
 
         if(!checkSelf){
-            ActivityCompat.requestPermissions(this, permissions, 112233)
+            ActivityCompat.requestPermissions(this, permissions, 1122)
         }else{
             onRequestPermissionResultForRuntime(true)
         }
@@ -142,7 +142,7 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-       if(requestCode == 112233 && grantResults.isNotEmpty()){
+       if(requestCode == 1122 && grantResults.isNotEmpty()){
             val size = grantResults.filter { it == PackageManager.PERMISSION_GRANTED }.size
             if(size == grantResults.size){
                 onRequestPermissionResultForRuntime(true)
