@@ -3,6 +3,7 @@ package com.yenen.ahmet.baseexoplayerlibrary.base
 import android.content.Context
 import android.net.Uri
 import android.os.Handler
+import android.os.Looper
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.Player
@@ -21,7 +22,7 @@ class MusicManager {
     private var currentPosition: Long = 0
     private var currentWindowIndex: Int = 0
     private var eventListeners = mutableListOf<MusicManagerListener>()
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
 
     companion object {
         @Volatile

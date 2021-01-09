@@ -5,12 +5,12 @@ apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.yenenahmet'
 
 android {
-    compileSdkVersion 29
-
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
@@ -39,6 +39,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.exoplayer:exoplayer:2.11.2'
-
+    implementation 'androidx.core:core-ktx:1.5.0-alpha05'
 
 }

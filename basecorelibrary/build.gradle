@@ -6,12 +6,12 @@ apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.yenenahmet'
 
 android {
-    compileSdkVersion 29
-
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
@@ -26,8 +26,8 @@ android {
         }
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding true
     }
     androidExtensions {
         experimental = true
@@ -43,7 +43,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.2.0'
-
+    implementation 'androidx.core:core-ktx:1.5.0-alpha05'
     // Dagger 2
     implementation 'com.google.dagger:dagger:2.27'
     kapt 'com.google.dagger:dagger-compiler:2.27'
@@ -64,9 +64,9 @@ dependencies {
     //Rx
 
     // Security
-    implementation "androidx.security:security-crypto:1.1.0-alpha02"
+    implementation "androidx.security:security-crypto:1.1.0-alpha03"
 
-    implementation 'com.google.android.material:material:1.3.0-alpha02'
+    implementation 'com.google.android.material:material:1.3.0-beta01'
 
 
     // Glide

@@ -2,8 +2,11 @@ package com.yenen.ahmet.basecorelibrary.base.ui
 
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.annotation.LayoutRes
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
@@ -43,7 +46,7 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
             onBundle(it)
         }
         createLiveData()
-
+        createListeners()
     }
 
     /*
@@ -110,11 +113,47 @@ abstract class BaseDaggerActivity<VM : BaseViewModel, DB : ViewDataBinding>(
     }
 
 
-    protected open fun createLiveData( ){
+    protected open fun createLiveData() {
 
     }
 
-    protected open fun createListeners(){
+    protected open fun createListeners() {
 
     }
+
+    protected fun requestPermissionsForRuntime(permissions: Array<out String>) {
+        var checkSelf = true
+        permissions.forEach { per->
+            val result = ContextCompat.checkSelfPermission(this, per)
+            if(result == PackageManager.PERMISSION_DENIED){
+                checkSelf = false
+            }
+        }
+
+        if(!checkSelf){
+            ActivityCompat.requestPermissions(this, permissions, 112233)
+        }else{
+            onRequestPermissionResultForRuntime(true)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+       if(requestCode == 112233 && grantResults.isNotEmpty()){
+            val size = grantResults.filter { it == PackageManager.PERMISSION_GRANTED }.size
+            if(size == grantResults.size){
+                onRequestPermissionResultForRuntime(true)
+            }else{
+                onRequestPermissionResultForRuntime(false)
+            }
+       }
+
+    }
+    protected open fun onRequestPermissionResultForRuntime(isGranted:Boolean){
+
+    }
+
 }

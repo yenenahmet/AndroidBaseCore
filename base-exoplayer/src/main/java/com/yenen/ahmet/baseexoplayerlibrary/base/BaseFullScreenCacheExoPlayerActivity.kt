@@ -1,10 +1,9 @@
 package com.yenen.ahmet.baseexoplayerlibrary.base
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.database.ExoDatabaseProvider
@@ -133,12 +132,7 @@ abstract class BaseFullScreenCacheExoPlayerActivity : AppCompatActivity() {
     }
 
     private fun hideSystemUI() {
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+        WindowCompat.setDecorFitsSystemWindows(window,false)
     }
 
 
@@ -147,6 +141,6 @@ abstract class BaseFullScreenCacheExoPlayerActivity : AppCompatActivity() {
         if (hasFocus) hideSystemUI()
     }
 
-    abstract protected fun getAppName():String
+    protected abstract fun getAppName():String
 
 }
