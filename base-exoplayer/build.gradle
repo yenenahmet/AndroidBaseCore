@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.yenenahmet'
 
@@ -28,9 +27,7 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
-    androidExtensions {
-        experimental = true
-    }
+
 
 }
 

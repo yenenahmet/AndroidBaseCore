@@ -40,7 +40,7 @@ abstract class BaseViewBindingPagerAdapter<VDB : ViewDataBinding, T>(
     @Suppress("UNCHECKED_CAST")
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         destroyView(container.tag as VDB, position, `object` as View)
-        container.removeView(`object` as View)
+        container.removeView(`object`)
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {

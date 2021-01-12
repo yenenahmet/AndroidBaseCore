@@ -1,19 +1,22 @@
 package com.yenen.ahmet.basecorelibrary.base.dialog
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-abstract class BaseBottomSheetDialog<VDB:ViewDataBinding>(private val layout:Int): BottomSheetDialogFragment() {
+abstract class BaseBottomSheetDialog<VDB : ViewDataBinding>(private val layout: Int) :
+    BottomSheetDialogFragment() {
 
-    private lateinit var binding:VDB
+    private lateinit var binding: VDB
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -40,7 +43,7 @@ abstract class BaseBottomSheetDialog<VDB:ViewDataBinding>(private val layout:Int
 
         val inf = LayoutInflater.from(context)
 
-        binding  = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate(
             inf,
             layout,
             container,
@@ -55,9 +58,13 @@ abstract class BaseBottomSheetDialog<VDB:ViewDataBinding>(private val layout:Int
     }
 
     protected fun hideKeyboard() {
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        activity?.currentFocus?.let {
+            val inputManager =
+                activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputManager?.hideSoftInputFromWindow(it.windowToken, 0)
+        }
     }
 
-    protected abstract fun onBindingCreate(binding:VDB)
+    protected abstract fun onBindingCreate(binding: VDB)
 
 }

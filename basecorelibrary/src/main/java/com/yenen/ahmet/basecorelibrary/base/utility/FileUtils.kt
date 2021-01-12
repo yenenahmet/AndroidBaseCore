@@ -65,7 +65,7 @@ object FileUtils {
 
     fun saveBitmapToFile(bitmap: Bitmap, filePath: String, subPath: String): Boolean {
         return try {
-            var bitmapBool = true
+            var bitmapBool: Boolean
             val mainFile = File(filePath)
 
             if (!mainFile.exists())

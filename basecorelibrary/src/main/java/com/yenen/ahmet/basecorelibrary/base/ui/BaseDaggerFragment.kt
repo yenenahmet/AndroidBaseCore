@@ -3,6 +3,7 @@ package com.yenen.ahmet.basecorelibrary.base.ui
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,8 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.LayoutRes
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
@@ -35,6 +38,7 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         createLiveData(viewLifecycleOwner)
+        createListeners()
     }
 
     override fun onCreateView(
@@ -130,4 +134,45 @@ abstract class BaseDaggerFragment<VM : BaseViewModel, DB : ViewDataBinding>
 
     }
 
+
+
+
+
+    protected fun requestPermissionsForRuntime(permissions: Array<out String>) {
+        activity?.let {
+            var checkSelf = true
+            permissions.forEach { per->
+                val result = ContextCompat.checkSelfPermission(it, per)
+                if(result == PackageManager.PERMISSION_DENIED){
+                    checkSelf = false
+                }
+            }
+
+            if(!checkSelf){
+                ActivityCompat.requestPermissions(it, permissions, 1122)
+            }else{
+                onRequestPermissionResultForRuntime(true)
+            }
+        }
+
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if(requestCode == 1122 && grantResults.isNotEmpty()){
+            val size = grantResults.filter { it == PackageManager.PERMISSION_GRANTED }.size
+            if(size == grantResults.size){
+                onRequestPermissionResultForRuntime(true)
+            }else{
+                onRequestPermissionResultForRuntime(false)
+            }
+        }
+
+    }
+    protected open fun onRequestPermissionResultForRuntime(isGranted:Boolean){
+
+    }
 }

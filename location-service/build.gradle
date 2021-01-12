@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'kotlin-kapt'
 group = 'com.github.yenenahmet'
@@ -29,9 +28,7 @@ android {
     buildFeatures {
         dataBinding true
     }
-    androidExtensions {
-        experimental = true
-    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
