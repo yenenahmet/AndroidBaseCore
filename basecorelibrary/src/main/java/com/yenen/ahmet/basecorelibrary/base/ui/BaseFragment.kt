@@ -150,7 +150,7 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
             }
 
             if(!checkSelf){
-                ActivityCompat.requestPermissions(it, permissions, 1122)
+                requestPermissions( permissions, 1122)
             }else{
                 onRequestPermissionResultForRuntime(true)
             }
