@@ -84,11 +84,6 @@ abstract class BaseActivity<VM : ViewModel, DB : ViewDataBinding>(
         finish()
     }
 
-    protected fun startActivityResult(sClass: Class<*>, req: Int) {
-        val intent = Intent(this, sClass)
-        startActivityForResult(intent, req)
-    }
-
     protected fun setNewLocale(language: String, localeManager: LocaleManager) {
         localeManager.setNewLocale(this, language)
         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))

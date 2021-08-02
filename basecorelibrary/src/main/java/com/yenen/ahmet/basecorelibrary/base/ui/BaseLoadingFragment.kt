@@ -17,15 +17,15 @@ abstract class BaseLoadingFragment<VM : ViewModel, DB : ViewDataBinding, VDB : V
         loadingDialog = BaseBindingDialog(activity, loadingLayoutResId)
     }
 
-    protected fun showDialog() {
+    fun showDialog() {
         loadingDialog?.show()
     }
 
-    protected fun dismissDialog() {
+    fun dismissDialog() {
         loadingDialog?.dismiss()
     }
 
-    protected fun isShowing():Boolean{
+    fun isShowing():Boolean{
         return loadingDialog?.isShowing()?: false
     }
 
