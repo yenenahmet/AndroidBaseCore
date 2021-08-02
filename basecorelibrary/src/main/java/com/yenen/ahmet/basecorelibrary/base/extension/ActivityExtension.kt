@@ -25,6 +25,7 @@ import android.content.ContentUris
 import android.media.RingtoneManager
 import android.webkit.MimeTypeMap
 import androidx.core.view.WindowCompat
+import androidx.fragment.app.Fragment
 import com.yenen.ahmet.basecorelibrary.base.local.LocaleManager
 import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils
 import com.yenen.ahmet.basecorelibrary.base.utility.FileUtils.getUri
@@ -272,6 +273,9 @@ fun AppCompatActivity.showToast(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_LONG).show()
 }
 
+fun AppCompatActivity.showToast(redId: Int) {
+    Toast.makeText(this, getString(redId), Toast.LENGTH_LONG).show()
+}
 
 fun AppCompatActivity.hideKeyboard() {
     currentFocus?.let {

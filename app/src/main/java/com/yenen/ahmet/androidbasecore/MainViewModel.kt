@@ -1,6 +1,6 @@
 package com.yenen.ahmet.androidbasecore
 
-import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
+import androidx.lifecycle.ViewModel
 
-class MainViewModel:BaseViewModel() {
-}
+
+class MainViewModel: ViewModel()

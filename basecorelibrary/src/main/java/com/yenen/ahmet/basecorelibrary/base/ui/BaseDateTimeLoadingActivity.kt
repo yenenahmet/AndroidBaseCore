@@ -7,10 +7,10 @@ import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
-import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
+import androidx.lifecycle.ViewModel
 import java.util.*
 
-abstract class BaseDateTimeLoadingActivity <VM : BaseViewModel, DB : ViewDataBinding, VDB : ViewDataBinding>(
+abstract class BaseDateTimeLoadingActivity <VM : ViewModel, DB : ViewDataBinding, VDB : ViewDataBinding>(
     viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int, @LayoutRes private val loadingLayoutResId: Int
 ) : BaseLoadingActivity<VM, DB, VDB>(viewModelClass, layoutRes, loadingLayoutResId),
     DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {

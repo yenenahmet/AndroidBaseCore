@@ -204,6 +204,10 @@ fun Fragment.showToast(text: String) {
     Toast.makeText(activity, text, Toast.LENGTH_LONG).show()
 }
 
+fun Fragment.showToast(redId: Int) {
+    Toast.makeText(activity, getString(redId), Toast.LENGTH_LONG).show()
+}
+
 fun Fragment.getFileSize(uri: Uri): String {
     var size = ""
     activity?.contentResolver?.query(uri, null, null, null, null, null).use {

@@ -3,10 +3,10 @@ package com.yenen.ahmet.basecorelibrary.base.ui
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.ViewModel
 import com.yenen.ahmet.basecorelibrary.base.dialog.BaseBindingDialog
-import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 
-abstract class BaseLoadingActivity<VM : BaseViewModel, DB : ViewDataBinding, VDB : ViewDataBinding>(
+abstract class BaseLoadingActivity<VM : ViewModel, DB : ViewDataBinding, VDB : ViewDataBinding>(
     viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int, @LayoutRes private val loadingLayoutResId: Int
 ) : BaseActivity<VM, DB>(viewModelClass, layoutRes) {
 

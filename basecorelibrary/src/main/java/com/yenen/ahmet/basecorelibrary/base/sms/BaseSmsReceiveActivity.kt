@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.provider.Telephony
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.ViewModel
 import com.yenen.ahmet.basecorelibrary.base.ui.BaseActivity
-import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 
-abstract class BaseSmsReceiveActivity<VM : BaseViewModel, DB : ViewDataBinding>(
+abstract class BaseSmsReceiveActivity<VM : ViewModel, DB : ViewDataBinding>(
     viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int,
     private val serviceProviderNumber: String
 ) : BaseActivity<VM, DB>(viewModelClass, layoutRes), SmsListener.Listener {

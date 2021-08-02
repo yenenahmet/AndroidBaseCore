@@ -1,40 +1,23 @@
 package com.yenen.ahmet.basecorelibrary.base.ui
 
-import android.annotation.SuppressLint
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
-import android.provider.OpenableColumns
-import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.annotation.LayoutRes
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.lang.Exception
-import java.text.SimpleDateFormat
-import java.util.*
 
-
-abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
+abstract class BaseFragment<VM :ViewModel, DB : ViewDataBinding>(
     private val viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int
 ) : Fragment() {
 
@@ -44,11 +27,6 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
 
     protected lateinit var binding: DB
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        createLiveData(viewLifecycleOwner)
-        createListeners()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,7 +34,6 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, layoutRes, container, false)
-        viewModel.setViewDataBinding(binding)
 
         initViewModel(viewModel)
 
@@ -67,7 +44,6 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
         }
         return binding.root
     }
-
 
     /*
      *  You need override this method.
@@ -119,23 +95,14 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding>(
 
 
     protected fun reStartApp(sClass: Class<*>) {
-        val intent = Intent(activity!!.applicationContext, sClass)
+        val intent = Intent(activity?.applicationContext, sClass)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
-        activity!!.finish()
+        activity?.finish()
         System.exit(0)
     }
 
     protected open fun onBundle(bundle: Bundle) {
-
-    }
-
-
-    protected open fun createLiveData(lifecycleOwner: LifecycleOwner){
-
-    }
-
-    protected open fun createListeners(){
 
     }
 

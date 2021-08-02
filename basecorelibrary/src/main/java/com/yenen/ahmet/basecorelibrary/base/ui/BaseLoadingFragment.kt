@@ -3,10 +3,10 @@ package com.yenen.ahmet.basecorelibrary.base.ui
 import android.content.Context
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.ViewModel
 import com.yenen.ahmet.basecorelibrary.base.dialog.BaseBindingDialog
-import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 
-abstract class BaseLoadingFragment<VM : BaseViewModel, DB : ViewDataBinding, VDB : ViewDataBinding>(
+abstract class BaseLoadingFragment<VM : ViewModel, DB : ViewDataBinding, VDB : ViewDataBinding>(
     viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int, @LayoutRes private val loadingLayoutResId: Int
 ) : BaseFragment<VM, DB>(viewModelClass, layoutRes) {
 

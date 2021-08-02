@@ -9,15 +9,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.yenen.ahmet.basecorelibrary.base.extension.hideKeyboard
 import com.yenen.ahmet.basecorelibrary.base.local.LocaleManager
-import com.yenen.ahmet.basecorelibrary.base.viewmodel.BaseViewModel
 
-abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
+
+abstract class BaseActivity<VM : ViewModel, DB : ViewDataBinding>(
     private val viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int
 ) : AppCompatActivity() {
-
 
     protected val binding by lazy {
         DataBindingUtil.setContentView(this, layoutRes) as DB
@@ -29,15 +29,11 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.setViewDataBinding(binding)
         initViewModel(viewModel)
         onBindingCreate(binding)
         intent.extras?.let {
             onBundle(it)
         }
-
-        createLiveData()
-        createListeners()
     }
 
     /*
@@ -107,19 +103,9 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
         System.exit(0)
     }
 
-
     protected open fun onBundle(bundle: Bundle) {
 
     }
-
-    protected open fun createLiveData() {
-
-    }
-
-    protected open fun createListeners() {
-
-    }
-
 
     protected fun requestPermissionsForRuntime(permissions: Array<out String>) {
         var checkSelf = true
@@ -150,12 +136,10 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding>(
                 onRequestPermissionResultForRuntime(false)
             }
         }
-
     }
 
     protected open fun onRequestPermissionResultForRuntime(isGranted:Boolean){
 
     }
-
 
 }
