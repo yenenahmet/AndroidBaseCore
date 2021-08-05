@@ -7,15 +7,14 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AbsListView
-import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 
 // ViewToken ve Input Manager Ekran rotasyonları için dikkat edilmesi gerekiyor !  by lazy olarak kullanılmaz//
-abstract class BaseViewBindingRecyclerViewInputAdapter<T, VDB : ViewDataBinding>(
-    @LayoutRes private val layoutRes: Int
-) : BaseViewBindingRecyclerViewAdapter<T, VDB>(layoutRes) {
+abstract class BaseViewBindingRecyclerViewInputAdapter<T, VDB : ViewDataBinding>
+    : BaseViewBindingRecyclerViewAdapter<T, VDB>() {
 
     private var activity: Activity? = null
     private var inputManager: InputMethodManager? = null

@@ -1,39 +1,38 @@
 package com.yenen.ahmet.basecorelibrary.base.adapter
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.yenen.ahmet.basecorelibrary.base.extension.setSafeOnClickListener
-import java.util.*
+import java.util.Locale
 
 @Suppress("UNCHECKED_CAST")
-abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding> constructor(
-    private val layoutRes: Int,locale:Locale
+abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding>(
+    locale: Locale
 ) :
     BaseRecyclerViewFilterAdapter<T, BaseViewBindingRecyclerViewFilterAdapter<T, VDB>.ViewHolder>(
-        mutableListOf(),locale
+        mutableListOf(), locale
     ) {
 
-    private var listener: ClickListener<T,VDB>? = null
+    private var listener: ClickListener<T, VDB>? = null
     private var filterListener: FilterListener<T>? = null
-    private var longListener: LongClickListener<T, VDB>? =null
+    private var longListener: LongClickListener<T, VDB>? = null
 
-    interface ClickListener<T,VDB> {
-        fun onItemClick(item: T, position: Int,binding:VDB)
+    interface ClickListener<T, VDB> {
+        fun onItemClick(item: T, position: Int, binding: VDB)
     }
 
     interface FilterListener<T> {
-        fun onFilterFinish(results: List<T>):Boolean
+        fun onFilterFinish(results: List<T>): Boolean
     }
 
-    interface LongClickListener<T,VDB>{
-        fun onItemLongClick(item: T, position: Int,rowBinding: VDB)
+    interface LongClickListener<T, VDB> {
+        fun onItemLongClick(item: T, position: Int, rowBinding: VDB)
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = DataBindingUtil.inflate<VDB>(getInflater(parent), layoutRes, parent, false)
+        val binding = getViewBinding(getInflater(parent), parent)
         return ViewHolder(binding)
     }
 
@@ -41,17 +40,17 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
         holder: BaseViewBindingRecyclerViewFilterAdapter<T, VDB>.ViewHolder,
         position: Int
     ) {
-        getItem(position)?.let {item->
-            holder.bind(item)
+        getItem(position)?.let { item ->
+            holder.bind(item, position)
             if (listener != null) {
                 holder.binding.root.setSafeOnClickListener { _ ->
-                    listener?.onItemClick(item, position,holder.binding as VDB)
+                    listener?.onItemClick(item, position, holder.binding as VDB)
                 }
             }
 
-            if(longListener!= null){
+            if (longListener != null) {
                 holder.binding.root.setOnLongClickListener {
-                    longListener?.onItemLongClick(item, position,holder.binding as VDB)
+                    longListener?.onItemLongClick(item, position, holder.binding as VDB)
                     true
                 }
             }
@@ -61,15 +60,15 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
 
     @Suppress("UNCHECKED_CAST")
     inner class ViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: T) {
-            setBindingModel(item, binding as VDB)
+        fun bind(item: T, position: Int) {
+            setBindingModel(item, binding as VDB, position)
             binding.executePendingBindings()
         }
     }
 
-    abstract fun setBindingModel(item: T, binding: VDB)
+    abstract fun setBindingModel(item: T, binding: VDB, position: Int)
 
-    fun setListener(listener: ClickListener<T,VDB>) {
+    fun setListener(listener: ClickListener<T, VDB>) {
         this.listener = null
         this.listener = listener
     }
@@ -80,7 +79,7 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
         longListener = null
     }
 
-    fun setLongClickListener(listener: LongClickListener<T, VDB>){
+    fun setLongClickListener(listener: LongClickListener<T, VDB>) {
         this.longListener = null
         this.longListener = listener
     }
@@ -90,7 +89,12 @@ abstract class BaseViewBindingRecyclerViewFilterAdapter<T, VDB : ViewDataBinding
         this.filterListener = listener
     }
 
-    override fun onFilterFinish(lowerCase:String,results: List<T>) :Boolean{
-        return filterListener?.onFilterFinish(results)?:false
+    override fun onFilterFinish(lowerCase: String, results: List<T>): Boolean {
+        return filterListener?.onFilterFinish(results) ?: false
     }
+
+    protected abstract fun getViewBinding(
+        layoutInflater: LayoutInflater,
+        parent: ViewGroup
+    ): ViewDataBinding
 }
