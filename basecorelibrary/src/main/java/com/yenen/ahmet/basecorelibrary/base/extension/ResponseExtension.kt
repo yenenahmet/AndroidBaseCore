@@ -13,7 +13,9 @@ fun <T> LiveDataResponseModel<T>.handleOnlySuccessStatusWithLoading(
             fragment.dismissDialog()
         }
         ProjectConstants.SUCCESS_STATUS -> {
-            block.invoke(this.data)
+            this.data?.let {
+                block.invoke(it)
+            }
             fragment.dismissDialog()
         }
     }
