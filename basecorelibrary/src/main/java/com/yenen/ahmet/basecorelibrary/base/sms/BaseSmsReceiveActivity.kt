@@ -3,15 +3,14 @@ package com.yenen.ahmet.basecorelibrary.base.sms
 import android.content.IntentFilter
 import android.os.Bundle
 import android.provider.Telephony
-import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import com.yenen.ahmet.basecorelibrary.base.ui.BaseActivity
 
 abstract class BaseSmsReceiveActivity<VM : ViewModel, DB : ViewDataBinding>(
-    viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int,
+    viewModelClass: Class<VM>,
     private val serviceProviderNumber: String
-) : BaseActivity<VM, DB>(viewModelClass, layoutRes), SmsListener.Listener {
+) : BaseActivity<VM, DB>(viewModelClass), SmsListener.Listener {
 
 
     private var smsListener: SmsListener? = null

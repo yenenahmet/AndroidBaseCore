@@ -14,7 +14,7 @@ object ImageScaleUtils {
     fun getScaledImage(
         targetLength: Int, quality: Int, compressFormat: Bitmap.CompressFormat,
         outputDirPath: String, outputFilename: String?, sourceImage: File
-    ) :File{
+    ): File {
         val directory = File(outputDirPath)
         if (!directory.exists()) {
             directory.mkdir()
@@ -32,11 +32,11 @@ object ImageScaleUtils {
         outputDirPath: String, outputFilename: String?, sourceImage: File
     ): String {
         val originalFileName = sourceImage.name
-        var targetFileName = ""
+
         val targetFileExtension = ".${
             compressFormat.name.toLowerCase(Locale.US).replace("jpeg", "jpg")
         }"
-        targetFileName = if (outputFilename == null) {
+        val targetFileName = if (outputFilename == null) {
             val extensionIndex = originalFileName.lastIndexOf('.')
             if (extensionIndex == -1) {
                 originalFileName + targetFileExtension
@@ -77,16 +77,16 @@ object ImageScaleUtils {
         val originalWidth = bitmap.width
         val originalHeight = bitmap.height
         var aspectRatio: Float = originalWidth.toFloat() / originalHeight.toFloat()
-        var targetWidth = 0
-        var targetHeight = 0
+        var targetWidth: Int = 0
+        var targetHeight: Int = 0
 
         if (originalWidth > originalHeight) {
             aspectRatio = 1 / aspectRatio;
             targetHeight = targetLength;
-            targetWidth = (targetHeight / aspectRatio).roundToInt();
+            targetWidth = (targetHeight / aspectRatio).roundToInt()
         } else {
             targetWidth = targetLength;
-            targetHeight = (targetWidth / aspectRatio).roundToInt();
+            targetHeight = (targetWidth / aspectRatio).roundToInt()
         }
 
         return Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, true)
@@ -103,10 +103,10 @@ object ImageScaleUtils {
     fun writeBitmapToFile(
         bitmap: Bitmap,
         compressFormat: Bitmap.CompressFormat,
-        quality:Int,
-        filePath:String
+        quality: Int,
+        filePath: String
     ) {
-        FileOutputStream(filePath).use{
+        FileOutputStream(filePath).use {
             bitmap.compress(compressFormat, quality, it)
             it.flush()
         }
