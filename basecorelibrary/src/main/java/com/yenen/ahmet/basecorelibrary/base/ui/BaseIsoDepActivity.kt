@@ -11,8 +11,8 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 
 abstract class BaseIsoDepActivity<VM : ViewModel, DB : ViewDataBinding>(
-    viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int
-) : BaseActivity<VM, DB>(viewModelClass, layoutRes) {
+    viewModelClass: Class<VM>
+) : BaseActivity<VM, DB>(viewModelClass) {
 
     private var nfcAdapter: NfcAdapter? = null
 

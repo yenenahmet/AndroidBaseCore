@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import com.yenen.ahmet.basecorelibrary.base.dialog.BaseBindingDialog
 
 abstract class BaseLoadingFragment<VM : ViewModel, DB : ViewDataBinding, VDB : ViewDataBinding>(
-    viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int, @LayoutRes private val loadingLayoutResId: Int
-) : BaseFragment<VM, DB>(viewModelClass, layoutRes) {
+    viewModelClass: Class<VM>, @LayoutRes private val loadingLayoutResId: Int
+) : BaseFragment<VM, DB>(viewModelClass) {
 
     private var loadingDialog: BaseBindingDialog<VDB>? = null
 

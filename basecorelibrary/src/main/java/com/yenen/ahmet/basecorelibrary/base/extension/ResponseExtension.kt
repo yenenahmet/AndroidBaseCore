@@ -5,7 +5,7 @@ import com.yenen.ahmet.basecorelibrary.base.ui.BaseLoadingFragment
 import com.yenen.ahmet.basecorelibrary.base.utility.ProjectConstants
 
 fun <T> LiveDataResponseModel<T>.handleOnlySuccessStatusWithLoading(
-    block: (T?) -> Unit, fragment: BaseLoadingFragment<*, *, *>
+    block: (T) -> Unit, fragment: BaseLoadingFragment<*, *, *>
 ) {
     when (status) {
         ProjectConstants.ERROR_STATUS -> {

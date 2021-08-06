@@ -8,11 +8,11 @@ import android.widget.TimePicker
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
-import java.util.*
+import java.util.Calendar
 
 abstract class BaseDateTimeLoadingActivity <VM : ViewModel, DB : ViewDataBinding, VDB : ViewDataBinding>(
-    viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int, @LayoutRes private val loadingLayoutResId: Int
-) : BaseLoadingActivity<VM, DB, VDB>(viewModelClass, layoutRes, loadingLayoutResId),
+    viewModelClass: Class<VM>,@LayoutRes private val loadingLayoutResId: Int
+) : BaseLoadingActivity<VM, DB, VDB>(viewModelClass, loadingLayoutResId),
     DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private var dateDialog: DatePickerDialog? = null

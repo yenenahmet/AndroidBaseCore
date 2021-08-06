@@ -2,42 +2,38 @@ package com.yenen.ahmet.basecorelibrary.base.ui
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.annotation.LayoutRes
-import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-abstract class BaseFragment<VM :ViewModel, DB : ViewDataBinding>(
-    private val viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int
+@Suppress("UNCHECKED_CAST")
+abstract class BaseFragment<VM : ViewModel, DB : ViewDataBinding>(
+    private val viewModelClass: Class<VM>
 ) : Fragment() {
 
     protected val viewModel by lazy {
         ViewModelProvider(this).get(viewModelClass)
     }
 
-    protected lateinit var binding: DB
-
+    protected lateinit var binding: ViewDataBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, layoutRes, container, false)
+
+        binding = getViewDataBinding(inflater, container)
 
         initViewModel(viewModel)
 
-        onBindingCreate(binding)
+        onBindingCreate(binding as DB)
 
         arguments?.let {
             onBundle(it)
@@ -64,14 +60,11 @@ abstract class BaseFragment<VM :ViewModel, DB : ViewDataBinding>(
 
     }
 
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         hideKeyboard()
-        onBindingClear(binding)
+        onBindingClear(binding as DB)
     }
-
 
     protected fun hideKeyboard() {
         activity?.currentFocus?.let {
@@ -106,42 +99,9 @@ abstract class BaseFragment<VM :ViewModel, DB : ViewDataBinding>(
 
     }
 
-    protected fun requestPermissionsForRuntime(permissions: Array<out String>) {
-        activity?.let {
-            var checkSelf = true
-            permissions.forEach { per->
-                val result = ContextCompat.checkSelfPermission(it, per)
-                if(result == PackageManager.PERMISSION_DENIED){
-                    checkSelf = false
-                }
-            }
-
-            if(!checkSelf){
-                requestPermissions( permissions, 1122)
-            }else{
-                onRequestPermissionResultForRuntime(true)
-            }
-        }
-
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if(requestCode == 1122 && grantResults.isNotEmpty()){
-            val size = grantResults.filter { it == PackageManager.PERMISSION_GRANTED }.size
-            if(size == grantResults.size){
-                onRequestPermissionResultForRuntime(true)
-            }else{
-                onRequestPermissionResultForRuntime(false)
-            }
-        }
-
-    }
-    protected open fun onRequestPermissionResultForRuntime(isGranted:Boolean){
-
-    }
+    protected abstract fun getViewDataBinding(
+        layoutInflater: LayoutInflater,
+        parent: ViewGroup?
+    ): ViewDataBinding
 
 }

@@ -1,27 +1,20 @@
 package com.yenen.ahmet.basecorelibrary.base.ui
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.yenen.ahmet.basecorelibrary.base.extension.hideKeyboard
 import com.yenen.ahmet.basecorelibrary.base.local.LocaleManager
 
-
+@Suppress("UNCHECKED_CAST")
 abstract class BaseActivity<VM : ViewModel, DB : ViewDataBinding>(
-    private val viewModelClass: Class<VM>, @LayoutRes private val layoutRes: Int
+    private val viewModelClass: Class<VM>
 ) : AppCompatActivity() {
 
-    protected val binding by lazy {
-        DataBindingUtil.setContentView(this, layoutRes) as DB
-    }
+    protected lateinit var binding: ViewDataBinding
 
     protected val viewModel by lazy {
         ViewModelProvider(this).get(viewModelClass)
@@ -29,8 +22,9 @@ abstract class BaseActivity<VM : ViewModel, DB : ViewDataBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = getViewBinding()
         initViewModel(viewModel)
-        onBindingCreate(binding)
+        onBindingCreate(binding as DB)
         intent.extras?.let {
             onBundle(it)
         }
@@ -57,7 +51,7 @@ abstract class BaseActivity<VM : ViewModel, DB : ViewDataBinding>(
 
     override fun onDestroy() {
         super.onDestroy()
-        onBindingClear(binding)
+        onBindingClear(binding as DB)
     }
 
     override fun onPause() {
@@ -102,39 +96,5 @@ abstract class BaseActivity<VM : ViewModel, DB : ViewDataBinding>(
 
     }
 
-    protected fun requestPermissionsForRuntime(permissions: Array<out String>) {
-        var checkSelf = true
-        permissions.forEach { per->
-            val result = ContextCompat.checkSelfPermission(this, per)
-            if(result == PackageManager.PERMISSION_DENIED){
-                checkSelf = false
-            }
-        }
-
-        if(!checkSelf){
-            ActivityCompat.requestPermissions(this, permissions, 1122)
-        }else{
-            onRequestPermissionResultForRuntime(true)
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if(requestCode == 1122 && grantResults.isNotEmpty()){
-            val size = grantResults.filter { it == PackageManager.PERMISSION_GRANTED }.size
-            if(size == grantResults.size){
-                onRequestPermissionResultForRuntime(true)
-            }else{
-                onRequestPermissionResultForRuntime(false)
-            }
-        }
-    }
-
-    protected open fun onRequestPermissionResultForRuntime(isGranted:Boolean){
-
-    }
-
+    protected abstract fun getViewBinding(): ViewDataBinding
 }
