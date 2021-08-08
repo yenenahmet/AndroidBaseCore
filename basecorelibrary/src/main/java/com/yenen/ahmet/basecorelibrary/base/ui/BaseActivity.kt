@@ -2,6 +2,7 @@ package com.yenen.ahmet.basecorelibrary.base.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
@@ -23,7 +24,8 @@ abstract class BaseActivity<VM : ViewModel, DB : ViewDataBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = getViewBinding()
+        binding = getViewBinding(LayoutInflater.from(this))
+        setContentView(binding.root)
         initViewModel(viewModel)
         onBindingCreate(binding)
         intent.extras?.let {
@@ -97,5 +99,5 @@ abstract class BaseActivity<VM : ViewModel, DB : ViewDataBinding>(
 
     }
 
-    protected abstract fun getViewBinding(): DB
+    protected abstract fun getViewBinding(inflater:LayoutInflater): DB
 }
