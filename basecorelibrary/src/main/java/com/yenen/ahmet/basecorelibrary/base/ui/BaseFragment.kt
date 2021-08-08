@@ -11,6 +11,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import kotlin.system.exitProcess
 
 @Suppress("UNCHECKED_CAST")
 abstract class BaseFragment<VM : ViewModel, DB : ViewDataBinding>(
@@ -21,7 +22,7 @@ abstract class BaseFragment<VM : ViewModel, DB : ViewDataBinding>(
         ViewModelProvider(this).get(viewModelClass)
     }
 
-    protected lateinit var binding: ViewDataBinding
+    protected lateinit var binding: DB
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +34,7 @@ abstract class BaseFragment<VM : ViewModel, DB : ViewDataBinding>(
 
         initViewModel(viewModel)
 
-        onBindingCreate(binding as DB)
+        onBindingCreate(binding)
 
         arguments?.let {
             onBundle(it)
@@ -63,7 +64,7 @@ abstract class BaseFragment<VM : ViewModel, DB : ViewDataBinding>(
     override fun onDestroyView() {
         super.onDestroyView()
         hideKeyboard()
-        onBindingClear(binding as DB)
+        onBindingClear(binding)
     }
 
     protected fun hideKeyboard() {
@@ -92,7 +93,7 @@ abstract class BaseFragment<VM : ViewModel, DB : ViewDataBinding>(
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
         activity?.finish()
-        System.exit(0)
+        exitProcess(0)
     }
 
     protected open fun onBundle(bundle: Bundle) {
@@ -102,6 +103,6 @@ abstract class BaseFragment<VM : ViewModel, DB : ViewDataBinding>(
     protected abstract fun getViewDataBinding(
         layoutInflater: LayoutInflater,
         parent: ViewGroup?
-    ): ViewDataBinding
+    ): DB
 
 }

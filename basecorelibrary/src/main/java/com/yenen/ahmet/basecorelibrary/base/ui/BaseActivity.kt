@@ -8,13 +8,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.yenen.ahmet.basecorelibrary.base.extension.hideKeyboard
 import com.yenen.ahmet.basecorelibrary.base.local.LocaleManager
+import kotlin.system.exitProcess
 
 @Suppress("UNCHECKED_CAST")
 abstract class BaseActivity<VM : ViewModel, DB : ViewDataBinding>(
     private val viewModelClass: Class<VM>
 ) : AppCompatActivity() {
 
-    protected lateinit var binding: ViewDataBinding
+    protected lateinit var binding: DB
 
     protected val viewModel by lazy {
         ViewModelProvider(this).get(viewModelClass)
@@ -24,7 +25,7 @@ abstract class BaseActivity<VM : ViewModel, DB : ViewDataBinding>(
         super.onCreate(savedInstanceState)
         binding = getViewBinding()
         initViewModel(viewModel)
-        onBindingCreate(binding as DB)
+        onBindingCreate(binding)
         intent.extras?.let {
             onBundle(it)
         }
@@ -51,7 +52,7 @@ abstract class BaseActivity<VM : ViewModel, DB : ViewDataBinding>(
 
     override fun onDestroy() {
         super.onDestroy()
-        onBindingClear(binding as DB)
+        onBindingClear(binding)
     }
 
     override fun onPause() {
@@ -89,12 +90,12 @@ abstract class BaseActivity<VM : ViewModel, DB : ViewDataBinding>(
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
         finish()
-        System.exit(0)
+        exitProcess(0)
     }
 
     protected open fun onBundle(bundle: Bundle) {
 
     }
 
-    protected abstract fun getViewBinding(): ViewDataBinding
+    protected abstract fun getViewBinding(): DB
 }
