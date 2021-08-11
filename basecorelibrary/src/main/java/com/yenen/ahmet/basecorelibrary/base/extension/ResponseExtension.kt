@@ -10,14 +10,14 @@ fun <T> LiveDataResponseModel<T>.handleOnlySuccessStatusWithLoading(
 ) {
     when (status) {
         ProjectConstants.ERROR_STATUS -> {
-            fragment.showToast(description ?: "")
             fragment.dismissDialog()
+            fragment.showToast(description ?: "")
         }
         ProjectConstants.SUCCESS_STATUS -> {
+            fragment.dismissDialog()
             this.data?.let {
                 block.invoke(it)
             }
-            fragment.dismissDialog()
         }
     }
 }
@@ -27,14 +27,14 @@ fun <T> LiveDataResponseModel<T>.handleOnlySuccessStatusWithLoading(
 ) {
     when (status) {
         ProjectConstants.ERROR_STATUS -> {
-            activity.showToast(description ?: "")
             activity.dismissDialog()
+            activity.showToast(description ?: "")
         }
         ProjectConstants.SUCCESS_STATUS -> {
+            activity.dismissDialog()
             this.data?.let {
                 block.invoke(it)
             }
-            activity.dismissDialog()
         }
     }
 }
