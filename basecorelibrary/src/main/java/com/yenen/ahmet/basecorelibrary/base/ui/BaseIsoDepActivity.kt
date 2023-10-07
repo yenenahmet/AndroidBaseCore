@@ -54,7 +54,7 @@ abstract class BaseIsoDepActivity<VM : ViewModel, DB : ViewDataBinding>(
             this,
             0,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         val filter = arrayOf(arrayOf(IsoDep::class.java.name))
         nfcAdapter?.enableForegroundDispatch(this, pendingIntent, null, filter)
